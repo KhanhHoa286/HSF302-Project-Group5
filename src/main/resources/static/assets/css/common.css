@@ -1,0 +1,137 @@
+
+/* 1. Reset cơ bản cho trang web */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #212529;
+    background-color: #f5f7fb;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 2. Thiết kế dùng chung cho thẻ Card (Khối chứa thông tin) */
+.card-custom {
+    background: #ffffff; /* Nền trắng */
+    border-radius: 10px; /* Bo góc tròn 10px */
+    border: none; /* Bỏ viền */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Đổ bóng nhẹ phía dưới */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển động mượt mà khi hover */
+}
+
+/* Khi di chuột vào card */
+.card-custom:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* Đổ bóng đậm hơn một chút */
+}
+
+/* 3. Nút bấm chính (Màu xanh dương) */
+.btn-primary-custom {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 500;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+/* Khi di chuột vào nút chính */
+.btn-primary-custom:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Nút phụ (Chỉ có viền xanh dương, nền trong suốt) */
+.btn-outline-primary-custom {
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Khi di chuột vào nút phụ */
+.btn-outline-primary-custom:hover {
+    background-color: #0d6efd;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* 4. Form (Khối nhập liệu: ô chữ, ô chọn dropdown) */
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 10px 16px;
+    border-color: #dee2e6;
+}
+
+/* Khi click vào ô nhập liệu (đang nhập chữ) */
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+}
+
+/* 5. Header gắn chặt trên cùng (Sticky Header) */
+header.sticky-top {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    background: #ffffff;
+}
+
+/* 6. Phân trang (Pagination - Nút 1, 2, 3...) */
+.pagination .page-link {
+    color: #212529;
+    border-radius: 6px;
+    margin: 0 2px;
+    border: none;
+   }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        color: #ffffff; /* Chữ trắng */
+    }
+
+    /* 7. Nhãn trạng thái (Badges) */
+    .badge-soft-success {
+        background-color: rgba(25, 135, 84, 0.1);
+        color: #198754;
+        padding: 6px 12px;
+        border-radius: 6px;
+    }
+
+    /* Màu vàng nhạt - Cảnh báo, Chờ duyệt */
+    .badge-soft-warning {
+        background-color: rgba(255, 193, 7, 0.1);
+        color: #c69500;
+        padding: 6px 12px;
+        border-radius: 6px;
+    }
+
+    /* Màu đỏ nhạt - Từ chối, Lỗi */
+    .badge-soft-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        padding: 6px 12px;
+        border-radius: 6px;
+    }
+
+    /* Màu xanh dương nhạt - Đang xử lý, Thông tin */
+    .badge-soft-primary {
+        background-color: rgba(13, 110, 253, 0.1);
+        color: #0d6efd;
+        padding: 6px 12px;
+        border-radius: 6px;
+    }
+
+    /* Màu xám nhạt - Đã đóng, Hủy */
+    .badge-soft-secondary {
+        background-color: rgba(108, 117, 125, 0.1);
+        color: #6c757d;
+        padding: 6px 12px;
+        border-radius: 6px;
+    }
+
+    /* 8. Đường link chung */
+    a.text-decoration-none:hover {
+        color: #0d6efd !important; /* Đổi màu xanh dương khi di chuột vào link */
+        transition: all 0.3s ease;
+    }

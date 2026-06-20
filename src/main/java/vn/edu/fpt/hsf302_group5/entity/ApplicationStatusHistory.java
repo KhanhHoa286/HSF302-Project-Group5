@@ -6,7 +6,7 @@ import vn.edu.fpt.hsf302_group5.entity.enums.ApplicationStatus;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ApplicationStatusHistory")
+@Table(name = "application_status_history")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,33 +15,34 @@ import java.time.LocalDateTime;
 public class ApplicationStatusHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "HistoryID")
+    @Column(name = "history_id")
     private Integer historyId;
 
-    @Column(name = "ApplicationID", nullable = false)
+    @Column(name = "application_id", nullable = false)
     private Integer applicationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ApplicationID", insertable = false, updatable = false)
+    @JoinColumn(name = "application_id", insertable = false, updatable = false)
     private Application application;
 
-    @Column(name = "OldStatus", length = 30)
+    @Column(name = "old_status", length = 30)
     @Enumerated(EnumType.STRING)
     private ApplicationStatus oldStatus;
 
-    @Column(name = "NewStatus", length = 30)
+    @Column(name = "new_status", length = 30)
     @Enumerated(EnumType.STRING)
     private ApplicationStatus newStatus;
 
-    @Column(name = "ChangedBy", nullable = false)
+    @Column(name = "changed_by", nullable = false)
     private Integer changedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ChangedBy", insertable = false, updatable = false)
+    @JoinColumn(name = "changed_by", insertable = false, updatable = false)
     private User user;
 
-    @Column(name = "ChangedAt", nullable = false)
+    @Column(name = "changed_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime changedAt = LocalDateTime.now();
 }
+

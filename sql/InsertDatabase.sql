@@ -1,10 +1,11 @@
-﻿USE [HSF-Group-Project]
+﻿USE [hsf_group_project];
+GO
 
 -- =========================
 -- USERS
 -- =========================
-INSERT INTO Users
-(Email, PasswordHash, FullName, Phone, AvatarUrl, Role, Status)
+INSERT INTO users
+(email, password_hash, full_name, phone, avatar_url, role, status)
 VALUES
 ('admin@jobhub.com', 'hashed123', N'Nguyễn Quản Trị', '0901000001', NULL, 'ADMIN', 'ACTIVE'),
 
@@ -18,307 +19,307 @@ VALUES
 -- =========================
 -- COMPANY
 -- =========================
-INSERT INTO Company
-(CompanyName, LogoUrl, Website, Description, Address)
+INSERT INTO company
+(company_name, logo_url, website, description, address)
 VALUES
-(N'FPT Software',
-'https://logo.clearbit.com/fpt.com.vn',
-'https://fptsoftware.com',
-N'Công ty phần mềm hàng đầu Việt Nam',
-N'Hà Nội'),
+    (N'FPT Software',
+     'https://logo.clearbit.com/fpt.com.vn',
+     'https://fptsoftware.com',
+     N'Công ty phần mềm hàng đầu Việt Nam',
+     N'Hà Nội'),
 
-(N'Viettel Solutions',
-'https://logo.clearbit.com/viettel.com.vn',
-'https://viettel.com.vn',
-N'Công ty công nghệ thuộc tập đoàn Viettel',
-N'Hà Nội');
+    (N'Viettel Solutions',
+     'https://logo.clearbit.com/viettel.com.vn',
+     'https://viettel.com.vn',
+     N'Công ty công nghệ thuộc tập đoàn Viettel',
+     N'Hà Nội');
 
 -- =========================
 -- RECRUITER
 -- UserID 2,3 là recruiter
 -- =========================
-INSERT INTO Recruiter
-(RecruiterID, CompanyID)
+INSERT INTO recruiter
+(recruiter_id, company_id)
 VALUES
-(2,1),
-(3,2);
-
+    (2,1),
+    (3,2);
 
 -- =========================
 -- INDUSTRY
 -- =========================
-INSERT INTO Industry
-(IndustryName)
+INSERT INTO industry
+(industry_name)
 VALUES
-(N'Information Technology'),
-(N'Artificial Intelligence'),
-(N'Cyber Security'),
-(N'Business Analyst');
+    (N'Information Technology'),
+    (N'Artificial Intelligence'),
+    (N'Cyber Security'),
+    (N'Business Analyst');
 
 -- =========================
 -- COMPANY INDUSTRY
 -- =========================
-INSERT INTO CompanyIndustry
+INSERT INTO company_industry
+(company_id, industry_id)
 VALUES
-(1,1),
-(1,2),
-(2,1),
-(2,3);
+    (1,1),
+    (1,2),
+    (2,1),
+    (2,3);
 
 -- =========================
 -- CANDIDATE PROFILE
 -- UserID 4,5,6
 -- =========================
-INSERT INTO CandidateProfile
-(CandidateID, DateOfBirth, Gender, Address, Summary)
+INSERT INTO candidate_profile
+(candidate_id, date_of_birth, gender, address, summary)
 VALUES
-(4,'2002-05-10','MALE',
-N'Hà Nội',
-N'Sinh viên CNTT yêu thích Java Backend'),
+    (4,'2002-05-10','MALE',
+     N'Hà Nội',
+     N'Sinh viên CNTT yêu thích Java Backend'),
 
-(5,'2001-08-15','FEMALE',
-N'Đà Nẵng',
-N'Frontend Developer với ReactJS'),
+    (5,'2001-08-15','FEMALE',
+     N'Đà Nẵng',
+     N'Frontend Developer với ReactJS'),
 
-(6,'2000-11-20','MALE',
-N'TP Hồ Chí Minh',
-N'Data Analyst và SQL Developer');
+    (6,'2000-11-20','MALE',
+     N'TP Hồ Chí Minh',
+     N'Data Analyst và SQL Developer');
 
 -- =========================
 -- SKILL
 -- =========================
-INSERT INTO Skill
-(SkillName)
+INSERT INTO skill
+(skill_name)
 VALUES
-(N'Java'),
-(N'Spring Boot'),
-(N'SQL Server'),
-(N'ReactJS'),
-(N'Python'),
-(N'Power BI');
+    (N'Java'),
+    (N'Spring Boot'),
+    (N'SQL Server'),
+    (N'ReactJS'),
+    (N'Python'),
+    (N'Power BI');
 
 -- =========================
 -- CANDIDATE SKILL
 -- =========================
-INSERT INTO CandidateSkill
+INSERT INTO candidate_skill
+(candidate_id, skill_id)
 VALUES
-(4,1),
-(4,2),
-(4,3),
+    (4,1),
+    (4,2),
+    (4,3),
 
-(5,4),
+    (5,4),
 
-(6,3),
-(6,5),
-(6,6);
+    (6,3),
+    (6,5),
+    (6,6);
 
 -- =========================
 -- EDUCATION
 -- =========================
-INSERT INTO Education
-(CandidateID, SchoolName, Degree, Major, StartDate, EndDate)
+INSERT INTO education
+(candidate_id, school_name, degree, major, start_date, end_date)
 VALUES
-(4,N'Đại học FPT',N'Cử nhân',N'Kỹ thuật phần mềm','2020-09-01','2024-06-30'),
+    (4,N'Đại học FPT',N'Cử nhân',N'Kỹ thuật phần mềm','2020-09-01','2024-06-30'),
 
-(5,N'Đại học Bách Khoa Đà Nẵng',N'Cử nhân',N'Công nghệ thông tin','2019-09-01','2023-06-30'),
+    (5,N'Đại học Bách Khoa Đà Nẵng',N'Cử nhân',N'Công nghệ thông tin','2019-09-01','2023-06-30'),
 
-(6,N'Đại học Kinh tế TP.HCM',N'Cử nhân',N'Hệ thống thông tin','2018-09-01','2022-06-30');
-
+    (6,N'Đại học Kinh tế TP.HCM',N'Cử nhân',N'Hệ thống thông tin','2018-09-01','2022-06-30');
 
 -- =========================
 -- EXPERIENCE
 -- =========================
-INSERT INTO Experience
-(CandidateID, CompanyName, Position, Description, StartDate, EndDate)
+INSERT INTO experience
+(candidate_id, company_name, position, description, start_date, end_date)
 VALUES
-(4,
-N'TMA Solutions',
-N'Java Intern',
-N'Phát triển REST API bằng Spring Boot',
-'2023-01-01',
-'2023-08-31'),
+    (4,
+     N'TMA Solutions',
+     N'Java Intern',
+     N'Phát triển REST API bằng Spring Boot',
+     '2023-01-01',
+     '2023-08-31'),
 
-(5,
-N'NashTech',
-N'Frontend Developer',
-N'Xây dựng giao diện ReactJS',
-'2023-02-01',
-NULL),
+    (5,
+     N'NashTech',
+     N'Frontend Developer',
+     N'Xây dựng giao diện ReactJS',
+     '2023-02-01',
+     NULL),
 
-(6,
-N'KPMG',
-N'Data Analyst',
-N'Xây dựng dashboard Power BI',
-'2022-07-01',
-NULL);
+    (6,
+     N'KPMG',
+     N'Data Analyst',
+     N'Xây dựng dashboard Power BI',
+     '2022-07-01',
+     NULL);
 
 -- =========================
 -- CV
 -- =========================
-INSERT INTO CV
-(CandidateID, CVName, FileName, FileUrl)
+INSERT INTO cv
+(candidate_id, cv_name, file_name, file_url)
 VALUES
-(4,
-N'Java Backend CV',
-N'java_backend_cv.pdf',
-'https://storage.blob.core.windows.net/cv/java_backend_cv.pdf'),
+    (4,
+     N'Java Backend CV',
+     N'java_backend_cv.pdf',
+     'https://storage.blob.core.windows.net/cv/java_backend_cv.pdf'),
 
-(5,
-N'Frontend CV',
-N'frontend_cv.pdf',
-'https://storage.blob.core.windows.net/cv/frontend_cv.pdf'),
+    (5,
+     N'Frontend CV',
+     N'frontend_cv.pdf',
+     'https://storage.blob.core.windows.net/cv/frontend_cv.pdf'),
 
-(6,
-N'Data Analyst CV',
-N'data_cv.pdf',
-'https://storage.blob.core.windows.net/cv/data_cv.pdf');
+    (6,
+     N'Data Analyst CV',
+     N'data_cv.pdf',
+     'https://storage.blob.core.windows.net/cv/data_cv.pdf');
 
 -- =========================
 -- JOB POST
 -- =========================
-INSERT INTO JobPost
+INSERT INTO job_post
 (
-    RecruiterID,
-    IndustryID,
-    JobLevel,
-    Vacancies,
-    Title,
-    Description,
-    Requirement,
-    Location,
-    SalaryMin,
-    SalaryMax,
-    EmploymentType,
-    Status,
-    ExpiredDate,
-    ApprovedBy,
-    ApprovedDate
+    recruiter_id,
+    industry_id,
+    job_level,
+    vacancies,
+    title,
+    description,
+    requirement,
+    location,
+    salary_min,
+    salary_max,
+    employment_type,
+    status,
+    expired_date,
+    approved_by,
+    approved_date
 )
 VALUES
-(
-    2,
-    1,
-    'JUNIOR',
-    3,
-    N'Java Backend Developer',
-    N'Phát triển hệ thống Spring Boot',
-    N'Java, Spring Boot, SQL',
-    N'Hà Nội',
-    12000000,
-    18000000,
-    'FULL_TIME',
-    'APPROVED',
-    DATEADD(DAY, 30, GETDATE()),
-    1,
-    GETDATE()
-),
+    (
+        2,
+        1,
+        'JUNIOR',
+        3,
+        N'Java Backend Developer',
+        N'Phát triển hệ thống Spring Boot',
+        N'Java, Spring Boot, SQL',
+        N'Hà Nội',
+        12000000,
+        18000000,
+        'FULL_TIME',
+        'APPROVED',
+        DATEADD(DAY, 30, GETDATE()),
+        1,
+        GETDATE()
+    ),
 
-(
-    3,
-    3,
-    'SENIOR',
-    2,
-    N'Cyber Security Engineer',
-    N'Giám sát an toàn thông tin',
-    N'Network, Security',
-    N'Hà Nội',
-    15000000,
-    25000000,
-    'FULL_TIME',
-    'APPROVED',
-    DATEADD(DAY, 30, GETDATE()),
-    1,
-    GETDATE()
-),
+    (
+        3,
+        3,
+        'SENIOR',
+        2,
+        N'Cyber Security Engineer',
+        N'Giám sát an toàn thông tin',
+        N'Network, Security',
+        N'Hà Nội',
+        15000000,
+        25000000,
+        'FULL_TIME',
+        'APPROVED',
+        DATEADD(DAY, 30, GETDATE()),
+        1,
+        GETDATE()
+    ),
 
-(
-    2,
-    2,
-    'MID',
-    2,
-    N'AI Engineer',
-    N'Xây dựng mô hình Machine Learning',
-    N'Python, AI, Deep Learning',
-    N'TP Hồ Chí Minh',
-    18000000,
-    30000000,
-    'FULL_TIME',
-    'PENDING',
-    DATEADD(DAY, 30, GETDATE()),
-    NULL,
-    NULL
-);
+    (
+        2,
+        2,
+        'MID',
+        2,
+        N'AI Engineer',
+        N'Xây dựng mô hình Machine Learning',
+        N'Python, AI, Deep Learning',
+        N'TP Hồ Chí Minh',
+        18000000,
+        30000000,
+        'FULL_TIME',
+        'PENDING',
+        DATEADD(DAY, 30, GETDATE()),
+        NULL,
+        NULL
+    );
 
 -- =========================
 -- SAVED JOB
 -- =========================
-INSERT INTO SavedJob
-(CandidateID, JobID)
+INSERT INTO saved_job
+(candidate_id, job_id)
 VALUES
-(4,1),
-(5,1),
-(6,2);
+    (4,1),
+    (5,1),
+    (6,2);
 
 -- =========================
 -- APPLICATION
 -- =========================
-INSERT INTO Application
+INSERT INTO application
 (
-CandidateID,
-JobID,
-CVID,
-CoverLetter,
-Status
+    candidate_id,
+    job_id,
+    cv_id,
+    cover_letter,
+    status
 )
 VALUES
-(
-4,
-1,
-1,
-N'Tôi mong muốn phát triển sự nghiệp Java Backend.',
-'UNDER_REVIEW'
-),
+    (
+        4,
+        1,
+        1,
+        N'Tôi mong muốn phát triển sự nghiệp Java Backend.',
+        'UNDER_REVIEW'
+    ),
 
-(
-6,
-2,
-3,
-N'Tôi có kinh nghiệm về phân tích dữ liệu và bảo mật.',
-'SHORTLISTED'
-);
+    (
+        6,
+        2,
+        3,
+        N'Tôi có kinh nghiệm về phân tích dữ liệu và bảo mật.',
+        'SHORTLISTED'
+    );
 
 -- =========================
 -- APPLICATION STATUS HISTORY
 -- =========================
-INSERT INTO ApplicationStatusHistory
+INSERT INTO application_status_history
 (
-ApplicationID,
-OldStatus,
-NewStatus,
-ChangedBy
+    application_id,
+    old_status,
+    new_status,
+    changed_by
 )
 VALUES
-(1,'APPLIED','UNDER_REVIEW',2),
-(2,'UNDER_REVIEW','SHORTLISTED',3);
+    (1,'APPLIED','UNDER_REVIEW',2),
+    (2,'UNDER_REVIEW','SHORTLISTED',3);
 
 -- =========================
 -- INTERVIEW
 -- =========================
-INSERT INTO Interview
+INSERT INTO interview
 (
-ApplicationID,
-InterviewDate,
-Location,
-MeetingLink,
-Note,
-Status
+    application_id,
+    interview_date,
+    location,
+    meeting_link,
+    note,
+    status
 )
 VALUES
-(
-2,
-DATEADD(DAY,5,GETDATE()),
-N'Viettel Tower',
-NULL,
-N'Phỏng vấn vòng kỹ thuật',
-'SCHEDULED'
-);
+    (
+        2,
+        DATEADD(DAY,5,GETDATE()),
+        N'Viettel Tower',
+        NULL,
+        N'Phỏng vấn vòng kỹ thuật',
+        'SCHEDULED'
+    );

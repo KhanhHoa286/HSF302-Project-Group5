@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Recruiter")
+@Table(name = "recruiter")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,18 +14,18 @@ import java.util.Set;
 @Builder
 public class Recruiter {
     @Id
-    @Column(name = "RecruiterID")
+    @Column(name = "recruiter_id")
     private Integer recruiterId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RecruiterID", insertable = false, updatable = false)
+    @JoinColumn(name = "recruiter_id", insertable = false, updatable = false)
     private User user;
 
-    @Column(name = "CompanyID", nullable = false)
+    @Column(name = "company_id", nullable = false)
     private Integer companyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CompanyID", insertable = false, updatable = false)
+    @JoinColumn(name = "company_id", insertable = false, updatable = false)
     private Company company;
 
     // Relationships
@@ -33,3 +33,4 @@ public class Recruiter {
     @Builder.Default
     private Set<JobPost> jobPosts = new HashSet<>();
 }
+

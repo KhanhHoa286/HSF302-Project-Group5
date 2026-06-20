@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Experience")
+@Table(name = "experience")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,28 +14,29 @@ import java.time.LocalDate;
 public class Experience {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ExperienceID")
+    @Column(name = "experience_id")
     private Integer experienceId;
 
-    @Column(name = "CandidateID", nullable = false)
+    @Column(name = "candidate_id", nullable = false)
     private Integer candidateId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CandidateID", insertable = false, updatable = false)
+    @JoinColumn(name = "candidate_id", insertable = false, updatable = false)
     private CandidateProfile candidateProfile;
 
-    @Column(name = "CompanyName", length = 200)
+    @Column(name = "company_name", length = 200)
     private String companyName;
 
-    @Column(name = "Position", length = 100)
+    @Column(name = "position", length = 100)
     private String position;
 
-    @Column(name = "Description", columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
-    @Column(name = "StartDate")
+    @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "EndDate")
+    @Column(name = "end_date")
     private LocalDate endDate;
 }
+

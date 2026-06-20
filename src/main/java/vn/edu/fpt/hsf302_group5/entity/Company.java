@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Company")
+@Table(name = "company")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,35 +17,35 @@ import java.util.Set;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CompanyID")
+    @Column(name = "company_id")
     private Integer companyId;
 
-    @Column(name = "CompanyName", nullable = false, length = 200)
+    @Column(name = "company_name", nullable = false, length = 200)
     private String companyName;
 
-    @Column(name = "LogoUrl", length = 500)
+    @Column(name = "logo_url", length = 500)
     private String logoUrl;
 
-    @Column(name = "Website", length = 255)
+    @Column(name = "website", length = 255)
     private String website;
 
-    @Column(name = "Description", columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
-    @Column(name = "Address", length = 255)
+    @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "Status", nullable = false, length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private CompanyStatus status = CompanyStatus.ACTIVE;
 
-    @Column(name = "CreatedAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "UpdatedAt")
+    @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
@@ -58,3 +58,4 @@ public class Company {
     @Builder.Default
     private Set<CompanyIndustry> companyIndustries = new HashSet<>();
 }
+

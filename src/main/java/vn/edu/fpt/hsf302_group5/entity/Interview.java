@@ -6,7 +6,7 @@ import vn.edu.fpt.hsf302_group5.entity.enums.InterviewStatus;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Interview")
+@Table(name = "interview")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,36 +15,37 @@ import java.time.LocalDateTime;
 public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "InterviewID")
+    @Column(name = "interview_id")
     private Integer interviewId;
 
-    @Column(name = "ApplicationID", nullable = false)
+    @Column(name = "application_id", nullable = false)
     private Integer applicationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ApplicationID", insertable = false, updatable = false)
+    @JoinColumn(name = "application_id", insertable = false, updatable = false)
     private Application application;
 
-    @Column(name = "InterviewDate", nullable = false)
+    @Column(name = "interview_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime interviewDate;
 
-    @Column(name = "Location", length = 255)
+    @Column(name = "location", length = 255)
     private String location;
 
-    @Column(name = "MeetingLink", length = 500)
+    @Column(name = "meeting_link", length = 500)
     private String meetingLink;
 
-    @Column(name = "Note", length = 500)
+    @Column(name = "note", length = 500)
     private String note;
 
-    @Column(name = "CreatedAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "Status", length = 20)
+    @Column(name = "status", length = 20)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private InterviewStatus status = InterviewStatus.SCHEDULED;
 }
+

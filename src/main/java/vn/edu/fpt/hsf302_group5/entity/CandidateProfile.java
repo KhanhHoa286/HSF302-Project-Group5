@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CandidateProfile")
+@Table(name = "candidate_profile")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,24 +16,24 @@ import java.util.Set;
 @Builder
 public class CandidateProfile {
     @Id
-    @Column(name = "CandidateID")
+    @Column(name = "candidate_id")
     private Integer candidateId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CandidateID", insertable = false, updatable = false)
+    @JoinColumn(name = "candidate_id", insertable = false, updatable = false)
     private User user;
 
-    @Column(name = "DateOfBirth")
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "Gender", length = 10)
+    @Column(name = "gender", length = 10)
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "Address", length = 255)
+    @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "Summary", columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "summary", columnDefinition = "NVARCHAR(MAX)")
     private String summary;
 
     // Relationships
@@ -61,3 +61,4 @@ public class CandidateProfile {
     @Builder.Default
     private Set<Application> applications = new HashSet<>();
 }
+

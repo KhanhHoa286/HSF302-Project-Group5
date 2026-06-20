@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Application")
+@Table(name = "application")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,44 +17,44 @@ import java.util.Set;
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ApplicationID")
+    @Column(name = "application_id")
     private Integer applicationId;
 
-    @Column(name = "CandidateID", nullable = false)
+    @Column(name = "candidate_id", nullable = false)
     private Integer candidateId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CandidateID", insertable = false, updatable = false)
+    @JoinColumn(name = "candidate_id", insertable = false, updatable = false)
     private CandidateProfile candidateProfile;
 
-    @Column(name = "JobID", nullable = false)
+    @Column(name = "job_id", nullable = false)
     private Integer jobId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "JobID", insertable = false, updatable = false)
+    @JoinColumn(name = "job_id", insertable = false, updatable = false)
     private JobPost jobPost;
 
-    @Column(name = "CVID", nullable = false)
+    @Column(name = "cvid", nullable = false)
     private Integer cvId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CVID", insertable = false, updatable = false)
+    @JoinColumn(name = "cvid", insertable = false, updatable = false)
     private CV cv;
 
-    @Column(name = "AppliedDate", nullable = false)
+    @Column(name = "applied_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime appliedDate = LocalDateTime.now();
 
-    @Column(name = "CoverLetter", columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "cover_letter", columnDefinition = "NVARCHAR(MAX)")
     private String coverLetter;
 
-    @Column(name = "Status", nullable = false, length = 30)
+    @Column(name = "status", nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private ApplicationStatus status = ApplicationStatus.APPLIED;
 
-    @Column(name = "Note", length = 500)
+    @Column(name = "note", length = 500)
     private String note;
 
     // Relationships
@@ -66,3 +66,4 @@ public class Application {
     @Builder.Default
     private Set<Interview> interviews = new HashSet<>();
 }
+

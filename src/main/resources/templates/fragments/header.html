@@ -1,0 +1,40 @@
+<header th:fragment="header" class="navbar navbar-expand-lg navbar-light bg-white sticky-top" xmlns:th="http://www.thymeleaf.org">
+    <div class="container">
+        <!-- Logo dẫn về trang chủ -->
+        <a class="navbar-brand text-primary fw-bold fs-4" href="../public/home.html">
+            <i class="bi bi-briefcase-fill me-2"></i>JobPortal
+        </a>
+
+        <!-- Nút menu trên điện thoại -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu chính -->
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="../public/home.html">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../candidate/job-list.html">Việc làm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../recruiter/my-job-posts.html">Nhà tuyển dụng</a>
+                </li>
+                <!-- Link sang trang Admin nổi bật để test -->
+                <li class="nav-item">
+                    <a class="nav-link fw-bold text-danger" href="../admin/dashboard.html">
+                        <i class="bi bi-shield-lock me-1"></i>Admin
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Nút đăng nhập / đăng ký -->
+            <div class="d-flex gap-2">
+                <a href="../public/login.html" class="btn btn-outline-primary-custom">Đăng nhập</a>
+                <a href="../public/register.html" class="btn btn-primary-custom">Đăng ký</a>
+            </div>
+        </div>
+    </div>
+</header>

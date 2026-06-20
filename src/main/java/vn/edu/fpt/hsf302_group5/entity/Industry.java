@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Industry")
+@Table(name = "industry")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,10 +15,10 @@ import java.util.Set;
 public class Industry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IndustryID")
+    @Column(name = "industry_id")
     private Integer industryId;
 
-    @Column(name = "IndustryName", nullable = false, unique = true, length = 100)
+    @Column(name = "industry_name", nullable = false, unique = true, length = 100)
     private String industryName;
 
     // Relationships
@@ -30,3 +30,4 @@ public class Industry {
     @Builder.Default
     private Set<JobPost> jobPosts = new HashSet<>();
 }
+

@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "JobPost")
+@Table(name = "job_post")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,77 +18,77 @@ import java.util.Set;
 public class JobPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "JobID")
+    @Column(name = "job_id")
     private Integer jobId;
 
-    @Column(name = "RecruiterID", nullable = false)
+    @Column(name = "recruiter_id", nullable = false)
     private Integer recruiterId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RecruiterID", insertable = false, updatable = false)
+    @JoinColumn(name = "recruiter_id", insertable = false, updatable = false)
     private Recruiter recruiter;
 
-    @Column(name = "IndustryID", nullable = false)
+    @Column(name = "industry_id", nullable = false)
     private Integer industryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "IndustryID", insertable = false, updatable = false)
+    @JoinColumn(name = "industry_id", insertable = false, updatable = false)
     private Industry industry;
 
-    @Column(name = "ApprovedBy")
+    @Column(name = "approved_by")
     private Integer approvedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ApprovedBy", insertable = false, updatable = false)
+    @JoinColumn(name = "approved_by", insertable = false, updatable = false)
     private User approver;
 
-    @Column(name = "JobLevel", length = 30)
+    @Column(name = "job_level", length = 30)
     private String jobLevel;
 
-    @Column(name = "Vacancies")
+    @Column(name = "vacancies")
     @Builder.Default
     private Integer vacancies = 1;
 
-    @Column(name = "Title", nullable = false, length = 200)
+    @Column(name = "title", nullable = false, length = 200)
     private String title;
 
-    @Column(name = "Description", nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "description", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
-    @Column(name = "Requirement", columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "requirement", columnDefinition = "NVARCHAR(MAX)")
     private String requirement;
 
-    @Column(name = "Location", length = 200)
+    @Column(name = "location", length = 200)
     private String location;
 
-    @Column(name = "SalaryMin", precision = 18, scale = 2)
+    @Column(name = "salary_min", precision = 18, scale = 2)
     private BigDecimal salaryMin;
 
-    @Column(name = "SalaryMax", precision = 18, scale = 2)
+    @Column(name = "salary_max", precision = 18, scale = 2)
     private BigDecimal salaryMax;
 
-    @Column(name = "EmploymentType", length = 30)
+    @Column(name = "employment_type", length = 30)
     private String employmentType;
 
-    @Column(name = "Status", nullable = false, length = 30)
+    @Column(name = "status", nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private JobStatus status = JobStatus.PENDING;
 
-    @Column(name = "PostedDate", nullable = false)
+    @Column(name = "posted_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime postedDate = LocalDateTime.now();
 
-    @Column(name = "ExpiredDate")
+    @Column(name = "expired_date")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime expiredDate;
 
-    @Column(name = "ApprovedDate")
+    @Column(name = "approved_date")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime approvedDate;
 
-    @Column(name = "AdminComment", length = 500)
+    @Column(name = "admin_comment", length = 500)
     private String adminComment;
 
     // Relationships
@@ -100,3 +100,4 @@ public class JobPost {
     @Builder.Default
     private Set<Application> applications = new HashSet<>();
 }
+

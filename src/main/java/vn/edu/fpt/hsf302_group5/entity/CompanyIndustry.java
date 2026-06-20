@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "CompanyIndustry")
+@Table(name = "company_industry")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,10 +15,11 @@ public class CompanyIndustry {
     private CompanyIndustryId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CompanyID", insertable = false, updatable = false)
+    @JoinColumn(name = "company_id", insertable = false, updatable = false)
     private Company company;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "IndustryID", insertable = false, updatable = false)
+    @JoinColumn(name = "industry_id", insertable = false, updatable = false)
     private Industry industry;
 }
+

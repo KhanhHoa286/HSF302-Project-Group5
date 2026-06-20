@@ -12,9 +12,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class CandidateSkillId implements Serializable {
-    @Column(name = "CandidateID")
+    @Column(name = "candidate_id")
     private Integer candidateId;
 
-    @Column(name = "SkillID")
+    @Column(name = "skill_id")
     private Integer skillId;
 }
+

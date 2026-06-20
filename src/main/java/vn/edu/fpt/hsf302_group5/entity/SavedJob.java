@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "SavedJob")
+@Table(name = "saved_job")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,10 +15,11 @@ public class SavedJob {
     private SavedJobId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CandidateID", insertable = false, updatable = false)
+    @JoinColumn(name = "candidate_id", insertable = false, updatable = false)
     private CandidateProfile candidateProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "JobID", insertable = false, updatable = false)
+    @JoinColumn(name = "job_id", insertable = false, updatable = false)
     private JobPost jobPost;
 }
+

@@ -1,0 +1,102 @@
+/* --- Bố cục chính chia 2 phần --- */
+.recruiter-layout {
+    display: flex; /* Bật chế độ xếp hàng ngang */
+    min-height: calc(100vh - 70px);
+}
+
+/* Cột menu bên trái (Sidebar) */
+.recruiter-sidebar {
+    width: 260px; /* Cố định 260px */
+    background: #ffffff; /* Trắng */
+    border-right: 1px solid #eaeaea; /* Kẻ viền phải màu xám */
+    position: sticky;
+    top: 70px; /* Cách đỉnh 70px */
+    height: calc(100vh - 70px);
+    overflow-y: auto; /* Bật thanh cuộn nếu menu quá dài */
+    padding: 20px 0;
+}
+
+/* Khu vực nội dung làm việc bên phải */
+.recruiter-content {
+    flex: 1; /* Chiếm tất cả không gian trống còn lại */
+    padding: 30px;
+    background: #f5f7fb; /* Nền xanh nhạt */
+}
+
+/* Danh sách link trong menu */
+.sidebar-menu {
+    list-style: none; /* Bỏ chấm tròn */
+    padding: 0;
+    margin: 0;
+}
+.sidebar-menu li {
+    margin-bottom: 5px;
+}
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    color: #495057; /* Chữ xám đậm */
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+.sidebar-menu a:hover {
+    background-color: rgba(13, 110, 253, 0.05); /* Rê chuột vào sẽ có nền xanh lợt */
+    color: #0d6efd; /* Chữ xanh dương */
+}
+.sidebar-menu a.active {
+    background-color: rgba(13, 110, 253, 0.08);
+    color: #0d6efd;
+    border-left-color: #0d6efd; /* Xuất hiện đường kẻ đứng bên trái */
+}
+.sidebar-menu i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* --- Khu vực tải Logo công ty lên --- */
+.logo-upload-area {
+    border: 2px dashed #dee2e6; /* Viền nét đứt màu xám */
+    border-radius: 8px; /* Bo góc nhẹ */
+    padding: 30px; /* Lề trong 30px */
+    text-align: center; /* Chữ căn giữa */
+    background: #f8f9fa; /* Nền xám nhạt */
+    cursor: pointer; /* Hình bàn tay khi chỉ chuột vào */
+    transition: all 0.3s ease;
+}
+.logo-upload-area:hover {
+    border-color: #0d6efd; /* Viền hóa xanh dương */
+    background: rgba(13, 110, 253, 0.05); /* Nền xanh lợt */
+}
+
+/* --- Khối thẻ Thống kê (Stat Card) --- */
+.stat-card {
+    padding: 20px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Đổ bóng phía dưới để nổi lên */
+    display: flex; /* Dùng Flexbox để xếp Icon và Text nằm ngang cạnh nhau */
+    align-items: center; /* Xếp ngay ngắn ở giữa theo chiều dọc */
+    gap: 15px; /* Cách nhau 15px */
+}
+
+/* Hình vuông bọc quanh cái Icon trong thống kê */
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem; /* Icon khá to */
+}
+/* Các màu sắc trạng thái cho khối Icon */
+.stat-icon.primary { background: rgba(13, 110, 253, 0.1); color: #0d6efd; } /* Xanh dương */
+.stat-icon.success { background: rgba(25, 135, 84, 0.1); color: #198754; } /* Xanh lá */
+.stat-icon.warning { background: rgba(255, 193, 7, 0.1); color: #c69500; } /* Vàng (chỉnh đậm tí để không chói) */
+.stat-icon.danger { background: rgba(220, 53, 69, 0.1); color: #dc3545; } /* Đỏ */

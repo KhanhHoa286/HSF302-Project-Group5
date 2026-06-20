@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,39 +18,39 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UserID")
+    @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "Email", nullable = false, unique = true, length = 255)
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "PasswordHash", nullable = false, length = 255)
+    @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
-    @Column(name = "FullName", nullable = false, length = 100)
+    @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
 
-    @Column(name = "Phone", length = 20)
+    @Column(name = "phone", length = 20)
     private String phone;
 
-    @Column(name = "AvatarUrl", length = 500)
+    @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
 
-    @Column(name = "Role", nullable = false, length = 20)
+    @Column(name = "role", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @Column(name = "Status", nullable = false, length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
 
-    @Column(name = "CreatedAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "UpdatedAt")
+    @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
@@ -67,3 +67,4 @@ public class User {
     @Builder.Default
     private Set<JobPost> approvedJobPosts = new HashSet<>();
 }
+

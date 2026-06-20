@@ -12,9 +12,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class CompanyIndustryId implements Serializable {
-    @Column(name = "CompanyID")
+    @Column(name = "company_id")
     private Integer companyId;
 
-    @Column(name = "IndustryID")
+    @Column(name = "industry_id")
     private Integer industryId;
 }
+
