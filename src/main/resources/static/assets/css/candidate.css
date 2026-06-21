@@ -1,0 +1,178 @@
+/* ==========================================================================
+   CSS DÀNH CHO ỨNG VIÊN (CANDIDATE.CSS)
+   Gồm: Bố cục chia cột, Sidebar ứng viên, Danh sách việc làm...
+   ========================================================================== */
+
+/* --- Bố cục chính chia 2 phần (Sidebar và Content) --- */
+.candidate-layout {
+    display: flex; /* Dùng flexbox để xếp các khối nằm ngang cạnh nhau */
+    min-height: calc(100vh - 70px); /* Bằng chiều cao màn hình trừ đi 70px của Header */
+}
+
+/* --- Cột thanh bên (Sidebar) --- */
+.candidate-sidebar {
+    width: 260px; /* Chiều rộng cố định 260px */
+    background: #ffffff; /* Nền trắng */
+    border-right: 1px solid #eaeaea; /* Có đường kẻ dọc màu xám bên phải */
+    position: sticky; /* Đứng yên khi cuộn trang */
+    top: 70px; /* Đứng ở khoảng cách 70px so với đỉnh (nằm dưới header) */
+    height: calc(100vh - 70px); /* Chiều cao cố định */
+    overflow-y: auto; /* Nếu menu quá dài thì sinh ra thanh cuộn dọc */
+    padding: 20px 0; /* Khoảng cách lề trên dưới 20px */
+}
+
+/* Nội dung chính bên phải của ứng viên */
+.candidate-content {
+    flex: 1; /* Chiếm toàn bộ phần không gian còn lại (bên phải) */
+    padding: 30px; /* Khoảng cách lề bên trong 30px */
+    background: #f5f7fb; /* Nền xanh xám nhạt (giống common.css) */
+}
+
+/* --- Danh sách menu trong Sidebar --- */
+.sidebar-menu {
+    list-style: none; /* Xóa các dấu chấm tròn của thẻ ul/li */
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 5px; /* Các nút cách nhau 5px */
+}
+
+/* Đường link trong menu */
+.sidebar-menu a {
+    display: flex;
+    align-items: center; /* Các icon và chữ nằm thẳng hàng */
+    padding: 12px 24px; /* Trên dưới 12px, trái phải 24px */
+    color: #495057; /* Màu xám đen */
+    text-decoration: none; /* Xóa gạch chân */
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent; /* Viền trái tàng hình (sẽ hiện khi active) */
+}
+
+/* Khi di chuột vào link trong menu */
+.sidebar-menu a:hover {
+    background-color: rgba(13, 110, 253, 0.05); /* Nền xanh nhạt xíu */
+    color: #0d6efd; /* Chữ chuyển xanh dương */
+}
+
+/* Khi trang đó đang được mở (Active) */
+.sidebar-menu a.active {
+    background-color: rgba(13, 110, 253, 0.08); /* Nền xanh dương nhạt */
+    color: #0d6efd; /* Chữ xanh dương */
+    border-left-color: #0d6efd; /* Viền bên trái hiện màu xanh dương */
+}
+
+/* Icon trong menu */
+.sidebar-menu i {
+    margin-right: 12px; /* Cách chữ 12px */
+    width: 20px; /* Đảm bảo các icon có chiều rộng bằng nhau cho thẳng hàng */
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Khối tìm kiếm (Filter) đứng yên */
+.filter-card {
+    position: sticky;
+    top: 90px; /* Đứng cách trên 90px khi cuộn trang */
+}
+
+/* --- Khu vực Hồ sơ (Profile) --- */
+.profile-section {
+    margin-bottom: 30px; /* Cách nhau 30px */
+}
+/* Tiêu đề mỗi khối thông tin */
+.profile-section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eaeaea; /* Kẻ đường gạch dưới */
+}
+
+/* Kỹ năng hiển thị dạng nhãn (Tags) */
+.skill-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: rgba(13, 110, 253, 0.1); /* Nền xanh nhạt */
+    color: #0d6efd; /* Chữ xanh đậm */
+    border-radius: 20px; /* Bo góc tròn hẳn như viên thuốc */
+    margin-right: 8px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* --- Khu vực tải CV (Upload CV) --- */
+.upload-drop-area {
+    border: 2px dashed #cccccc; /* Viền đứt nét màu xám */
+    border-radius: 12px;
+    padding: 50px 20px;
+    text-align: center;
+    background: #fafafa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+/* Khi rê chuột vào khu vực upload */
+.upload-drop-area:hover {
+    border-color: #0d6efd; /* Đổi thành nét đứt xanh dương */
+    background: rgba(13, 110, 253, 0.02);
+}
+.upload-icon {
+    font-size: 3rem; /* Icon cực to */
+    color: #adb5bd; /* Xám nhạt */
+    margin-bottom: 15px;
+}
+
+/* --- Biểu đồ Dòng Thời Gian (Timeline Kinh nghiệm làm việc) --- */
+.timeline {
+    position: relative; /* Đặt mốc tọa độ ở đây */
+    padding: 0;
+    list-style: none; /* Xóa dấu chấm */
+}
+/* Đường kẻ dọc nối các mốc thời gian */
+.timeline::before {
+    content: ''; /* Không chứa chữ */
+    position: absolute;
+    top: 0; bottom: 0; left: 31px; /* Đặt ở bên trái, cách mép 31px */
+    width: 2px; /* Độ dày 2px */
+    background: #e9ecef; /* Màu kẻ dọc xám nhạt */
+}
+.timeline > li {
+    position: relative;
+    margin-bottom: 25px;
+}
+/* Icon chấm mốc thời gian tròn tròn */
+.timeline .timeline-badge {
+    color: #ffffff; /* Icon trắng */
+    width: 40px;
+    height: 40px;
+    line-height: 40px; /* Nằm chính giữa */
+    font-size: 1.2em;
+    text-align: center;
+    position: absolute; /* Đặt đè lên đường kẻ dọc */
+    top: 0; left: 12px;
+    background-color: #e9ecef;
+    border-radius: 50%; /* Bo tròn hình tròn */
+    z-index: 100; /* Hiển thị nổi lên trên */
+}
+.timeline .timeline-badge.success { background-color: #198754; } /* Chấm màu xanh lá */
+.timeline .timeline-badge.primary { background-color: #0d6efd; } /* Chấm màu xanh dương */
+.timeline .timeline-badge.danger { background-color: #dc3545; } /* Chấm màu đỏ */
+
+/* Thẻ thông tin bên cạnh mốc thời gian */
+.timeline .timeline-panel {
+    width: calc(100% - 75px); /* Chiếm phần bên phải, trừ đi 75px khoảng icon tròn */
+    float: right; /* Đẩy sang phải */
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+}
+/* Xoá hiệu ứng float */
+.timeline > li::after {
+    content: " ";
+    display: table;
+    clear: both;
+}
