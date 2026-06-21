@@ -23,6 +23,33 @@ USE [hsf_group_project];
 GO
 
 -- =========================
+-- PROVINCE
+-- =========================
+CREATE TABLE province
+(
+    province_id   INT IDENTITY(1,1) PRIMARY KEY,
+    province_code VARCHAR(20) NOT NULL UNIQUE,
+    province_name NVARCHAR(100) NOT NULL UNIQUE
+);
+
+-- =========================
+-- ADMINISTRATIVE UNIT
+-- =========================
+CREATE TABLE administrative_unit
+(
+    unit_id      INT IDENTITY(1,1) PRIMARY KEY,
+    province_id  INT NOT NULL,
+    unit_code    VARCHAR(20) NOT NULL UNIQUE,
+    unit_name    NVARCHAR(100) NOT NULL,
+    unit_level   VARCHAR(20) NOT NULL
+        CONSTRAINT ck_administrative_unit_level CHECK (unit_level IN ('COMMUNE', 'WARD', 'SPECIAL_ZONE')),
+
+    CONSTRAINT fk_administrative_unit_province FOREIGN KEY (province_id)
+        REFERENCES province (province_id),
+    CONSTRAINT uq_administrative_unit_name UNIQUE (province_id, unit_name)
+);
+
+-- =========================
 -- USERS
 -- =========================
 CREATE TABLE users
@@ -46,16 +73,23 @@ CREATE TABLE users
 -- =========================
 CREATE TABLE company
 (
-    company_id   INT IDENTITY(1,1) PRIMARY KEY,
-    company_name NVARCHAR(200) NOT NULL,
-    logo_url     NVARCHAR(500),
-    website      VARCHAR(255),
-    description  NVARCHAR(MAX),
-    address      NVARCHAR(255),
-    status       VARCHAR(20) NOT NULL DEFAULT 'ACTIVE'
+    company_id                INT IDENTITY(1,1) PRIMARY KEY,
+    company_name              NVARCHAR(200) NOT NULL,
+    logo_url                  NVARCHAR(500),
+    website                   VARCHAR(255),
+    description               NVARCHAR(MAX),
+    address_detail            NVARCHAR(255),
+    province_id               INT NULL,
+    administrative_unit_id    INT NULL,
+    status                    VARCHAR(20) NOT NULL DEFAULT 'ACTIVE'
         CONSTRAINT ck_company_status CHECK (status IN ('ACTIVE', 'INACTIVE')),
-    created_at   DATETIME2   DEFAULT GETDATE(),
-    updated_at   DATETIME2 NULL
+    created_at                DATETIME2   DEFAULT GETDATE(),
+    updated_at                DATETIME2 NULL,
+
+    CONSTRAINT fk_company_province FOREIGN KEY (province_id)
+        REFERENCES province (province_id),
+    CONSTRAINT fk_company_administrative_unit FOREIGN KEY (administrative_unit_id)
+        REFERENCES administrative_unit (unit_id)
 );
 
 -- =========================
@@ -102,15 +136,21 @@ CREATE TABLE company_industry
 -- =========================
 CREATE TABLE candidate_profile
 (
-    candidate_id  INT PRIMARY KEY,
-    date_of_birth DATE,
-    gender        VARCHAR(10)
+    candidate_id             INT PRIMARY KEY,
+    date_of_birth            DATE,
+    gender                   VARCHAR(10)
         CONSTRAINT ck_candidate_gender CHECK (gender IN ('MALE', 'FEMALE', 'OTHER')),
-    address       NVARCHAR(255),
-    summary       NVARCHAR(MAX),
+    address_detail           NVARCHAR(255),
+    province_id              INT NULL,
+    administrative_unit_id   INT NULL,
+    summary                  NVARCHAR(MAX),
 
     CONSTRAINT fk_candidate_user FOREIGN KEY (candidate_id)
-        REFERENCES users (user_id)
+        REFERENCES users (user_id),
+    CONSTRAINT fk_candidate_province FOREIGN KEY (province_id)
+        REFERENCES province (province_id),
+    CONSTRAINT fk_candidate_administrative_unit FOREIGN KEY (administrative_unit_id)
+        REFERENCES administrative_unit (unit_id)
 );
 
 -- =========================
@@ -193,25 +233,27 @@ CREATE TABLE cv
 -- =========================
 CREATE TABLE job_post
 (
-    job_id          INT IDENTITY(1,1) PRIMARY KEY,
-    recruiter_id    INT           NOT NULL,
-    industry_id     INT           NOT NULL,
-    job_level       VARCHAR(30),
-    vacancies       INT           DEFAULT 1,
-    title           NVARCHAR(200) NOT NULL,
-    description     NVARCHAR(MAX) NOT NULL,
-    requirement     NVARCHAR(MAX),
-    location        NVARCHAR(200),
-    salary_min      DECIMAL(18, 2),
-    salary_max      DECIMAL(18, 2),
-    employment_type VARCHAR(30),
-    status          VARCHAR(30)   NOT NULL DEFAULT 'PENDING'
+    job_id                  INT IDENTITY(1,1) PRIMARY KEY,
+    recruiter_id            INT           NOT NULL,
+    industry_id             INT           NOT NULL,
+    job_level               VARCHAR(30),
+    vacancies               INT           DEFAULT 1,
+    title                   NVARCHAR(200) NOT NULL,
+    description             NVARCHAR(MAX) NOT NULL,
+    requirement             NVARCHAR(MAX),
+    location_detail         NVARCHAR(200),
+    province_id             INT NULL,
+    administrative_unit_id  INT NULL,
+    salary_min              DECIMAL(18, 2),
+    salary_max              DECIMAL(18, 2),
+    employment_type         VARCHAR(30),
+    status                  VARCHAR(30)   NOT NULL DEFAULT 'PENDING'
         CONSTRAINT ck_job_post_status CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED', 'CLOSED')),
-    posted_date     DATETIME2     DEFAULT GETDATE(),
-    expired_date    DATETIME2 NULL,
-    approved_by     INT NULL,
-    approved_date   DATETIME2 NULL,
-    admin_comment   NVARCHAR(500),
+    posted_date             DATETIME2     DEFAULT GETDATE(),
+    expired_date            DATETIME2 NULL,
+    approved_by             INT NULL,
+    approved_date           DATETIME2 NULL,
+    admin_comment           NVARCHAR(500),
 
     CONSTRAINT ck_salary CHECK (
         salary_min IS NULL
@@ -224,7 +266,11 @@ CREATE TABLE job_post
     CONSTRAINT fk_job_post_industry FOREIGN KEY (industry_id)
         REFERENCES industry (industry_id),
     CONSTRAINT fk_job_post_admin FOREIGN KEY (approved_by)
-        REFERENCES users (user_id)
+        REFERENCES users (user_id),
+    CONSTRAINT fk_job_post_province FOREIGN KEY (province_id)
+        REFERENCES province (province_id),
+    CONSTRAINT fk_job_post_administrative_unit FOREIGN KEY (administrative_unit_id)
+        REFERENCES administrative_unit (unit_id)
 );
 
 -- =========================

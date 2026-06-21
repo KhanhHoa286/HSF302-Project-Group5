@@ -46,24 +46,23 @@ public class User {
     private UserStatus status = UserStatus.ACTIVE;
 
     @Column(name = "created_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
-    // Relationships
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private Set<Recruiter> recruiters = new HashSet<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Recruiter recruiter;
 
-    @OneToMany(mappedBy = "changedBy", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private CandidateProfile candidateProfile;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
     private Set<ApplicationStatusHistory> statusHistories = new HashSet<>();
 
-    @OneToMany(mappedBy = "approvedBy", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "approver", cascade = CascadeType.ALL)
     @Builder.Default
     private Set<JobPost> approvedJobPosts = new HashSet<>();
 }

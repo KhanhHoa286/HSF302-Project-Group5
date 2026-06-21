@@ -17,7 +17,7 @@ public class Recruiter {
     @Column(name = "recruiter_id")
     private Integer recruiterId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruiter_id", insertable = false, updatable = false)
     private User user;
 

@@ -34,15 +34,14 @@ public class Application {
     @JoinColumn(name = "job_id", insertable = false, updatable = false)
     private JobPost jobPost;
 
-    @Column(name = "cvid", nullable = false)
+    @Column(name = "cv_id", nullable = false)
     private Integer cvId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cvid", insertable = false, updatable = false)
+    @JoinColumn(name = "cv_id", insertable = false, updatable = false)
     private CV cv;
 
     @Column(name = "applied_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime appliedDate = LocalDateTime.now();
 

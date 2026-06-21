@@ -3,6 +3,8 @@ package vn.edu.fpt.hsf302_group5.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "saved_job")
 @Getter
@@ -21,5 +23,9 @@ public class SavedJob {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", insertable = false, updatable = false)
     private JobPost jobPost;
+
+    @Column(name = "saved_at", nullable = false)
+    @Builder.Default
+    private LocalDateTime savedAt = LocalDateTime.now();
 }
 

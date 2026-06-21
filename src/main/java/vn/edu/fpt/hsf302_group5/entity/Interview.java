@@ -26,7 +26,6 @@ public class Interview {
     private Application application;
 
     @Column(name = "interview_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime interviewDate;
 
     @Column(name = "location", length = 255)
@@ -39,7 +38,6 @@ public class Interview {
     private String note;
 
     @Column(name = "created_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 

@@ -41,7 +41,6 @@ public class ApplicationStatusHistory {
     private User user;
 
     @Column(name = "changed_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime changedAt = LocalDateTime.now();
 }

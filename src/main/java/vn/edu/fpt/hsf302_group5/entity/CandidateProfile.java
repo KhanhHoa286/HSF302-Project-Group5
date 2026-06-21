@@ -30,8 +30,22 @@ public class CandidateProfile {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "address", length = 255)
-    private String address;
+    @Column(name = "address_detail", length = 255)
+    private String addressDetail;
+
+    @Column(name = "province_id")
+    private Integer provinceId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id", insertable = false, updatable = false)
+    private Province province;
+
+    @Column(name = "administrative_unit_id")
+    private Integer administrativeUnitId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "administrative_unit_id", insertable = false, updatable = false)
+    private AdministrativeUnit administrativeUnit;
 
     @Column(name = "summary", columnDefinition = "NVARCHAR(MAX)")
     private String summary;

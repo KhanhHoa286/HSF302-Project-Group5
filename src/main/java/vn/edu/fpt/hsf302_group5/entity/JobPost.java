@@ -58,8 +58,22 @@ public class JobPost {
     @Column(name = "requirement", columnDefinition = "NVARCHAR(MAX)")
     private String requirement;
 
-    @Column(name = "location", length = 200)
-    private String location;
+    @Column(name = "location_detail", length = 200)
+    private String locationDetail;
+
+    @Column(name = "province_id")
+    private Integer provinceId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id", insertable = false, updatable = false)
+    private Province province;
+
+    @Column(name = "administrative_unit_id")
+    private Integer administrativeUnitId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "administrative_unit_id", insertable = false, updatable = false)
+    private AdministrativeUnit administrativeUnit;
 
     @Column(name = "salary_min", precision = 18, scale = 2)
     private BigDecimal salaryMin;
@@ -76,16 +90,13 @@ public class JobPost {
     private JobStatus status = JobStatus.PENDING;
 
     @Column(name = "posted_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime postedDate = LocalDateTime.now();
 
     @Column(name = "expired_date")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime expiredDate;
 
     @Column(name = "approved_date")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime approvedDate;
 
     @Column(name = "admin_comment", length = 500)

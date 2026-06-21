@@ -32,8 +32,22 @@ public class Company {
     @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
-    @Column(name = "address", length = 255)
-    private String address;
+    @Column(name = "address_detail", length = 255)
+    private String addressDetail;
+
+    @Column(name = "province_id")
+    private Integer provinceId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id", insertable = false, updatable = false)
+    private Province province;
+
+    @Column(name = "administrative_unit_id")
+    private Integer administrativeUnitId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "administrative_unit_id", insertable = false, updatable = false)
+    private AdministrativeUnit administrativeUnit;
 
     @Column(name = "status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
@@ -41,12 +55,10 @@ public class Company {
     private CompanyStatus status = CompanyStatus.ACTIVE;
 
     @Column(name = "created_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime updatedAt;
 
     // Relationships

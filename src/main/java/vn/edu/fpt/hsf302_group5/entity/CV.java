@@ -16,7 +16,7 @@ import java.util.Set;
 public class CV {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cvid")
+    @Column(name = "cv_id")
     private Integer cvId;
 
     @Column(name = "candidate_id", nullable = false)
@@ -36,7 +36,6 @@ public class CV {
     private String fileUrl;
 
     @Column(name = "uploaded_at", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime uploadedAt = LocalDateTime.now();
 
