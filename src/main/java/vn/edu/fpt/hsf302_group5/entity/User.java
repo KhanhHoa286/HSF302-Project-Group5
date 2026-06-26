@@ -2,7 +2,6 @@ package vn.edu.fpt.hsf302_group5.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import vn.edu.fpt.hsf302_group5.entity.enums.UserRole;
 import vn.edu.fpt.hsf302_group5.entity.enums.UserStatus;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -36,9 +35,9 @@ public class User {
     @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
 
-    @Column(name = "role", nullable = false, length = 20)
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
     @Column(name = "status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
@@ -66,4 +65,3 @@ public class User {
     @Builder.Default
     private Set<JobPost> approvedJobPosts = new HashSet<>();
 }
-

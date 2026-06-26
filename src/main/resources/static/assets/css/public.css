@@ -1,0 +1,127 @@
+/* ==========================================================================
+   CSS DÀNH CHO NGƯỜI DÙNG KHÁCH (PUBLIC.CSS)
+   Gồm: Trang chủ, Đăng nhập, Đăng ký
+   ========================================================================== */
+
+/* --- Banner trang chủ (Khu vực to nhất trên cùng) --- */
+.hero-banner {
+    /* Hiệu ứng màu nền loang (gradient) xanh dương rất nhạt */
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(13, 110, 253, 0.15) 100%);
+    padding: 80px 0; /* Khoảng cách trên dưới 80px */
+    border-bottom: 1px solid #eaeaea; /* Viền dưới xám nhạt */
+}
+
+/* Tiêu đề to trong Banner */
+.hero-banner h1 {
+    font-weight: 700; /* In đậm mạnh */
+    color: #1a1a1a; /* Đen đậm */
+    margin-bottom: 20px;
+}
+
+/* Câu mô tả nhỏ trong Banner */
+.hero-banner .subtitle {
+    font-size: 1.2rem; /* Chữ to hơn bình thường 1 xíu */
+    color: #666666; /* Chữ xám */
+    margin-bottom: 40px;
+}
+
+/* --- Thanh tìm kiếm trên Banner --- */
+.search-bar-hero {
+    background: #ffffff; /* Nền trắng */
+    padding: 10px; /* Khoảng cách lề bên trong 10px */
+    border-radius: 12px; /* Bo góc tròn 12px */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Đổ bóng to để làm nổi bật */
+}
+
+/* Xoá viền mặc định của các ô nhập chữ trong thanh tìm kiếm */
+.search-bar-hero .form-control, .search-bar-hero .form-select {
+    border: none;
+    background: transparent; /* Nền trong suốt */
+    box-shadow: none; /* Bỏ đổ bóng */
+}
+
+/* Vạch kẻ xám phân cách giữa ô "Từ khóa" và ô "Địa điểm" */
+.search-bar-hero .border-end-custom {
+    border-right: 1px solid #eeeeee;
+}
+
+/* --- Thẻ hiển thị việc làm (Trang chủ) --- */
+.job-card {
+    border: 1px solid #f0f0f0; /* Viền xám mờ */
+}
+
+/* Khi di chuột vào thẻ việc làm, viền sẽ thành màu xanh dương */
+.job-card:hover {
+    border-color: #0d6efd;
+}
+
+/* Logo công ty trong thẻ việc làm */
+.company-logo {
+    width: 60px; /* Rộng 60px */
+    height: 60px; /* Cao 60px */
+    object-fit: contain; /* Căn chỉnh ảnh không bị méo */
+    border-radius: 8px; /* Bo góc 8px */
+    border: 1px solid #f0f0f0; /* Viền mỏng */
+    padding: 5px; /* Cách lề trong 5px */
+}
+
+/* --- Thẻ hiển thị danh mục ngành nghề --- */
+.category-card {
+    text-align: center; /* Căn giữa chữ và icon */
+    padding: 30px 20px; /* Lề trên dưới 30px, lề trái phải 20px */
+    background: #ffffff; /* Nền trắng */
+    border-radius: 10px; /* Bo góc 10px */
+    border: 1px solid #f0f0f0; /* Viền xám nhạt */
+    cursor: pointer; /* Chuột chuyển thành hình bàn tay khi chỉ vào */
+    transition: all 0.3s ease; /* Chuyển động mượt */
+}
+
+/* Khi di chuột vào thẻ ngành nghề */
+.category-card:hover {
+    border-color: #0d6efd; /* Viền màu xanh dương */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* Nổi lên */
+    transform: translateY(-5px); /* Nhấc thẻ bay lên trên 5px */
+}
+
+/* Icon (hình vẽ) trong thẻ ngành nghề */
+.category-icon {
+    font-size: 2.5rem; /* Kích thước icon rất to */
+    color: #0d6efd; /* Icon màu xanh dương */
+    margin-bottom: 15px; /* Cắt lớp chữ bên dưới 15px */
+}
+
+/* --- Hàng logo các công ty đối tác --- */
+.top-companies img {
+    max-height: 50px; /* Chiều cao tối đa 50px */
+    filter: grayscale(100%); /* Biến ảnh màu thành ảnh đen trắng */
+    opacity: 0.6; /* Làm mờ ảnh một chút */
+    transition: all 0.3s ease; /* Hiệu ứng mượt */
+}
+
+/* Khi di chuột vào logo công ty */
+.top-companies img:hover {
+    filter: grayscale(0%); /* Hủy đen trắng, ảnh hiện màu gốc */
+    opacity: 1; /* Hủy mờ, ảnh rõ ràng */
+}
+
+/* --- Khối bao bọc trang Đăng nhập / Đăng ký --- */
+.auth-wrapper {
+    /* Chiều cao bằng màn hình trừ đi phần header/footer */
+    min-height: calc(100vh - 140px);
+    display: flex; /* Bật chế độ Flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    padding: 40px 0;
+}
+
+/* Khung form Đăng nhập */
+.auth-card {
+    width: 100%;
+    max-width: 450px; /* Rộng tối đa 450px */
+    padding: 40px; /* Cách lề trong 40px */
+}
+
+/* Form Đăng ký cần rộng hơn một chút để chia 2 cột */
+.auth-card.register-card {
+    max-width: 550px; /* Rộng tối đa 550px */
+}

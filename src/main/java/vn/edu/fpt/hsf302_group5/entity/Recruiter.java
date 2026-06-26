@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "recruiter")
+@Table(name = "recruiters")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -36,7 +36,7 @@ public class controller {
         return "pages/candidate/saved-jobs";
     }
 
-    @GetMapping("/test6")
+    @GetMapping("/")
     public String test6(){
         return "pages/candidate/upload-cv";
     }

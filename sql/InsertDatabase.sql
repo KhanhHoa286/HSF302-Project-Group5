@@ -5,7 +5,7 @@ GO
 -- PROVINCE
 -- Seed theo 34 đơn vị hành chính cấp tỉnh hiện hành
 -- =========================
-INSERT INTO province
+INSERT INTO provinces
 (province_code, province_name)
 VALUES
     ('HA_NOI', N'Hà Nội'),
@@ -46,7 +46,7 @@ VALUES
 -- =========================
 -- ADMINISTRATIVE UNIT (Full Nationwide dataset from danh-muc-dvhc-2025.pdf)
 -- =========================
-INSERT INTO administrative_unit
+INSERT INTO administrative_units
 (province_id, unit_code, unit_name, unit_level)
 VALUES
     (1, 'HN_HOAN_KIEM', N'Hoàn Kiếm', 'WARD'),
@@ -1000,7 +1000,7 @@ VALUES
     (16, 'PT_HY_CUONG', N'Hy Cương', 'COMMUNE'),
     (16, 'PT_LAM_THAO', N'Lâm Thao', 'COMMUNE');
 
-INSERT INTO administrative_unit
+INSERT INTO administrative_units
 (province_id, unit_code, unit_name, unit_level)
 VALUES
     (16, 'PT_XUAN_LUNG', N'Xuân Lũng', 'COMMUNE'),
@@ -1954,7 +1954,7 @@ VALUES
     (25, 'GL_BINH_DINH', N'Bình Định', 'WARD'),
     (25, 'GL_AN_NHON', N'An Nhơn', 'WARD');
 
-INSERT INTO administrative_unit
+INSERT INTO administrative_units
 (province_id, unit_code, unit_name, unit_level)
 VALUES
     (25, 'GL_AN_NHON_DONG', N'An Nhơn Đông', 'WARD'),
@@ -2899,28 +2899,70 @@ VALUES
     (2, 'HCM_BEN_THANH', N'Bến Thành', 'WARD'),
     (2, 'HCM_LINH_TRUNG', N'Linh Trung', 'WARD'),
     (2, 'HCM_TAN_DINH', N'Tân Định', 'WARD'),
-    ((SELECT province_id FROM province WHERE province_name = N'Hải Phòng'), 'HP_HONG_BANG', N'Hồng Bàng', 'WARD'),
-    ((SELECT province_id FROM province WHERE province_name = N'Hải Phòng'), 'HP_NGO_QUYEN', N'Ngô Quyền', 'WARD'),
-    ((SELECT province_id FROM province WHERE province_name = N'Cần Thơ'), 'CT_NINH_KIEU', N'Ninh Kiều', 'WARD'),
-    ((SELECT province_id FROM province WHERE province_name = N'Cần Thơ'), 'CT_BINH_THUY', N'Bình Thủy', 'WARD');
+    ((SELECT province_id FROM provinces WHERE province_name = N'Hải Phòng'), 'HP_HONG_BANG', N'Hồng Bàng', 'WARD'),
+    ((SELECT province_id FROM provinces WHERE province_name = N'Hải Phòng'), 'HP_NGO_QUYEN', N'Ngô Quyền', 'WARD'),
+    ((SELECT province_id FROM provinces WHERE province_name = N'Cần Thơ'), 'CT_NINH_KIEU', N'Ninh Kiều', 'WARD'),
+    ((SELECT province_id FROM provinces WHERE province_name = N'Cần Thơ'), 'CT_BINH_THUY', N'Bình Thủy', 'WARD');
 
 
+-- =========================
+-- ROLE
+-- =========================
+INSERT INTO roles (role_name, description) VALUES
+    ('ADMIN', N'Quản trị viên hệ thống'),
+    ('CANDIDATE', N'Ứng viên tìm việc'),
+    ('RECRUITER', N'Nhà tuyển dụng');
+
+-- =========================
+-- PERMISSION
+-- =========================
+INSERT INTO permissions (permission_code, permission_name, description) VALUES
+    ('USER_CREATE', N'Tạo người dùng mới', N'Cho phép tạo người dùng mới trong hệ thống'),
+    ('USER_UPDATE', N'Cập nhật người dùng', N'Cho phép sửa thông tin người dùng'),
+    ('USER_DELETE', N'Xóa người dùng', N'Cho phép xóa hoặc vô hiệu hóa người dùng'),
+    ('JOB_APPROVE', N'Duyệt tin tuyển dụng', N'Cho phép phê duyệt tin tuyển dụng của nhà tuyển dụng'),
+    ('JOB_DELETE', N'Xóa tin tuyển dụng', N'Cho phép xóa tin tuyển dụng'),
+    ('COMPANY_UPDATE', N'Cập nhật thông tin công ty', N'Cho phép cập nhật thông tin công ty'),
+    ('JOB_CREATE', N'Tạo tin tuyển dụng mới', N'Cho phép tạo mới tin tuyển dụng'),
+    ('JOB_UPDATE', N'Cập nhật tin tuyển dụng', N'Cho phép chỉnh sửa tin tuyển dụng'),
+    ('APPLICATION_VIEW', N'Xem hồ sơ ứng tuyển', N'Cho phép xem chi tiết hồ sơ đã ứng tuyển'),
+    ('APPLICATION_UPDATE', N'Cập nhật trạng thái ứng tuyển', N'Cho phép cập nhật trạng thái hồ sơ ứng tuyển');
+
+-- =========================
+-- ROLE PERMISSION
+-- =========================
+-- Admin có tất cả quyền
+INSERT INTO role_permissions (role_id, permission_id)
+SELECT (SELECT role_id FROM roles WHERE role_name = 'ADMIN'), permission_id
+FROM permissions;
+
+-- Recruiter có quyền: COMPANY_UPDATE, JOB_DELETE, JOB_CREATE, JOB_UPDATE, APPLICATION_VIEW, APPLICATION_UPDATE
+INSERT INTO role_permissions (role_id, permission_id)
+VALUES
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'COMPANY_UPDATE')),
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'JOB_DELETE')),
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'JOB_CREATE')),
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'JOB_UPDATE')),
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'APPLICATION_VIEW')),
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'APPLICATION_UPDATE'));
+
+-- =========================
 -- USERS
 -- =========================
 INSERT INTO users
-(email, password_hash, full_name, phone, avatar_url, role, status)
+(email, password_hash, full_name, phone, avatar_url, role_id, status)
 VALUES
-    ('admin@jobhub.com', 'hashed123', N'Nguyễn Quản Trị', '0901000001', NULL, 'ADMIN', 'ACTIVE'),
-    ('recruiter1@fpt.com', 'hashed123', N'Trần Minh HR', '0901000002', NULL, 'RECRUITER', 'ACTIVE'),
-    ('recruiter2@viettel.com', 'hashed123', N'Lê Thu Hà', '0901000003', NULL, 'RECRUITER', 'ACTIVE'),
-    ('candidate1@gmail.com', 'hashed123', N'Nguyễn Văn An', '0901000004', NULL, 'CANDIDATE', 'ACTIVE'),
-    ('candidate2@gmail.com', 'hashed123', N'Trần Thị Mai', '0901000005', NULL, 'CANDIDATE', 'ACTIVE'),
-    ('candidate3@gmail.com', 'hashed123', N'Phạm Đức Long', '0901000006', NULL, 'CANDIDATE', 'ACTIVE');
+    ('admin@jobhub.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Nguyễn Quản Trị', '0901000001', NULL, (SELECT role_id FROM roles WHERE role_name = 'ADMIN'), 'ACTIVE'),
+    ('recruiter1@fpt.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Trần Minh HR', '0901000002', NULL, (SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), 'ACTIVE'),
+    ('recruiter2@viettel.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Lê Thu Hà', '0901000003', NULL, (SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), 'ACTIVE'),
+    ('candidate1@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Nguyễn Văn An', '0901000004', NULL, (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
+    ('candidate2@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Trần Thị Mai', '0901000005', NULL, (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
+    ('candidate3@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Phạm Đức Long', '0901000006', NULL, (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE');
 
 -- =========================
 -- COMPANY
 -- =========================
-INSERT INTO company
+INSERT INTO companies
 (company_name, logo_url, website, description, address_detail, province_id, administrative_unit_id)
 VALUES
     (
@@ -2932,7 +2974,7 @@ VALUES
         1,
         (
             SELECT unit_id
-            FROM administrative_unit
+            FROM administrative_units
             WHERE unit_code = 'HN_HOA_LAC'
         )
     ),
@@ -2945,16 +2987,16 @@ VALUES
         1,
         (
             SELECT unit_id
-            FROM administrative_unit
+            FROM administrative_units
             WHERE unit_code = 'HN_ME_TRI'
         )
     );
 
 -- =========================
 -- RECRUITER
--- UserID 2,3 là recruiter
+-- UserID 2,3 là recruiters
 -- =========================
-INSERT INTO recruiter
+INSERT INTO recruiters
 (recruiter_id, company_id)
 VALUES
     (2,1),
@@ -2963,7 +3005,7 @@ VALUES
 -- =========================
 -- INDUSTRY
 -- =========================
-INSERT INTO industry
+INSERT INTO industries
 (industry_name)
 VALUES
     (N'Information Technology'),
@@ -2974,7 +3016,7 @@ VALUES
 -- =========================
 -- COMPANY INDUSTRY
 -- =========================
-INSERT INTO company_industry
+INSERT INTO company_industries
 (company_id, industry_id)
 VALUES
     (1,1),
@@ -2986,7 +3028,7 @@ VALUES
 -- CANDIDATE PROFILE
 -- UserID 4,5,6
 -- =========================
-INSERT INTO candidate_profile
+INSERT INTO candidate_profiles
 (candidate_id, date_of_birth, gender, address_detail, province_id, administrative_unit_id, summary)
 VALUES
     (
@@ -2997,7 +3039,7 @@ VALUES
         1,
         (
             SELECT unit_id
-            FROM administrative_unit
+            FROM administrative_units
             WHERE unit_code = 'HN_DICH_VONG'
         ),
         N'Sinh viên CNTT yêu thích Java Backend'
@@ -3010,7 +3052,7 @@ VALUES
         5,
         (
             SELECT unit_id
-            FROM administrative_unit
+            FROM administrative_units
             WHERE unit_code = 'DN_HAI_CHAU'
         ),
         N'Frontend Developer với ReactJS'
@@ -3023,7 +3065,7 @@ VALUES
         2,
         (
             SELECT unit_id
-            FROM administrative_unit
+            FROM administrative_units
             WHERE unit_code = 'HCM_BEN_THANH'
         ),
         N'Data Analyst và SQL Developer'
@@ -3032,7 +3074,7 @@ VALUES
 -- =========================
 -- SKILL
 -- =========================
-INSERT INTO skill
+INSERT INTO skills
 (skill_name)
 VALUES
     (N'Java'),
@@ -3045,7 +3087,7 @@ VALUES
 -- =========================
 -- CANDIDATE SKILL
 -- =========================
-INSERT INTO candidate_skill
+INSERT INTO candidate_skills
 (candidate_id, skill_id)
 VALUES
     (4,1),
@@ -3059,7 +3101,7 @@ VALUES
 -- =========================
 -- EDUCATION
 -- =========================
-INSERT INTO education
+INSERT INTO educations
 (candidate_id, school_name, degree, major, start_date, end_date)
 VALUES
     (4,N'Đại học FPT',N'Cử nhân',N'Kỹ thuật phần mềm','2020-09-01','2024-06-30'),
@@ -3069,7 +3111,7 @@ VALUES
 -- =========================
 -- EXPERIENCE
 -- =========================
-INSERT INTO experience
+INSERT INTO experiences
 (candidate_id, company_name, position, description, start_date, end_date)
 VALUES
     (
@@ -3100,32 +3142,32 @@ VALUES
 -- =========================
 -- CV
 -- =========================
-INSERT INTO cv
+INSERT INTO cvs
 (candidate_id, cv_name, file_name, file_url)
 VALUES
     (
         4,
         N'Java Backend CV',
         N'java_backend_cv.pdf',
-        'https://storage.blob.core.windows.net/cv/java_backend_cv.pdf'
+        'https://storage.blob.core.windows.net/cvs/java_backend_cv.pdf'
     ),
     (
         5,
         N'Frontend CV',
         N'frontend_cv.pdf',
-        'https://storage.blob.core.windows.net/cv/frontend_cv.pdf'
+        'https://storage.blob.core.windows.net/cvs/frontend_cv.pdf'
     ),
     (
         6,
         N'Data Analyst CV',
         N'data_cv.pdf',
-        'https://storage.blob.core.windows.net/cv/data_cv.pdf'
+        'https://storage.blob.core.windows.net/cvs/data_cv.pdf'
     );
 
 -- =========================
 -- JOB POST
 -- =========================
-INSERT INTO job_post
+INSERT INTO job_posts
 (
     recruiter_id,
     industry_id,
@@ -3158,7 +3200,7 @@ VALUES
         1,
         (
             SELECT unit_id
-            FROM administrative_unit
+            FROM administrative_units
             WHERE unit_code = 'HN_DICH_VONG'
         ),
         12000000,
@@ -3181,7 +3223,7 @@ VALUES
         1,
         (
             SELECT unit_id
-            FROM administrative_unit
+            FROM administrative_units
             WHERE unit_code = 'HN_ME_TRI'
         ),
         15000000,
@@ -3204,7 +3246,7 @@ VALUES
         2,
         (
             SELECT unit_id
-            FROM administrative_unit
+            FROM administrative_units
             WHERE unit_code = 'HCM_LINH_TRUNG'
         ),
         18000000,
@@ -3219,7 +3261,7 @@ VALUES
 -- =========================
 -- SAVED JOB
 -- =========================
-INSERT INTO saved_job
+INSERT INTO saved_jobs
 (candidate_id, job_id)
 VALUES
     (4,1),
@@ -3229,7 +3271,7 @@ VALUES
 -- =========================
 -- APPLICATION
 -- =========================
-INSERT INTO application
+INSERT INTO applications
 (
     candidate_id,
     job_id,
@@ -3256,7 +3298,7 @@ VALUES
 -- =========================
 -- APPLICATION STATUS HISTORY
 -- =========================
-INSERT INTO application_status_history
+INSERT INTO application_status_histories
 (
     application_id,
     old_status,
@@ -3270,7 +3312,7 @@ VALUES
 -- =========================
 -- INTERVIEW
 -- =========================
-INSERT INTO interview
+INSERT INTO interviews
 (
     application_id,
     interview_date,
@@ -3289,7 +3331,7 @@ VALUES
         'SCHEDULED'
     );
 
-INSERT INTO job_post
+INSERT INTO job_posts
 (
     recruiter_id,
     industry_id,
@@ -3318,7 +3360,7 @@ VALUES
  N'Java Core, OOP, SQL cơ bản',
  N'Duy Tân Tower',
  1,
- (SELECT unit_id FROM administrative_unit WHERE unit_code='HN_CAU_GIAY'),
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HN_CAU_GIAY'),
  5000000,8000000,
  'INTERNSHIP','APPROVED',
  DATEADD(DAY,45,GETDATE()),
@@ -3331,7 +3373,7 @@ VALUES
  N'Java 17, Spring Boot, JPA',
  N'Keangnam',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  18000000,28000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3344,7 +3386,7 @@ VALUES
  N'ReactJS, HTML, CSS, JavaScript',
  N'Thủ Đức',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  15000000,25000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,40,GETDATE()),
@@ -3357,7 +3399,7 @@ VALUES
  N'Java, ReactJS, SQL Server',
  N'Quận 7',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  25000000,40000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3370,7 +3412,7 @@ VALUES
  N'CCNA, TCP/IP, Firewall',
  N'Cầu Giấy',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  16000000,25000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3383,7 +3425,7 @@ VALUES
  N'Pentest, SIEM, SOC',
  N'Mỹ Đình',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  25000000,45000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3396,7 +3438,7 @@ VALUES
  N'SQL, Excel, Power BI',
  N'Tân Bình',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  12000000,18000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,60,GETDATE()),
@@ -3409,7 +3451,7 @@ VALUES
  N'Power BI, SQL, DAX',
  N'Quận 1',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  18000000,28000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,45,GETDATE()),
@@ -3422,7 +3464,7 @@ VALUES
  N'Python, Spark, ETL',
  N'Thủ Đức',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  28000000,45000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3435,7 +3477,7 @@ VALUES
  N'Python, TensorFlow, ML',
  N'Thủ Đức',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  25000000,40000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3448,7 +3490,7 @@ VALUES
  N'Python, NLP, Deep Learning',
  N'Khu Công Nghệ Cao',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  35000000,60000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,45,GETDATE()),
@@ -3461,7 +3503,7 @@ VALUES
  N'Selenium, Test Case',
  N'Hà Đông',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  14000000,22000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,45,GETDATE()),
@@ -3474,7 +3516,7 @@ VALUES
  N'Java, Selenium, TestNG',
  N'Cầu Giấy',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  18000000,28000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3487,7 +3529,7 @@ VALUES
  N'Kotlin, Android SDK',
  N'Thanh Xuân',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  15000000,22000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,40,GETDATE()),
@@ -3500,7 +3542,7 @@ VALUES
  N'Flutter, Dart',
  N'Cầu Giấy',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  18000000,30000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,40,GETDATE()),
@@ -3513,7 +3555,7 @@ VALUES
  N'Microservices, Cloud',
  N'Ba Đình',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  45000000,70000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3526,7 +3568,7 @@ VALUES
  N'Docker, Kubernetes, Azure',
  N'Cầu Giấy',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  25000000,40000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3539,7 +3581,7 @@ VALUES
  N'Azure, Terraform',
  N'Mỹ Đình',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  30000000,50000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3552,7 +3594,7 @@ VALUES
  N'SIEM, SOC',
  N'Hà Nội',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  18000000,28000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,45,GETDATE()),
@@ -3565,7 +3607,7 @@ VALUES
  N'OWASP, Burp Suite',
  N'Hà Nội',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  25000000,45000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3578,7 +3620,7 @@ VALUES
  N'SQL Server, Stored Procedure',
  N'Quận 3',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  13000000,18000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,45,GETDATE()),
@@ -3591,7 +3633,7 @@ VALUES
  N'SQL, Power BI',
  N'Quận 1',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  18000000,28000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3604,7 +3646,7 @@ VALUES
  N'Agile, Scrum',
  N'Cầu Giấy',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  25000000,35000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3617,7 +3659,7 @@ VALUES
  N'PMP, Agile',
  N'Ba Đình',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  35000000,60000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3630,7 +3672,7 @@ VALUES
  N'Figma, Adobe XD',
  N'Hà Nội',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  15000000,25000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,40,GETDATE()),
@@ -3643,7 +3685,7 @@ VALUES
  N'Windows, Network',
  N'Hà Nội',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  10000000,15000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,60,GETDATE()),
@@ -3656,7 +3698,7 @@ VALUES
  N'Linux, Windows Server',
  N'Hà Nội',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  18000000,30000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3669,7 +3711,7 @@ VALUES
  N'Python, FastAPI',
  N'Thủ Đức',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  18000000,30000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,45,GETDATE()),
@@ -3682,7 +3724,7 @@ VALUES
  N'Hadoop, Spark',
  N'Thủ Đức',
  2,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=2),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
  35000000,55000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
@@ -3695,7 +3737,7 @@ VALUES
  N'C#, ASP.NET Core, SQL Server',
  N'Cầu Giấy',
  1,
- (SELECT TOP 1 unit_id FROM administrative_unit WHERE province_id=1),
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  18000000,28000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),

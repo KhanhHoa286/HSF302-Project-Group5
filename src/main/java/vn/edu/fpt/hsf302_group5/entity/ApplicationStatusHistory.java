@@ -6,7 +6,7 @@ import vn.edu.fpt.hsf302_group5.entity.enums.ApplicationStatus;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "application_status_history")
+@Table(name = "application_status_histories")
 @Getter
 @Setter
 @NoArgsConstructor

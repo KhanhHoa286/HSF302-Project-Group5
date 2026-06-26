@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "administrative_unit")
+@Table(name = "administrative_units")
 @Getter
 @Setter
 @NoArgsConstructor

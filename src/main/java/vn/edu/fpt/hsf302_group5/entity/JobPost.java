@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "job_post")
+@Table(name = "job_posts")
 @Getter
 @Setter
 @NoArgsConstructor
