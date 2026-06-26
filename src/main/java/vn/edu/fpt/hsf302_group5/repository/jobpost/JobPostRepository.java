@@ -85,4 +85,8 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
              WHERE j.jobId = :jobPostId
             """)
     JobPostDetailDTO getJobPostDetaiDTOByJobPostId(@Param("jobPostId") Integer jobPostId);
+
+    java.util.List<vn.edu.fpt.hsf302_group5.entity.JobPost> findTop5ByStatusOrderByPostedDateDesc(
+        vn.edu.fpt.hsf302_group5.entity.enums.JobStatus status
+    );
 }
