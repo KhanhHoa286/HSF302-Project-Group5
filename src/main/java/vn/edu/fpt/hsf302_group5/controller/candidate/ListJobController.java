@@ -5,11 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.hsf302_group5.dto.industry.IndustryResponse;
-import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
+import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponseDTO;
 import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
 import vn.edu.fpt.hsf302_group5.service.industry.IndustryService;
 import vn.edu.fpt.hsf302_group5.service.jobpost.JobPostService;
@@ -17,7 +16,6 @@ import vn.edu.fpt.hsf302_group5.service.province.ProvinceService;
 import vn.edu.fpt.hsf302_group5.util.AppConstants;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class ListJobController {
         List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
         List<IndustryResponse> industryResponses = industryService.getAllIndustryResponse();
 
-        Page<JobPostResponse> jobPage = jobPostService.getJobPostsByFilter(search_keyword, industryId, provinceId,minSalary, page);
+        Page<JobPostResponseDTO> jobPage = jobPostService.getJobPostsByFilter(search_keyword, industryId, provinceId,minSalary, page);
         int startPage = (jobPage.getNumber() / AppConstants.NUMBER_PAGE_PER_BLOCK) * AppConstants.NUMBER_PAGE_PER_BLOCK;
         int endPage = Math.min(startPage + AppConstants.NUMBER_PAGE_PER_BLOCK - 1, jobPage.getTotalPages() - 1);
 

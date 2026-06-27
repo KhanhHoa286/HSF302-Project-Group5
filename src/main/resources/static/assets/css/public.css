@@ -125,3 +125,95 @@
 .auth-card.register-card {
     max-width: 550px; /* Rộng tối đa 550px */
 }
+
+/* --- Split Layout Auth Styles --- */
+.auth-container {
+    max-width: 1000px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+}
+.auth-sidebar {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: #ffffff;
+    padding: 48px;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.auth-form-side {
+    width: 55%;
+    padding: 48px;
+}
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid #dee2e6;
+    background: #ffffff;
+    color: #212529;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-decoration: none;
+}
+.social-btn:hover {
+    background: #f8f9fa;
+    border-color: #ced4da;
+}
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #6c757d;
+    margin: 20px 0;
+}
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dee2e6;
+}
+.divider:not(:empty)::before {
+    margin-right: .25em;
+}
+.divider:not(:empty)::after {
+    margin-left: .25em;
+}
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #0d6efd;
+}
+.login-btn {
+    background-color: #0d6efd;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+.login-btn:hover {
+    background-color: #0b5ed7;
+    transform: translateY(-1px);
+}
+@media (max-width: 768px) {
+    .auth-container {
+        flex-direction: column;
+    }
+    .auth-sidebar {
+        width: 100%;
+        padding: 30px;
+    }
+    .auth-form-side {
+        width: 100%;
+        padding: 30px;
+    }
+}

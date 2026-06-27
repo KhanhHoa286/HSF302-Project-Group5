@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailDTO;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
-import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
+import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponseDTO;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 
 import java.math.BigDecimal;
@@ -28,7 +28,7 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
     StatisticResponse getStatistic();
 
     @Query("""
-    select new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse(
+    select new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponseDTO(
         j.jobId, j.title,
         j.recruiter.company.companyName,
         j.province.provinceName,
@@ -47,7 +47,7 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
       and (:salaryMin is null
            or j.salaryMin >= :salaryMin)
 """)
-    Page<JobPostResponse> getJobPostResponseByFilter(
+    Page<JobPostResponseDTO> getJobPostResponseByFilter(
             @Param("searchKeyword") String searchKeyword,
             @Param("industryId") Integer industryId,
             @Param("provinceId") Integer provinceId,

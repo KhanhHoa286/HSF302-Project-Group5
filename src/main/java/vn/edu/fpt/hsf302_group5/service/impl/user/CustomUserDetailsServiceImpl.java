@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.hsf302_group5.entity.Permission;
 import vn.edu.fpt.hsf302_group5.entity.User;
 import vn.edu.fpt.hsf302_group5.repository.user.UserRepository;
+import vn.edu.fpt.hsf302_group5.service.user.CustomUserDetailsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
     private final UserRepository userRepository;
 

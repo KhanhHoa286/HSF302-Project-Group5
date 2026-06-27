@@ -22,7 +22,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(
+    public DaoAuthenticationProvider authenticationProvider( //chịu trách nhiệm thực hiện quá trình xác thực (Authentication) thông tin đăng nhập từ cơ sở dữ liệu.
             UserDetailsService userDetailsService, 
             PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
@@ -35,7 +35,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF tạm thời để phát triển/kiểm thử
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/register", "/css/**", "/js/**", "/images/**", "/assets/**").permitAll() // Cho phép truy cập tài nguyên tĩnh
+                        .requestMatchers("/", "/home/**", "/login", "/register", "/css/**", "/js/**", "/images/**", "/assets/**").permitAll() // Cho phép truy cập tài nguyên tĩnh
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
