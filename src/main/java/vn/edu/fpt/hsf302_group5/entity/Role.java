@@ -33,7 +33,7 @@ public class Role {
     @Builder.Default
     private Set<Permission> permissions = new HashSet<>();
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<User> users = new HashSet<>();
 }

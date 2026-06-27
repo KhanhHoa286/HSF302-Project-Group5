@@ -2,11 +2,13 @@ package vn.edu.fpt.hsf302_group5.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -38,11 +40,19 @@ public class SecurityConfig {
                         .requestMatchers("/", "/home/**", "/login", "/register", "/register-recruiter", "/css/**", "/js/**", "/images/**", "/assets/**").permitAll() // Cho phép truy cập tài nguyên tĩnh
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
+                .formLogin((form) -> form
                         .loginPage("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .failureUrl("/login?error=true")
+                        .failureHandler(((request, response, exception) -> {
+                            if (exception instanceof DisabledException) {
+                                response.sendRedirect("/login?error=accountInactive");
+                            } else if (exception instanceof UsernameNotFoundException) {
+                                response.sendRedirect("/login?error=userNotFound");
+                            } else {
+                                response.sendRedirect("/login?error=badCredentials");
+                            }
+                        }))
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )

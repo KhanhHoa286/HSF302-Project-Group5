@@ -23,53 +23,64 @@
             <p class="text-muted small">Tạo tài khoản miễn phí, tìm kiếm hơn 60.000 việc làm.</p>
         </div>
 
-        <form th:action="@{/register}" method="post">
+        <div th:if="${errors}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errors}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <form th:action="@{/register}" method="post" th:object="${userRequestDTO}">
             <!-- CSRF Token or hidden fields can be added here by backend -->
             <div class="mb-3">
                 <label class="topcv-label">Họ và tên</label>
                 <div class="topcv-input-group">
                     <i class="bi bi-person prefix-icon text-green-topcv"></i>
-                    <input type="text" name="fullName" class="form-control" placeholder="Nhập họ và tên" required>
+                    <input type="text" th:field="*{fullName}" class="form-control" placeholder="Nhập họ và tên" required>
                 </div>
+                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
             </div>
 
             <div class="mb-3">
                 <label class="topcv-label">Email</label>
                 <div class="topcv-input-group">
                     <i class="bi bi-envelope prefix-icon text-green-topcv"></i>
-                    <input type="email" name="email" class="form-control" placeholder="Nhập email" required>
+                    <input type="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required>
                 </div>
+                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
             <div class="mb-3">
                 <label class="topcv-label">Mật khẩu</label>
                 <div class="topcv-input-group">
                     <i class="bi bi-lock prefix-icon text-green-topcv"></i>
-                    <input type="password" name="password" id="passwordField" class="form-control" placeholder="Nhập mật khẩu" required>
+                    <input type="password" th:field="*{password}" id="passwordField" class="form-control" placeholder="Nhập mật khẩu" required>
                     <i class="bi bi-eye-slash toggle-password" onclick="togglePasswordVisibility('passwordField', this)"></i>
                 </div>
+                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
             </div>
 
             <div class="mb-3">
                 <label class="topcv-label">Xác nhận mật khẩu</label>
                 <div class="topcv-input-group">
                     <i class="bi bi-lock prefix-icon text-green-topcv"></i>
-                    <input type="password" name="confirmPassword" id="confirmPasswordField" class="form-control" placeholder="Nhập lại mật khẩu" required>
+                    <input type="password" th:field="*{confirmPassword}" id="confirmPasswordField" class="form-control" placeholder="Nhập lại mật khẩu" required>
                     <i class="bi bi-eye-slash toggle-password" onclick="togglePasswordVisibility('confirmPasswordField', this)"></i>
                 </div>
+                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
             </div>
 
             <div class="mb-4">
                 <div class="form-check d-flex align-items-start gap-2">
-                    <input class="form-check-input" type="checkbox" id="termsCheck" required style="margin-top: 4px; accent-color: #00b14f;">
+                    <input class="form-check-input" name="acceptTerms" type="checkbox" id="termsCheck" required style="margin-top: 4px; accent-color: #00b14f;">
                     <label class="topcv-checkbox-label" for="termsCheck">
                         Tôi đã đọc và đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a> của JobPortal (Bắt buộc)
                     </label>
                 </div>
+                <div class="text-danger small mt-1" th:if="${acceptTermsError}" th:text="${acceptTermsError}"></div>
             </div>
 
             <button type="submit" class="btn btn-topcv-green-submit mb-3">
                 Đăng ký <i class="bi bi-arrow-right"></i>
+
             </button>
 
             <div class="topcv-divider">Hoặc</div>
