@@ -42,4 +42,9 @@ public class controller {
     public String test6(){
         return "pages/public/home";
     }
+
+    @GetMapping("/privacy-policy")
+    public String privacyPolicyPage() {
+        return "pages/public/privacy-policy";
+    }
 }

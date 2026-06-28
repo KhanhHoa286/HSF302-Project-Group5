@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chính sách bảo mật - JobPortal</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" th:href="@{/assets/css/common.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/public.css}">
+
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header(activePage='')}"></div>
+
+<section class="bg-light py-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none text-green-topcv">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Chính sách bảo mật</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="policy-wrapper" style="background-color: #f8f9fa;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="policy-container">
+                    <h1 class="policy-title text-center">CHÍNH SÁCH QUYỀN RIÊNG TƯ THÔNG TIN NGƯỜI DÙNG</h1>
+                    
+                    <div class="policy-meta d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <span><i class="bi bi-clock-history me-1"></i> Có hiệu lực từ ngày 18 tháng 05 năm 2026</span>
+                        <a href="#" class="text-green-topcv text-decoration-none fw-semibold"><i class="bi bi-archive me-1"></i> Xem các phiên bản đã lưu trữ</a>
+                    </div>
+
+                    <div class="policy-content">
+                        <p class="fw-semibold">
+                            Sự riêng tư của bạn là yếu tố quan trọng đối với jobportal.vn (gọi tắt là JobPortal). Vui lòng đọc kỹ Chính Sách Quyền Riêng tư Thông Tin Người Dùng này (Sau đây gọi tắt là “Chính Sách Quyền Riêng Tư”) vì nó là một phần của Điều Khoản Sử Dụng nhằm quản lý việc sử dụng các Dịch vụ trên trang web JobPortal.
+                        </p>
+
+                        <p class="fw-semibold">Thông Báo Chính Sách Quyền Riêng Tư này giải thích:</p>
+                        <ul>
+                            <li>Loại Dữ liệu Cá nhân của bạn được JobPortal xử lý khi bạn sử dụng các Dịch vụ của JobPortal.</li>
+                            <li>Cách thức JobPortal xử lý Dữ liệu Cá nhân của bạn khi bạn sử dụng các Dịch vụ của JobPortal.</li>
+                            <li>Mục đích JobPortal thu thập và xử lý Dữ liệu Cá nhân của bạn.</li>
+                            <li>Quyền truy cập và chỉnh sửa Dữ liệu Cá nhân của bạn.</li>
+                            <li>Các bên thứ ba mà JobPortal có thể công bố Dữ liệu Cá nhân của bạn.</li>
+                            <li>Tính bắt buộc hoặc tự nguyện đối với việc cung cấp Dữ liệu Cá nhân và hậu quả khi bạn từ chối cung cấp Dữ liệu Cá nhân trong trường hợp bắt buộc.</li>
+                            <li>Cách thức JobPortal giữ gìn sự bảo mật và an ninh về Dữ liệu Cá nhân của bạn.</li>
+                        </ul>
+
+                        <p>
+                            Chính Sách Quyền Riêng Tư này sẽ áp dụng đối với chủ thể dữ liệu cá nhân là khách hàng Nhà Tuyển Dụng đại diện cho các doanh nghiệp có nhu cầu tuyển dụng Ứng viên trên JobPortal ngay sau khi JobPortal đã gửi thông báo và được bạn chấp thuận. Nếu bạn không muốn chấp nhận các Điều khoản của Chính Sách Quyền Riêng Tư này, bạn không nên tiếp tục sử dụng các Dịch vụ của JobPortal.
+                        </p>
+
+                        <p>
+                            Chúng tôi có thể cập nhật Chính Sách Quyền Riêng Tư này bất cứ lúc nào theo thời gian vì các lý do pháp lý hoặc theo quy định nội bộ của JobPortal, hoặc để cho phép hoạt động thích hợp của trang web jobportal.vn. JobPortal sẽ thông báo tới bạn thông qua phương thức thông báo phù hợp do JobPortal quyết định tại từng thời điểm. Những thay đổi này sẽ áp dụng cho việc sử dụng trang web jobportal.vn. Trường hợp Nhà Tuyển Dụng tiếp tục sử dụng dịch vụ của JobPortal sau khi Chính Sách được sửa đổi, bổ sung thì các nội dung Chính Sách có giá trị áp dụng đối với Nhà Tuyển Dụng.
+                        </p>
+
+                        <h2 class="policy-section-title">1. DỮ LIỆU CÁ NHÂN MÀ JOBPORTAL THU THẬP</h2>
+                        <p>
+                            Chúng tôi muốn bạn hiểu rõ các loại thông tin mà chúng tôi thu thập khi bạn sử dụng dịch vụ của chúng tôi. Theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15, “Dữ liệu Cá nhân” là dữ liệu số hoặc thông tin dưới dạng khác xác định hoặc giúp xác định một con người cụ thể, bao gồm: dữ liệu cá nhân cơ bản và dữ liệu cá nhân nhạy cảm. Danh mục dữ liệu cá nhân cơ bản và dữ liệu cá nhân nhạy cảm tham chiếu tại Điều 3 và Điều 4 Nghị định 356/2025/NĐ-CP.
+                        </p>
+
+                        <h3 class="policy-subsection-title">1.1. Những dữ liệu bạn tạo ra hoặc cung cấp cho chúng tôi</h3>
+                        <p>
+                            Để thiết lập tài khoản, xác thực danh tính theo quy định của pháp luật hiện hành (bao gồm cả các lần cập nhật) và sử dụng các dịch vụ trên Nền tảng của JobPortal, bạn sẽ trực tiếp cung cấp cho chúng tôi các Dữ liệu Cá nhân thông qua việc nhập liệu hoặc tải tệp lên (upload). Các dữ liệu này bao gồm nhưng không giới hạn ở:
+                        </p>
+                        <ul>
+                            <li><strong>Dữ liệu cá nhân cơ bản:</strong> Họ và tên, giới tính, hình ảnh cá nhân, số điện thoại cá nhân, địa chỉ email, tên công ty, địa điểm làm việc và một số giấy tờ pháp lý khác của doanh nghiệp.</li>
+                            <li><strong>Dữ liệu cá nhân nhạy cảm:</strong> Hình ảnh Căn cước công dân (CCCD) và hình ảnh sinh trắc học khuôn mặt (ảnh selfie). <em>Lưu ý: Nhóm dữ liệu này không bắt buộc tại thời điểm đăng ký ban đầu, mà chỉ được thu thập trong các trường hợp cần xác thực danh tính nâng cao.</em></li>
+                        </ul>
+                        <p>
+                            Đối với các dữ liệu được JobPortal đánh dấu là “Bắt buộc”, bạn cần cung cấp và đồng ý để JobPortal có thể xử lý nhằm mục đích cung cấp dịch vụ. Nếu bạn không đồng ý cung cấp Dữ liệu Cá nhân này và/hoặc không đồng ý để chúng tôi xử lý thông tin theo quy định tại Chính Sách Quyền Riêng Tư này, JobPortal sẽ không thể cung cấp các dịch vụ liên quan và việc đăng ký dịch vụ của bạn sẽ bị gián đoạn hoặc từ chối.
+                        </p>
+
+                        <h3 class="policy-subsection-title">1.2. Thông tin mà chúng tôi thu thập khi bạn sử dụng dịch vụ của chúng tôi</h3>
+                        <p>
+                            Theo quy định pháp luật, các dữ liệu theo dõi hành vi, hoạt động sử dụng dịch vụ trên không gian mạng được phân loại là Dữ liệu Cá nhân nhạy cảm. Việc xử lý nhóm dữ liệu này được JobPortal áp dụng các biện pháp bảo mật, phân quyền truy cập nghiêm ngặt. Khi bạn tương tác với Nền tảng JobPortal, chúng tôi thu thập các dữ liệu sau:
+                        </p>
+                        <ul>
+                            <li><strong>Hoạt động của bạn:</strong> Lịch sử tương tác như dữ liệu theo dõi các từ khóa tìm kiếm, lịch sử truy cập hệ thống,…</li>
+                            <li>JobPortal cũng sử dụng các mã ghi rõ ràng trong email định dạng HTML để xác định các email nào đã được mở bởi người nhận. Điều này cho phép JobPortal đánh giá tính hiệu quả của các phương tiện truyền thông nhất định và hiệu quả của các chiến lược của công ty.</li>
+                            <li><strong>Dữ liệu từ ứng dụng, trình duyệt và thiết bị của bạn:</strong>
+                                <ul>
+                                    <li>Khi bạn truy cập bất cứ trang web nào thuộc hệ thống JobPortal, máy chủ trang web của chúng tôi sẽ tự động thu thập thông tin truy cập của bạn tại các trang web này, bao gồm địa chỉ IP, thời gian, ngày và thời lượng truy cập.</li>
+                                    <li>JobPortal có thể theo dõi quá trình truy cập của bạn tại bất cứ trang web nào thuộc hệ thống JobPortal, bằng cách cài đặt một “cookie” trong máy tính của bạn hoặc các thiết bị truy cập khác khi bạn đăng nhập.</li>
+                                    <li>Cookies chức năng cho phép JobPortal lưu lại các trạng thái dữ liệu của bạn để bạn sẽ không phải đăng nhập lại trong lần truy cập sau.</li>
+                                    <li><em>(Dữ liệu Cá nhân nhạy cảm)</em> Cookies phân tích giúp JobPortal thu thập luồng dữ liệu truy cập ẩn danh để theo dõi xu hướng và mẫu người dùng. JobPortal có thể sử dụng luồng dữ liệu truy cập ẩn danh để giúp các nhà quảng cáo cung cấp quảng cáo nhắm tới mục tiêu tốt hơn.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p>
+                            Để đảm bảo sự minh bạch và quyền của bạn, bạn hoàn toàn có thể tùy chỉnh việc cho phép thu thập các dữ liệu theo dõi hành vi bằng cách Bật/ Tắt/ Tùy chỉnh các loại Cookie không bắt buộc tại phần Cài đặt hoặc xem chi tiết tại Chính sách Cookies.
+                        </p>
+
+                        <h2 class="policy-section-title">2. MỤC ĐÍCH XỬ LÝ DỮ LIỆU CÁ NHÂN</h2>
+                        <p>
+                            <strong>2.1.</strong> “Xử lý dữ liệu cá nhân” là hoạt động tác động đến dữ liệu cá nhân, bao gồm một hoặc nhiều hoạt động như sau: thu thập, phân tích, tổng hợp, mã hóa, giải mã, chỉnh sửa, xóa, hủy, khử nhận dạng, cung cấp, công khai, chuyển giao dữ liệu cá nhân và hoạt động khác tác động đến dữ liệu cá nhân.
+                        </p>
+                        <p>
+                            <strong>2.2.</strong> Kể từ thời điểm bạn cung cấp Dữ liệu Cá nhân cho JobPortal và/hoặc JobPortal có được thông qua các hành động khác như mục 1 cho đến khi bạn không còn bất cứ giao dịch hay sử dụng dịch vụ nào khác tại JobPortal hoặc dựa theo yêu cầu/ quyết định của bạn, JobPortal (với tư cách là Bên Kiểm soát và xử lý dữ liệu) sẽ xử lý dữ liệu cá nhân của bạn cho các mục đích sau:
+                        </p>
+                        
+                        <div class="ps-3">
+                            <p><strong>Cung cấp dịch vụ cho bạn:</strong></p>
+                            <ul>
+                                <li>Chúng tôi sử dụng thông tin bạn đăng ký để tạo lập, xác thực, quản lý và duy trì tài khoản nhà tuyển dụng trên Nền tảng do JobPortal vận hành, bao gồm các hệ thống phục vụ hoạt động tuyển dụng và quản lý hồ sơ.</li>
+                                <li>Nhằm xác lập thẩm quyền đại diện hợp pháp của bạn đối với Doanh nghiệp và bảo vệ Nền tảng khỏi các rủi ro gian lận, lừa đảo, chúng tôi sẽ sử dụng giấy phép đăng ký kinh doanh Doanh nghiệp và một số giấy tờ khác mà bạn cung cấp để cấp quyền đăng tin tuyển dụng.</li>
+                                <li>Trong quá trình bạn sử dụng Nền tảng, nếu hệ thống phát hiện các hoạt động bất thường, có dấu hiệu lừa đảo hoặc nghi ngờ vi phạm Điều khoản dịch vụ, chúng tôi sẽ sử dụng hình ảnh CCCD và hình ảnh khuôn mặt của bạn để thực hiện quy trình Định danh điện tử (eKYC).</li>
+                                <li>Chúng tôi sử dụng địa chỉ IP được gán cho thiết bị của bạn để gửi cho bạn dữ liệu mà bạn đã yêu cầu, chẳng hạn như tải một CV xuống.</li>
+                                <li>Khi mua dịch vụ hoặc hàng hóa từ chúng tôi, chúng tôi dùng thông tin thanh toán cho những việc như xử lý thanh toán, lập, xuất, quản lý và lưu trữ hoá đơn, chứng từ kế toán, chứng từ giao dịch theo quy định của pháp luật.</li>
+                            </ul>
+
+                            <p><strong>Duy trì và cải thiện dịch vụ của chúng tôi:</strong></p>
+                            <ul>
+                                <li>Chúng tôi sử dụng thông tin của bạn để đảm bảo các dịch vụ hoạt động như mong muốn, theo dõi sự cố hoặc khắc phục sự cố mà bạn báo cáo, khiếu nại cho chúng tôi.</li>
+                                <li>Phân tích tương tác người dùng qua cookie để thiết kế lại tính năng và cải thiện sản phẩm tốt hơn.</li>
+                            </ul>
+
+                            <p><strong>Giao tiếp và hỗ trợ bạn:</strong></p>
+                            <ul>
+                                <li>Thông báo vận hành: trạng thái ứng viên ứng tuyển, thông báo duyệt tin tuyển dụng, cảnh báo bảo mật hoặc thông báo lỗi hệ thống.</li>
+                                <li>Chăm sóc khách hàng và khảo sát chất lượng dịch vụ.</li>
+                                <li>Tiếp thị và Khuyến mãi: gửi các bản tin thị trường nhân sự, cẩm nang tuyển dụng, lời mời tham gia sự kiện hoặc các chương trình ưu đãi khi có sự đồng ý của bạn.</li>
+                            </ul>
+
+                            <p><strong>Tuân thủ pháp luật và Bảo vệ quyền lợi:</strong></p>
+                            <ul>
+                                <li>Đáp ứng các yêu cầu hợp lệ bằng văn bản từ cơ quan Nhà nước có thẩm quyền phục vụ mục đích điều tra, thực thi pháp luật.</li>
+                                <li>Bảo vệ quyền, tài sản và lợi ích hợp pháp của JobPortal, giải quyết tranh chấp pháp lý.</li>
+                            </ul>
+                        </div>
+
+                        <p>
+                            <strong>2.3.</strong> Việc thu thập dữ liệu nêu trên được thực hiện dựa trên các nguyên tắc hợp pháp, minh bạch và công bằng. Để đảm bảo sự rõ ràng, JobPortal phân định giới hạn xử lý dữ liệu như sau:
+                        </p>
+                        <ul>
+                            <li><strong>Đối với các mục đích thiết yếu:</strong> Bao gồm các hoạt động nhằm cung cấp dịch vụ cốt lõi, duy trì hệ thống và giao tiếp hỗ trợ bắt buộc. Bạn không thể giới hạn việc xử lý dữ liệu cho các mục đích thiết yếu này. Nếu không đồng ý, vui lòng ngừng sử dụng tài khoản.</li>
+                            <li><strong>Đối với các mục đích tùy chọn (Dựa trên sự đồng ý tự nguyện):</strong> Gửi các bản tin về thị trường lao động hoặc giới thiệu dịch vụ mới. Bạn có toàn quyền lựa chọn đồng ý hoặc rút lại sự đồng ý bất kỳ lúc nào.</li>
+                        </ul>
+
+                        <p>
+                            <strong>2.4.</strong> JobPortal sẽ thông báo, yêu cầu sự đồng ý của bạn trước khi xử lý Dữ liệu Cá nhân ngoài các mục quy định tại Khoản 2.2 Điều này. Hiệu lực xử lý dữ liệu sẽ bắt đầu từ thời điểm bạn đồng ý Chính Sách Quyền Riêng Tư này cho đến khi bạn quyết định rút lại sự đồng ý hoặc tự động kết thúc theo quy định pháp luật.
+                        </p>
+
+                        <h2 class="policy-section-title">3. QUYỀN CỦA BẠN ĐỐI VỚI DỮ LIỆU CÁ NHÂN</h2>
+                        <p>
+                            Bạn có đầy đủ các quyền của Chủ thể dữ liệu được quy định tại Điều 4 Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15, bao gồm:
+                        </p>
+                        <ul>
+                            <li><strong>Quyền được biết:</strong> Được thông báo minh bạch về các hoạt động xử lý dữ liệu trước khi thực hiện.</li>
+                            <li><strong>Quyền đồng ý và Rút lại sự đồng ý:</strong> Có quyền rút lại sự đồng ý bất kỳ lúc nào qua hòm thư điện tử cskh@jobportal.vn (JobPortal sẽ phản hồi trong 02 ngày làm việc và thực hiện trong vòng 15 ngày).</li>
+                            <li><strong>Quyền xem, chỉnh sửa hoặc yêu cầu chỉnh sửa:</strong> Bạn có thể tự xem và chỉnh sửa dữ liệu trực tiếp trên tài khoản hoặc yêu cầu chúng tôi hỗ trợ.</li>
+                            <li><strong>Quyền yêu cầu xóa, hạn chế hoặc phản đối xử lý dữ liệu:</strong> Yêu cầu xóa dữ liệu, hạn chế xử lý hoặc phản đối việc xử lý dữ liệu cho mục đích quảng cáo, tiếp thị.</li>
+                            <li><strong>Quyền cung cấp dữ liệu:</strong> Tự tải xuống bản sao dữ liệu hoặc yêu cầu JobPortal cung cấp bản sao dữ liệu hợp pháp.</li>
+                            <li><strong>Các quyền khác:</strong> Quyền khiếu nại, tố cáo, khởi kiện, yêu cầu bồi thường thiệt hại theo quy định pháp luật.</li>
+                        </ul>
+
+                        <h2 class="policy-section-title">4. NGHĨA VỤ CỦA BẠN ĐỐI VỚI DỮ LIỆU CÁ NHÂN CỦA MÌNH</h2>
+                        <p>
+                            <strong>4.1. Trách nhiệm về tính chính xác và cập nhật:</strong> Bạn chịu trách nhiệm toàn bộ về tính chính xác, trung thực, đầy đủ và cập nhật của các dữ liệu cung cấp. Bạn có nghĩa vụ chủ động cập nhật thông tin khi có thay đổi.
+                        </p>
+                        <p>
+                            <strong>4.2. Trách nhiệm đối với dữ liệu của người khác:</strong> Khi cung cấp dữ liệu của cá nhân khác, bạn phải đảm bảo đã thông báo và nhận được sự đồng ý hợp pháp của họ.
+                        </p>
+                        <p>
+                            <strong>4.3. Nghĩa vụ theo quy định pháp luật:</strong> Tự bảo vệ dữ liệu cá nhân của mình, tôn trọng dữ liệu của người khác, cung cấp chính xác dữ liệu khi đồng ý cho phép xử lý và chấp hành pháp luật về bảo vệ dữ liệu cá nhân.
+                        </p>
+
+                        <h2 class="policy-section-title">5. LỰA CHỌN VÀ TRUY CẬP DỮ LIỆU CÁ NHÂN</h2>
+                        <p>
+                            <strong>5.1.</strong> Bạn có thể kiểm soát người muốn chia sẻ dữ liệu, xem lại và kiểm soát việc đăng ký nhận dịch vụ hoặc lựa chọn không tiếp nhận bất cứ tài liệu tiếp thị nào từ JobPortal.
+                        </p>
+                        <p>
+                            <strong>5.2. Các bước yêu cầu xóa tài khoản:</strong> Gửi email về hòm thư <strong>cskh@jobportal.vn</strong> với tiêu đề <em>"Yêu cầu xóa tài khoản"</em>. Chúng tôi sẽ kiểm tra và phản hồi hỗ trợ bạn.
+                        </p>
+
+                        <h2 class="policy-section-title">6. LƯU TRỮ DỮ LIỆU CÁ NHÂN</h2>
+                        <p>
+                            Chúng tôi lưu trữ dữ liệu trong khoảng thời gian cần thiết để thực hiện các mục đích xử lý hoặc lâu hơn nếu có yêu cầu pháp lý. Khi bạn yêu cầu xóa dữ liệu, JobPortal sẽ tiến hành xóa hoặc khử nhận dạng dữ liệu trên hệ thống, ngoại trừ một số thông tin bắt buộc phải giữ lại theo quy định pháp luật chuyên ngành (như hóa đơn, lịch sử giao dịch).
+                        </p>
+
+                        <h2 class="policy-section-title">7. BẢO MẬT DỮ LIỆU CÁ NHÂN</h2>
+                        <p>
+                            JobPortal áp dụng các biện pháp kỹ thuật, tổ chức và công nghệ mã hóa tối tân nhất để bảo vệ an toàn dữ liệu, đặc biệt là nhóm dữ liệu nhạy cảm. Tuy nhiên, do không có phương pháp truyền tải hay lưu trữ điện tử nào bảo mật 100%, chúng tôi khuyến khích bạn liên hệ ngay qua email nếu phát hiện bất kỳ nghi vấn bảo mật nào.
+                        </p>
+
+                        <h2 class="policy-section-title">8. CHIA SẺ THÔNG TIN CỦA BẠN</h2>
+                        <p>
+                            Chúng tôi không chia sẻ thông tin cá nhân của bạn với bên ngoài, ngoại trừ:
+                        </p>
+                        <ul>
+                            <li>Các đơn vị trong hệ sinh thái của JobPortal nhằm cung cấp trải nghiệm dịch vụ liền mạch.</li>
+                            <li>Bên xử lý dữ liệu đáng tin cậy hỗ trợ vận hành hệ thống (như hạ tầng đám mây, phân tích dữ liệu) dưới sự ràng buộc nghiêm ngặt của hợp đồng bảo mật.</li>
+                            <li>Các cơ quan Nhà nước có thẩm quyền khi có yêu cầu bằng văn bản hợp lệ theo pháp luật.</li>
+                        </ul>
+
+                        <h2 class="policy-section-title">9. HẬU QUẢ, THIỆT HẠI KHÔNG MONG MUỐN CÓ KHẢ NĂNG XẢY RA</h2>
+                        <p>
+                            Bao gồm việc mất dữ liệu do chia sẻ nhầm, đối tượng lừa đảo lợi dụng thông tin sau khi được bạn chia sẻ, hoặc hệ thống phân tích sai lệch dữ liệu do bạn không cập nhật thông tin kịp thời. Trong trường hợp xảy ra sự cố rò rỉ thông tin, JobPortal cam kết lập tức thông báo tới cá nhân bị ảnh hưởng và cơ quan chuyên trách để phối hợp khắc phục.
+                        </p>
+
+                        <h2 class="policy-section-title">10. THỜI GIAN BẮT ĐẦU, THỜI GIAN KẾT THÚC XỬ LÝ DỮ LIỆU</h2>
+                        <p>
+                            Bắt đầu từ ngày bạn đồng ý với Chính Sách Quyền Riêng Tư này cho đến khi bạn có yêu cầu bằng văn bản về việc rút lại sự đồng ý hoặc các mục đích xử lý dữ liệu được hoàn thành, hoặc theo quy định pháp luật.
+                        </p>
+
+                        <h2 class="policy-section-title">11. CHUYỂN DỮ LIỆU CÁ NHÂN XUYÊN BIÊN GIỚI</h2>
+                        <p>
+                            Hệ thống máy chủ chính đặt tại Việt Nam. Một số trường hợp tối ưu hóa vận hành nội bộ (như sử dụng dịch vụ của Google, Microsoft), dữ liệu có thể được chuyển ra nước ngoài trên cơ sở tuân thủ nghiêm ngặt các quy định pháp luật hiện hành và thiết lập cam kết bảo mật chặt chẽ với đối tác ngoại quốc.
+                        </p>
+
+                        <h2 class="policy-section-title">12. CÁC TRANG LIÊN KẾT</h2>
+                        <p>
+                            Các liên kết đến trang thứ ba hoặc các widget mạng xã hội (Facebook, Google Login) sẽ tuân theo chính sách bảo mật riêng của nhà cung cấp dịch vụ đó.
+                        </p>
+
+                        <h2 class="policy-section-title">13. SỰ ĐỒNG Ý CỦA BẠN</h2>
+                        <p>
+                            Sự đồng ý của bạn là cơ sở pháp lý cao nhất để JobPortal thực hiện các hoạt động xử lý dữ liệu. Bằng việc xác nhận đồng ý Chính sách này, bạn xác nhận đã được thông báo đầy đủ và cho phép chúng tôi xử lý dữ liệu đúng theo các mục đích đã cam kết.
+                        </p>
+
+                        <h2 class="policy-section-title">14. XỬ LÝ DỮ LIỆU CÁ NHÂN CỦA TRẺ EM, NGƯỜI BỊ TUYÊN BỐ ĐÃ CHẾT, MẤT TÍCH</h2>
+                        <p>
+                            JobPortal không chủ định thu thập dữ liệu của trẻ em dưới 16 tuổi. Đối với dữ liệu của người mất tích hoặc đã chết, JobPortal chỉ xử lý sau khi nhận được sự đồng ý từ người thân thích theo thứ tự ưu tiên pháp luật quy định.
+                        </p>
+
+                        <div class="highlight-box mt-4">
+                            <p class="fw-bold mb-1">THÔNG TIN LIÊN LẠC</p>
+                            <p class="mb-0">
+                                Nếu bạn có bất kỳ câu hỏi nào về Chính Sách Quyền Riêng Tư này, vui lòng gửi email trực tiếp tới địa chỉ: <strong class="text-green-topcv">cskh@jobportal.vn</strong> để được hỗ trợ giải quyết nhanh nhất.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
