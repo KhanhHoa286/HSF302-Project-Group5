@@ -167,4 +167,37 @@ public class UserServiceServiceImpl implements UserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    @Transactional
+    @Override
+    public void forgotPassword(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Email không tồn tại trên hệ thống!"));
+        if (user.getStatus() == UserStatus.INACTIVE) {
+            throw new RuntimeException("Tài khoản này đang bị khóa hoặc chưa được kích hoạt!");
+        }
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setToken(token);
+        verificationToken.setUser(user);
+        verificationToken.setExpiryDate(LocalDateTime.now().plusHours(AppConstants.VERRIFI_TOKEN_REGISTER));
+        user.setVerificationToken(verificationToken);
+        verificationTokenService.save(verificationToken);
+        String linkResetPassword = AppConstants.LINK_RESET_PASSWORD + token;
+        emailService.sendVerificationEmail(email, linkResetPassword);
+    }
+
+    @Transactional
+    @Override
+    public void resetPassword(String token, String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            throw new RuntimeException("Mật khảu phải khớp!");
+        }
+        if (!password.matches("^(?=.*(\\d))(?=.*[a-z])(?=.*[!#$@$%^&*()_])(?=.*[A-Z]).+$")) {
+            throw new RuntimeException("Mật khẩu phải chứa cả chữ hoa, chữ thường, chữ số và cả kí tự đặc biệt!");
+        }
+        User user = userRepository.findByToken(token);
+        user.setPasswordHash(passwordEncoder.encode(password));
+        user.setVerificationToken(null);
+        userRepository.save(user);
+    }
 }

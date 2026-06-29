@@ -15,4 +15,8 @@ public interface UserService {
     void saveRecruiter(RecruiterRegisterRequest recruiterRegisterRequest);
 
     boolean existsByEmail(String email);
+
+    void forgotPassword(String email);
+
+    void resetPassword(String token, String password, String confirmPassword);
 }
