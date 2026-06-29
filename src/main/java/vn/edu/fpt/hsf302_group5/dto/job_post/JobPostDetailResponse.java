@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class JobPostDetailDTO {
+public class JobPostDetailResponse {
 
     private Integer id;
     private String companyUrl;
@@ -38,7 +38,7 @@ public class JobPostDetailDTO {
     private LocalDateTime expiredDate;
     private String administrativeUnitName;
 
-    public JobPostDetailDTO(Integer id, JobLevel jobLevel, ExperienceLevel experienceLevel, String companyUrl, String jobtitle, String description, String requirement, String benefit, String locationDetail, String companyName, String companyProvinceAddress, BigDecimal salaryMin, BigDecimal salaryMax, EmploymentType employmentType, JobStatus status, LocalDateTime postedDate, LocalDateTime expiredDate, String administrativeUnitName) {
+    public JobPostDetailResponse(Integer id, JobLevel jobLevel, ExperienceLevel experienceLevel, String companyUrl, String jobtitle, String description, String requirement, String benefit, String locationDetail, String companyName, String companyProvinceAddress, BigDecimal salaryMin, BigDecimal salaryMax, EmploymentType employmentType, JobStatus status, LocalDateTime postedDate, LocalDateTime expiredDate, String administrativeUnitName) {
         this.id = id;
         this.jobLevel = jobLevel;
         this.experienceLevel = experienceLevel;

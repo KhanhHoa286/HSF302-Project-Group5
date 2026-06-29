@@ -3,7 +3,6 @@ package vn.edu.fpt.hsf302_group5.service.impl.verificationtoken;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.hsf302_group5.dto.user.UserRequertDTO;
 import vn.edu.fpt.hsf302_group5.entity.User;
 import vn.edu.fpt.hsf302_group5.entity.VerificationToken;
 import vn.edu.fpt.hsf302_group5.entity.enums.UserStatus;

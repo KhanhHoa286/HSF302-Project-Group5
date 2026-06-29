@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailDTO;
+import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
-import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponseDTO;
+import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 
@@ -30,7 +30,7 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
     StatisticResponse getStatistic();
 
     @Query("""
-    select new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponseDTO(
+    select new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse(
         j.jobId, j.title,
         j.recruiter.company.companyName,
         j.province.provinceName,
@@ -49,7 +49,7 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
       and (:salaryMin is null
            or j.salaryMin >= :salaryMin)
 """)
-    Page<JobPostResponseDTO> getJobPostResponseByFilter(
+    Page<JobPostResponse> getJobPostResponseByFilter(
             @Param("searchKeyword") String searchKeyword,
             @Param("industryId") Integer industryId,
             @Param("provinceId") Integer provinceId,
@@ -59,7 +59,7 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
 
 
     @Query("""
-             SELECT new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailDTO(
+             SELECT new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailResponse(
                  j.jobId, 
                  j.jobLevel, 
                  j.experienceLevel,
@@ -86,7 +86,7 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
              LEFT JOIN j.administrativeUnit au 
              WHERE j.jobId = :jobPostId
             """)
-    JobPostDetailDTO getJobPostDetaiDTOByJobPostId(@Param("jobPostId") Integer jobPostId);
+    JobPostDetailResponse getJobPostDetaiDTOByJobPostId(@Param("jobPostId") Integer jobPostId);
     List<JobPost> findTop5ByStatusOrderByPostedDateDesc(
         JobStatus status
     );

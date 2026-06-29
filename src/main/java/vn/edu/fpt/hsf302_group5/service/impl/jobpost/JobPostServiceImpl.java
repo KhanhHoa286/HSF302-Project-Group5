@@ -5,10 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailDTO;
+import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.JobPostFormRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
-import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponseDTO;
+import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.EmploymentType;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobLevel;
@@ -31,7 +31,7 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public Page<JobPostResponseDTO> getJobPostsByFilter(String searchKeyword, Integer industryId, Integer provinceId, BigDecimal minSalary, int page) {
+    public Page<JobPostResponse> getJobPostsByFilter(String searchKeyword, Integer industryId, Integer provinceId, BigDecimal minSalary, int page) {
         if (searchKeyword == null || searchKeyword.isBlank()) {
             searchKeyword = null;
         }
@@ -71,8 +71,8 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public JobPostDetailDTO getJobPostDetaiDTOByJobPostId(Integer jobPostId) {
-        JobPostDetailDTO jobPostDetailDTO = jobPostRepository.getJobPostDetaiDTOByJobPostId(jobPostId);
-        return jobPostDetailDTO;
+    public JobPostDetailResponse getJobPostDetaiDTOByJobPostId(Integer jobPostId) {
+        JobPostDetailResponse jobPostDetailResponse = jobPostRepository.getJobPostDetaiDTOByJobPostId(jobPostId);
+        return jobPostDetailResponse;
     }
 }
