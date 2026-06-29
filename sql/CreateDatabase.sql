@@ -95,6 +95,7 @@ CREATE TABLE users
     password_hash VARCHAR(255) NOT NULL,
     full_name     NVARCHAR(100) NOT NULL,
     phone         VARCHAR(20),
+    gender        VARCHAR(20) NULL,
     avatar_url    NVARCHAR(500),
     role_id       INT          NOT NULL,
     status        VARCHAR(20)  NOT NULL DEFAULT 'ACTIVE'

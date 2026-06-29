@@ -2,6 +2,7 @@ package vn.edu.fpt.hsf302_group5.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import vn.edu.fpt.hsf302_group5.entity.enums.Gender;
 import vn.edu.fpt.hsf302_group5.entity.enums.UserStatus;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -31,6 +32,10 @@ public class User {
 
     @Column(name = "phone", length = 20)
     private String phone;
+
+    @Column(name = "gender", length = 20)
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(name = "avatar_url", length = 500)
     private String avatarUrl;

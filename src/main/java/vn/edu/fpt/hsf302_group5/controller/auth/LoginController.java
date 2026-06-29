@@ -11,8 +11,4 @@ public class LoginController {
         return "pages/public/login";
     }
 
-    @GetMapping("/register-recruiter")
-    public String registerRecruiterPage() {
-        return "pages/public/register-recruiter";
-    }
 }

@@ -5,15 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vn.edu.fpt.hsf302_group5.dto.administrativeunit.AdministrativeUnitResponse;
+import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
+import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequestDTO;
 import vn.edu.fpt.hsf302_group5.dto.user.UserRequertDTO;
 import vn.edu.fpt.hsf302_group5.entity.VerificationToken;
+import vn.edu.fpt.hsf302_group5.entity.enums.Gender;
+import vn.edu.fpt.hsf302_group5.service.province.ProvinceService;
 import vn.edu.fpt.hsf302_group5.service.user.UserService;
 import vn.edu.fpt.hsf302_group5.service.verificationtoken.VerificationTokenService;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +25,8 @@ public class RegisterController {
 
     private final UserService userService;
     private final VerificationTokenService verificationTokenService;
+    private final ProvinceService provinceService;
+    private final vn.edu.fpt.hsf302_group5.service.administrativeunit.AdministrativeUnitService administrativeUnitService;
 
     @GetMapping("/register")
     public String registerPage(Model model) {
@@ -81,5 +87,27 @@ public class RegisterController {
             redirectAttributes.addAttribute("error", error);
         }
         return "redirect:/login";
+    }
+
+    // Phần đăng kí tài khoản cho nhà tuyển dụng
+
+    @GetMapping("/register-recruiter")
+    public String registerRecruiterPage(Model model) {
+        model.addAttribute("recruiterRegisterRequestDTO", new RecruiterRegisterRequestDTO());
+        List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
+        model.addAttribute("genders", Gender.values());
+        model.addAttribute("provinceResponses",  provinceResponses);
+        return "pages/public/register-recruiter";
+    }
+
+    @PostMapping("/register-recruiter")
+    public String doRegisterRecruiter() {
+        return "redirect:/register-recruiter-success";
+    }
+
+    @GetMapping("/api/load-administrator/{id}")
+    @ResponseBody
+    public List<AdministrativeUnitResponse> loadAdministrator(@PathVariable("id") Integer id) {
+        return administrativeUnitService.getByProvinceId(id);
     }
 }

@@ -40,15 +40,15 @@
             </div>
         </div>
 
-        <form th:action="@{/register-recruiter}" method="post">
+        <form th:action="@{/register-recruiter}" method="post" th:object="${recruiterRegisterRequestDTO}">
             <!-- Tài khoản Section -->
             <div class="mb-4">
                 <h4 class="fw-bold fs-5 mb-2" style="color: #212f3f;">Tài khoản</h4>
-                <p class="text-muted small">Để cung cấp dịch vụ cho bạn, chúng tôi cần xử lý một số dữ liệu cá nhân theo quy định tại <a href="#" class="text-green-topcv fw-bold">Chính sách quyền riêng tư</a> và <a href="#" class="text-green-topcv fw-bold">Điều khoản dịch vụ</a>. Vui lòng lựa chọn các mục đích mà bạn đồng ý dưới đây:</p>
+                <p class="text-muted small">Để cung cấp dịch vụ cho bạn, chúng tôi cần xử lý một số dữ liệu cá nhân theo quy định tại <a th:href="@{/privacy-policy}" class="text-green-topcv fw-bold">Chính sách quyền riêng tư</a> và <a th:href="@{/privacy-policy}" class="text-green-topcv fw-bold">Điều khoản dịch vụ</a>. Vui lòng lựa chọn các mục đích mà bạn đồng ý dưới đây:</p>
 
                 <!-- Checkbox 1 -->
                 <div class="form-check d-flex align-items-start gap-2 mb-2">
-                    <input class="form-check-input" type="checkbox" id="termsCheckNTD" required style="margin-top: 4px; accent-color: #00b14f;">
+                    <input class="form-check-input" name="agreeTerms" type="checkbox" id="termsCheckNTD" required style="margin-top: 4px; accent-color: #00b14f;">
                     <label class="topcv-checkbox-label" for="termsCheckNTD">
                         Tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách Quyền riêng tư của JobPortal.
                     </label>
@@ -85,7 +85,7 @@
                     <label class="topcv-label">Email đăng nhập <span class="text-danger">*</span></label>
                     <div class="topcv-input-group mb-1">
                         <i class="bi bi-envelope prefix-icon"></i>
-                        <input type="email" name="email" class="form-control" placeholder="Email" required>
+                        <input type="email" th:field="*{email}" class="form-control" placeholder="Email" required>
                     </div>
                     <div class="text-danger small" style="font-size: 0.825rem; line-height: 1.4;">
                         Trường hợp bạn đăng ký tài khoản bằng email không phải email tên miền công ty, một số dịch vụ trên tài khoản có thể bị giới hạn mua hoặc sử dụng.
@@ -96,7 +96,7 @@
                     <label class="topcv-label">Mật khẩu <span class="text-danger">*</span></label>
                     <div class="topcv-input-group">
                         <i class="bi bi-lock prefix-icon"></i>
-                        <input type="password" name="password" id="passwordNTD" class="form-control" placeholder="Mật khẩu" required>
+                        <input type="password" th:field="*{password}" id="passwordNTD" class="form-control" placeholder="Mật khẩu" required>
                         <i class="bi bi-eye-slash toggle-password" onclick="togglePasswordVisibility('passwordNTD', this)"></i>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                     <label class="topcv-label">Nhập lại mật khẩu <span class="text-danger">*</span></label>
                     <div class="topcv-input-group">
                         <i class="bi bi-lock prefix-icon"></i>
-                        <input type="password" name="confirmPassword" id="confirmPasswordNTD" class="form-control" placeholder="Nhập lại mật khẩu" required>
+                        <input type="password" th:field="*{confirmPassword}" id="confirmPasswordNTD" class="form-control" placeholder="Nhập lại mật khẩu" required>
                         <i class="bi bi-eye-slash toggle-password" onclick="togglePasswordVisibility('confirmPasswordNTD', this)"></i>
                     </div>
                 </div>
@@ -121,21 +121,18 @@
                     <label class="topcv-label">Họ và tên <span class="text-danger">*</span></label>
                     <div class="topcv-input-group">
                         <i class="bi bi-person prefix-icon"></i>
-                        <input type="text" name="fullName" class="form-control" placeholder="Họ và tên" required>
+                        <input type="text" th:field="*{fullName}" class="form-control" placeholder="Họ và tên" required>
                     </div>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <label class="topcv-label">Giới tính <span class="text-danger">*</span></label>
-                    <div class="d-flex gap-4 align-items-center" style="height: 48px;">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gender" id="genderMale" value="MALE" checked style="accent-color: #00b14f;">
-                            <label class="form-check-label" for="genderMale">Nam</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="FEMALE" style="accent-color: #00b14f;">
-                            <label class="form-check-label" for="genderFemale">Nữ</label>
-                        </div>
+                    <div class="topcv-input-group">
+                        <i class="bi bi-person prefix-icon"></i>
+                        <select name="gender" class="form-select" required th:field="*{gender}">
+                            <option value="" selected disabled>Chọn giới tính</option>
+                            <option th:each="gender : ${genders}" th:value="${gender.name()}" th:text="${gender.getValue()}"></option>
+                        </select>
                     </div>
                 </div>
 
@@ -143,7 +140,7 @@
                     <label class="topcv-label">Số điện thoại cá nhân <span class="text-danger">*</span></label>
                     <div class="topcv-input-group">
                         <i class="bi bi-telephone prefix-icon"></i>
-                        <input type="tel" name="phoneNumber" class="form-control" placeholder="Số điện thoại cá nhân" required>
+                        <input type="tel" th:field="*{phoneNumber}" class="form-control" placeholder="Số điện thoại cá nhân" required>
                     </div>
                 </div>
 
@@ -151,7 +148,7 @@
                     <label class="topcv-label">Công ty <span class="text-danger">*</span></label>
                     <div class="topcv-input-group">
                         <i class="bi bi-building prefix-icon"></i>
-                        <input type="text" name="companyName" class="form-control" placeholder="Tên công ty" required>
+                        <input type="text" th:field="*{companyName}" class="form-control" placeholder="Tên công ty" required>
                     </div>
                 </div>
 
@@ -159,12 +156,9 @@
                     <label class="topcv-label">Địa điểm làm việc <span class="text-danger">*</span></label>
                     <div class="topcv-input-group">
                         <i class="bi bi-geo-alt prefix-icon"></i>
-                        <select name="provinceId" class="form-select" required>
+                        <select class="form-select" id="provinceId" required th:field="*{provinceId}">
                             <option value="" selected disabled>Chọn tỉnh/thành phố</option>
-                            <option value="1">Hà Nội</option>
-                            <option value="2">TP. Hồ Chí Minh</option>
-                            <option value="3">Đà Nẵng</option>
-                            <option value="4">Bình Dương</option>
+                            <option th:each="provinceResponse : ${provinceResponses}" th:value="${provinceResponse.provinceId}" th:text="${provinceResponse.provinceName}">Hà Nội</option>
                         </select>
                     </div>
                 </div>
@@ -173,7 +167,17 @@
                     <label class="topcv-label">Phường/ xã</label>
                     <div class="topcv-input-group">
                         <i class="bi bi-geo-alt prefix-icon"></i>
-                        <input type="text" name="ward" class="form-control" placeholder="Chọn phường/xã">
+                        <select class="form-select" id="administratorUnitId" required th:field="*{administratorUnitId}">
+                            <option value="" selected disabled>Chọn phường/xã</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="topcv-label">Địa chỉ cụ thể <span class="text-danger">*</span></label>
+                    <div class="topcv-input-group">
+                        <i class="bi bi-house-door prefix-icon"></i>
+                        <input type="text" th:field="*{addressSpecific}" class="form-control" placeholder="Số nhà, tên đường, v.v." required>
                     </div>
                 </div>
             </div>
@@ -209,6 +213,21 @@
             iconElement.classList.add('bi-eye-slash');
         }
     }
+    document.querySelector("#provinceId").addEventListener("change", function (event) {
+        const provinceId = event.target.value;
+        fetch("/api/load-administrator/" + provinceId)
+        .then(response => response.json())
+        .then(json => {
+            const adminSelect = document.querySelector("#administratorUnitId");
+            adminSelect.innerHTML = '<option value="" selected disabled>Chọn phường/xã</option>';
+            json.forEach(unit => {
+                const option = document.createElement("option");
+                option.value = unit.unitId;
+                option.textContent = unit.unitName;
+                adminSelect.appendChild(option);
+            });
+        });
+    });
 </script>
 
 </body>
