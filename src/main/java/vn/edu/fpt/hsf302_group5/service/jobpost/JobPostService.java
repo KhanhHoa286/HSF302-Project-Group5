@@ -17,4 +17,6 @@ public interface JobPostService {
       JobPost craeteJob(JobPostFormRequest jobPostForm);
 
       JobPostDetailResponse getJobPostDetaiDTOByJobPostId(Integer jobPostId);
+
+      JobPost getJobPostById(Integer jobId);
 }

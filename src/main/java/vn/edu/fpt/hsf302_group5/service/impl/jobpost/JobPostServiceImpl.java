@@ -75,4 +75,9 @@ public class JobPostServiceImpl implements JobPostService {
         JobPostDetailResponse jobPostDetailResponse = jobPostRepository.getJobPostDetaiDTOByJobPostId(jobPostId);
         return jobPostDetailResponse;
     }
+
+    @Override
+    public JobPost getJobPostById(Integer jobId) {
+        return jobPostRepository.findById(jobId).orElse(null);
+    }
 }
