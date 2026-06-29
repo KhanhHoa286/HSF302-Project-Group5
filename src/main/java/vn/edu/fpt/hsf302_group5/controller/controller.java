@@ -2,6 +2,8 @@ package vn.edu.fpt.hsf302_group5.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class controller {
@@ -36,8 +38,13 @@ public class controller {
         return "pages/candidate/saved-jobs";
     }
 
-    @GetMapping("/test6")
+    @GetMapping("/")
     public String test6(){
-        return "pages/candidate/upload-cv";
+        return "pages/public/home";
+    }
+
+    @GetMapping("/privacy-policy")
+    public String privacyPolicyPage() {
+        return "pages/public/privacy-policy";
     }
 }

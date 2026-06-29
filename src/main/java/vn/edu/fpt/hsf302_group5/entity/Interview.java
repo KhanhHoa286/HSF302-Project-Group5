@@ -6,7 +6,7 @@ import vn.edu.fpt.hsf302_group5.entity.enums.InterviewStatus;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "interview")
+@Table(name = "interviews")
 @Getter
 @Setter
 @NoArgsConstructor

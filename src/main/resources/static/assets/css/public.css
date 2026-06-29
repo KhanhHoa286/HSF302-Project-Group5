@@ -1,0 +1,595 @@
+/* ==========================================================================
+   CSS DÀNH CHO NGƯỜI DÙNG KHÁCH (PUBLIC.CSS)
+   Gồm: Trang chủ, Đăng nhập, Đăng ký
+   ========================================================================== */
+
+/* --- Banner trang chủ (Khu vực to nhất trên cùng) --- */
+.hero-banner {
+    /* Hiệu ứng màu nền loang (gradient) xanh dương rất nhạt */
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, rgba(13, 110, 253, 0.15) 100%);
+    padding: 80px 0; /* Khoảng cách trên dưới 80px */
+    border-bottom: 1px solid #eaeaea; /* Viền dưới xám nhạt */
+}
+
+/* Tiêu đề to trong Banner */
+.hero-banner h1 {
+    font-weight: 700; /* In đậm mạnh */
+    color: #1a1a1a; /* Đen đậm */
+    margin-bottom: 20px;
+}
+
+/* Câu mô tả nhỏ trong Banner */
+.hero-banner .subtitle {
+    font-size: 1.2rem; /* Chữ to hơn bình thường 1 xíu */
+    color: #666666; /* Chữ xám */
+    margin-bottom: 40px;
+}
+
+/* --- Thanh tìm kiếm trên Banner --- */
+.search-bar-hero {
+    background: #ffffff; /* Nền trắng */
+    padding: 10px; /* Khoảng cách lề bên trong 10px */
+    border-radius: 12px; /* Bo góc tròn 12px */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Đổ bóng to để làm nổi bật */
+}
+
+/* Xoá viền mặc định của các ô nhập chữ trong thanh tìm kiếm */
+.search-bar-hero .form-control, .search-bar-hero .form-select {
+    border: none;
+    background: transparent; /* Nền trong suốt */
+    box-shadow: none; /* Bỏ đổ bóng */
+}
+
+/* Vạch kẻ xám phân cách giữa ô "Từ khóa" và ô "Địa điểm" */
+.search-bar-hero .border-end-custom {
+    border-right: 1px solid #eeeeee;
+}
+
+/* --- Thẻ hiển thị việc làm (Trang chủ) --- */
+.job-card {
+    border: 1px solid #f0f0f0; /* Viền xám mờ */
+}
+
+/* Khi di chuột vào thẻ việc làm, viền sẽ thành màu xanh dương */
+.job-card:hover {
+    border-color: #0d6efd;
+}
+
+/* Logo công ty trong thẻ việc làm */
+.company-logo {
+    width: 60px; /* Rộng 60px */
+    height: 60px; /* Cao 60px */
+    object-fit: contain; /* Căn chỉnh ảnh không bị méo */
+    border-radius: 8px; /* Bo góc 8px */
+    border: 1px solid #f0f0f0; /* Viền mỏng */
+    padding: 5px; /* Cách lề trong 5px */
+}
+
+/* --- Thẻ hiển thị danh mục ngành nghề --- */
+.category-card {
+    text-align: center; /* Căn giữa chữ và icon */
+    padding: 30px 20px; /* Lề trên dưới 30px, lề trái phải 20px */
+    background: #ffffff; /* Nền trắng */
+    border-radius: 10px; /* Bo góc 10px */
+    border: 1px solid #f0f0f0; /* Viền xám nhạt */
+    cursor: pointer; /* Chuột chuyển thành hình bàn tay khi chỉ vào */
+    transition: all 0.3s ease; /* Chuyển động mượt */
+}
+
+/* Khi di chuột vào thẻ ngành nghề */
+.category-card:hover {
+    border-color: #0d6efd; /* Viền màu xanh dương */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* Nổi lên */
+    transform: translateY(-5px); /* Nhấc thẻ bay lên trên 5px */
+}
+
+/* Icon (hình vẽ) trong thẻ ngành nghề */
+.category-icon {
+    font-size: 2.5rem; /* Kích thước icon rất to */
+    color: #0d6efd; /* Icon màu xanh dương */
+    margin-bottom: 15px; /* Cắt lớp chữ bên dưới 15px */
+}
+
+/* --- Hàng logo các công ty đối tác --- */
+.top-companies img {
+    max-height: 50px; /* Chiều cao tối đa 50px */
+    filter: grayscale(100%); /* Biến ảnh màu thành ảnh đen trắng */
+    opacity: 0.6; /* Làm mờ ảnh một chút */
+    transition: all 0.3s ease; /* Hiệu ứng mượt */
+}
+
+/* Khi di chuột vào logo công ty */
+.top-companies img:hover {
+    filter: grayscale(0%); /* Hủy đen trắng, ảnh hiện màu gốc */
+    opacity: 1; /* Hủy mờ, ảnh rõ ràng */
+}
+
+/* --- Khối bao bọc trang Đăng nhập / Đăng ký --- */
+.auth-wrapper {
+    /* Chiều cao bằng màn hình trừ đi phần header/footer */
+    min-height: calc(100vh - 140px);
+    display: flex; /* Bật chế độ Flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    padding: 40px 0;
+}
+
+/* Khung form Đăng nhập */
+.auth-card {
+    width: 100%;
+    max-width: 450px; /* Rộng tối đa 450px */
+    padding: 40px; /* Cách lề trong 40px */
+}
+
+/* Form Đăng ký cần rộng hơn một chút để chia 2 cột */
+.auth-card.register-card {
+    max-width: 550px; /* Rộng tối đa 550px */
+}
+
+/* --- Split Layout Auth Styles --- */
+.auth-container {
+    max-width: 1000px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+}
+.auth-sidebar {
+    background: linear-gradient(135deg, #00c257 0%, #009a44 100%);
+    color: #ffffff;
+    padding: 48px;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.auth-form-side {
+    width: 55%;
+    padding: 48px;
+}
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid #dee2e6;
+    background: #ffffff;
+    color: #212529;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-decoration: none;
+}
+.social-btn:hover {
+    background: #f8f9fa;
+    border-color: #ced4da;
+}
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #6c757d;
+    margin: 20px 0;
+}
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dee2e6;
+}
+.divider:not(:empty)::before {
+    margin-right: .25em;
+}
+.divider:not(:empty)::after {
+    margin-left: .25em;
+}
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #00b14f;
+}
+.login-btn {
+    background-color: #00b14f;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+.login-btn:hover {
+    background-color: #009a44;
+    transform: translateY(-1px);
+}
+@media (max-width: 768px) {
+    .auth-container {
+        flex-direction: column;
+    }
+    .auth-sidebar {
+        width: 100%;
+        padding: 30px;
+    }
+    .auth-form-side {
+        width: 100%;
+        padding: 30px;
+    }
+}
+
+/* ==========================================================================
+   TOPCV STYLE CUSTOMIZATIONS (CANDIDATE & RECRUITER REGISTRATION)
+   ========================================================================== */
+
+/* Header buttons styled like TopCV */
+.btn-topcv-register {
+    color: #00b14f !important;
+    background-color: transparent !important;
+    border: 1.5px solid #00b14f !important;
+    border-radius: 24px !important;
+    padding: 6px 20px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+}
+.btn-topcv-register:hover, .btn-topcv-register.active {
+    color: #ffffff !important;
+    background-color: #00b14f !important;
+}
+
+.btn-topcv-login {
+    color: #00b14f !important;
+    background-color: transparent !important;
+    border: 1.5px solid #00b14f !important;
+    border-radius: 24px !important;
+    padding: 6px 20px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+}
+.btn-topcv-login:hover, .btn-topcv-login.active {
+    background-color: #00b14f !important;
+    border-color: #00b14f !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(0, 177, 79, 0.25) !important;
+}
+
+.btn-topcv-recruiter {
+    color: #212f3f !important;
+    background-color: #f4f6f8 !important;
+    border: 1.5px solid #f4f6f8 !important;
+    border-radius: 24px !important;
+    padding: 6px 20px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+}
+.btn-topcv-recruiter:hover, .btn-topcv-recruiter.active {
+    background-color: #212f3f !important;
+    border-color: #212f3f !important;
+    color: #ffffff !important;
+}
+
+/* Candidate registration specific container */
+.candidate-register-container {
+    max-width: 550px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+    border: 1px solid #f0f0f0;
+}
+
+/* Recruiter registration specific container */
+.recruiter-register-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+    border: 1px solid #eef2f5;
+}
+
+/* Regulation card for Recruiter page */
+.recruiter-regulation-card {
+    background-color: #f6fcf8;
+    border: 1px solid #00b14f;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+.recruiter-regulation-title {
+    color: #00b14f;
+    font-weight: bold;
+    font-size: 1.15rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+.recruiter-regulation-body {
+    margin-top: 12px;
+    font-size: 0.925rem;
+    color: #4a4a4a;
+    line-height: 1.6;
+}
+.recruiter-regulation-body p {
+    margin-bottom: 8px;
+}
+.recruiter-regulation-body p:last-child {
+    margin-bottom: 0;
+}
+
+/* Google Recruiter registration button */
+.btn-google-recruiter {
+    background-color: #4285f4;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    width: 100%;
+}
+.btn-google-recruiter:hover {
+    background-color: #357ae8;
+}
+
+/* TopCV specific labels and inputs */
+.topcv-label {
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+.topcv-label span.text-danger {
+    color: #ff3b30 !important;
+}
+
+.topcv-input-group {
+    position: relative;
+    margin-bottom: 18px;
+}
+.topcv-input-group i.prefix-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00b14f;
+    font-size: 1.05rem;
+    z-index: 5;
+}
+.topcv-input-group .form-control, 
+.topcv-input-group .form-select {
+    padding-left: 42px;
+    padding-right: 42px;
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.topcv-input-group .form-control:focus, 
+.topcv-input-group .form-select:focus {
+    border-color: #00b14f;
+    box-shadow: 0 0 0 3px rgba(0, 177, 79, 0.1);
+}
+
+.topcv-input-group .toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #8c98a5;
+    font-size: 1.05rem;
+    z-index: 10;
+}
+
+/* Checkbox and consent options */
+.topcv-checkbox-label {
+    font-size: 0.9rem;
+    color: #4a525d;
+    cursor: pointer;
+    line-height: 1.4;
+}
+.topcv-checkbox-label a {
+    color: #00b14f;
+    font-weight: 600;
+    text-decoration: none;
+}
+.topcv-checkbox-label a:hover {
+    text-decoration: underline;
+}
+
+.consent-sub-info {
+    margin-left: 24px;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+.consent-sub-info.green-info {
+    background-color: #f7faf9;
+    border-left: 3px solid #00b14f;
+    padding: 6px 12px;
+    border-radius: 4px;
+    color: #555e69;
+}
+.consent-sub-info.red-info {
+    color: #ff3b30;
+}
+
+/* General button modifications for Submit */
+.btn-topcv-green-submit {
+    background-color: #00b14f;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 24px;
+    padding: 12px 30px;
+    font-weight: bold;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    transition: background-color 0.2s, transform 0.1s;
+    text-decoration: none;
+}
+.btn-topcv-green-submit:hover {
+    background-color: #009a44;
+}
+.btn-topcv-green-submit:active {
+    transform: scale(0.99);
+}
+
+.btn-topcv-outline-submit {
+    background-color: transparent;
+    color: #212529 !important;
+    border: 1px solid #dee2e6;
+    border-radius: 24px;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    transition: background-color 0.2s;
+    text-decoration: none;
+}
+.btn-topcv-outline-submit:hover {
+    background-color: #f8f9fa;
+    border-color: #ced4da;
+}
+
+.topcv-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #8c98a5;
+    margin: 24px 0;
+    font-size: 0.9rem;
+}
+.topcv-divider::before, .topcv-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #eef2f5;
+}
+.topcv-divider:not(:empty)::before {
+    margin-right: .5em;
+}
+.topcv-divider:not(:empty)::after {
+    margin-left: .5em;
+}
+
+.text-green-topcv {
+    color: #00b14f !important;
+}
+
+.topcv-help-footer {
+    background-color: #f4f6f8;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.85rem;
+    color: #555e69;
+    text-align: center;
+    margin-top: 24px;
+}
+
+/* Registration success specific styles */
+.success-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 550px;
+    width: 100%;
+    padding: 2.5rem;
+    text-align: center;
+}
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #e6f7ed;
+    color: #00b14f;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+}
+
+/* Privacy policy specific styles */
+.policy-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+}
+.policy-title {
+    color: #212f3f;
+    font-weight: 700;
+    border-bottom: 2px solid #eef2f5;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+}
+.policy-meta {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 2rem;
+}
+.policy-section-title {
+    color: #212f3f;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    border-left: 4px solid #00b14f;
+    padding-left: 10px;
+}
+.policy-subsection-title {
+    color: #2d3748;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+.policy-content p, .policy-content li {
+    font-size: 0.975rem;
+    line-height: 1.75;
+    color: #4a5568;
+    text-align: justify;
+}
+.policy-content ul {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.policy-content li {
+    margin-bottom: 0.5rem;
+}
+.highlight-box {
+    background-color: #f7fafc;
+    border-left: 4px solid #4a5568;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0 8px 8px 0;
+}
+

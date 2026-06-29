@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "province")
+@Table(name = "provinces")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailDTO;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.JobPostFormRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
-import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
+import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponseDTO;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.EmploymentType;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobLevel;
@@ -31,7 +31,7 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public Page<JobPostResponse> getJobPostsByFilter(String searchKeyword, Integer industryId, Integer provinceId, BigDecimal minSalary, int page) {
+    public Page<JobPostResponseDTO> getJobPostsByFilter(String searchKeyword, Integer industryId, Integer provinceId, BigDecimal minSalary, int page) {
         if (searchKeyword == null || searchKeyword.isBlank()) {
             searchKeyword = null;
         }

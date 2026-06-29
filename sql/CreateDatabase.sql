@@ -1,4 +1,4 @@
-﻿-- Nếu DB đã tồn tại thì xóa
+-- Nếu DB đã tồn tại thì xóa
 USE master;
 IF EXISTS (
     SELECT *
@@ -23,9 +23,9 @@ USE [hsf_group_project];
 GO
 
 -- =========================
--- PROVINCE
+-- PROVINCES
 -- =========================
-CREATE TABLE province
+CREATE TABLE provinces
 (
     province_id   INT IDENTITY(1,1) PRIMARY KEY,
     province_code VARCHAR(20) NOT NULL UNIQUE,
@@ -33,9 +33,9 @@ CREATE TABLE province
 );
 
 -- =========================
--- ADMINISTRATIVE UNIT
+-- ADMINISTRATIVE UNITS
 -- =========================
-CREATE TABLE administrative_unit
+CREATE TABLE administrative_units
 (
     unit_id      INT IDENTITY(1,1) PRIMARY KEY,
     province_id  INT NOT NULL,
@@ -45,8 +45,44 @@ CREATE TABLE administrative_unit
         CONSTRAINT ck_administrative_unit_level CHECK (unit_level IN ('COMMUNE', 'WARD', 'SPECIAL_ZONE')),
 
     CONSTRAINT fk_administrative_unit_province FOREIGN KEY (province_id)
-        REFERENCES province (province_id),
+        REFERENCES provinces (province_id),
     CONSTRAINT uq_administrative_unit_name UNIQUE (province_id, unit_name)
+);
+
+-- =========================
+-- ROLES
+-- =========================
+CREATE TABLE roles
+(
+    role_id     INT IDENTITY(1,1) PRIMARY KEY,
+    role_name   VARCHAR(50) NOT NULL UNIQUE,
+    description NVARCHAR(255) NULL
+);
+
+-- =========================
+-- PERMISSIONS
+-- =========================
+CREATE TABLE permissions
+(
+    permission_id   INT IDENTITY(1,1) PRIMARY KEY,
+    permission_code VARCHAR(100) NOT NULL UNIQUE,
+    permission_name NVARCHAR(150) NOT NULL,
+    description     NVARCHAR(255) NULL
+);
+
+-- =========================
+-- ROLE PERMISSIONS
+-- =========================
+CREATE TABLE role_permissions
+(
+    role_id       INT NOT NULL,
+    permission_id INT NOT NULL,
+
+    CONSTRAINT pk_role_permission PRIMARY KEY (role_id, permission_id),
+    CONSTRAINT fk_role_permission_role FOREIGN KEY (role_id)
+        REFERENCES roles (role_id) ON DELETE CASCADE,
+    CONSTRAINT fk_role_permission_permission FOREIGN KEY (permission_id)
+        REFERENCES permissions (permission_id) ON DELETE CASCADE
 );
 
 -- =========================
@@ -59,19 +95,22 @@ CREATE TABLE users
     password_hash VARCHAR(255) NOT NULL,
     full_name     NVARCHAR(100) NOT NULL,
     phone         VARCHAR(20),
+    gender        VARCHAR(20) NULL,
     avatar_url    NVARCHAR(500),
-    role          VARCHAR(20)  NOT NULL
-        CONSTRAINT ck_users_role CHECK (role IN ('ADMIN', 'CANDIDATE', 'RECRUITER')),
+    role_id       INT          NOT NULL,
     status        VARCHAR(20)  NOT NULL DEFAULT 'ACTIVE'
         CONSTRAINT ck_users_status CHECK (status IN ('ACTIVE', 'INACTIVE')),
     created_at    DATETIME2    DEFAULT GETDATE(),
-    updated_at    DATETIME2 NULL
+    updated_at    DATETIME2 NULL,
+
+    CONSTRAINT fk_users_role FOREIGN KEY (role_id)
+        REFERENCES roles (role_id)
 );
 
 -- =========================
--- COMPANY
+-- COMPANIES
 -- =========================
-CREATE TABLE company
+CREATE TABLE companies
 (
     company_id                INT IDENTITY(1,1) PRIMARY KEY,
     company_name              NVARCHAR(200) NOT NULL,
@@ -87,38 +126,38 @@ CREATE TABLE company
     updated_at                DATETIME2 NULL,
 
     CONSTRAINT fk_company_province FOREIGN KEY (province_id)
-        REFERENCES province (province_id),
+        REFERENCES provinces (province_id),
     CONSTRAINT fk_company_administrative_unit FOREIGN KEY (administrative_unit_id)
-        REFERENCES administrative_unit (unit_id)
+        REFERENCES administrative_units (unit_id)
 );
 
 -- =========================
--- RECRUITER
+-- RECRUITERS
 -- =========================
-CREATE TABLE recruiter
+CREATE TABLE recruiters
 (
     recruiter_id INT PRIMARY KEY,
-    company_id   INT NOT NULL,
+    company_id   INT NOT NULL UNIQUE,
 
     CONSTRAINT fk_recruiter_user FOREIGN KEY (recruiter_id)
         REFERENCES users (user_id),
     CONSTRAINT fk_recruiter_company FOREIGN KEY (company_id)
-        REFERENCES company (company_id)
+        REFERENCES companies (company_id)
 );
 
 -- =========================
--- INDUSTRY
+-- INDUSTRIES
 -- =========================
-CREATE TABLE industry
+CREATE TABLE industries
 (
     industry_id   INT IDENTITY(1,1) PRIMARY KEY,
     industry_name NVARCHAR(100) NOT NULL UNIQUE
 );
 
 -- =========================
--- COMPANY INDUSTRY
+-- COMPANY INDUSTRIES
 -- =========================
-CREATE TABLE company_industry
+CREATE TABLE company_industries
 (
     company_id  INT NOT NULL,
     industry_id INT NOT NULL,
@@ -126,15 +165,15 @@ CREATE TABLE company_industry
     CONSTRAINT pk_company_industry PRIMARY KEY (company_id, industry_id),
 
     CONSTRAINT fk_company_industry_company FOREIGN KEY (company_id)
-        REFERENCES company (company_id),
+        REFERENCES companies (company_id),
     CONSTRAINT fk_company_industry_industry FOREIGN KEY (industry_id)
-        REFERENCES industry (industry_id)
+        REFERENCES industries (industry_id)
 );
 
 -- =========================
--- CANDIDATE PROFILE
+-- CANDIDATE PROFILES
 -- =========================
-CREATE TABLE candidate_profile
+CREATE TABLE candidate_profiles
 (
     candidate_id             INT PRIMARY KEY,
     date_of_birth            DATE,
@@ -148,24 +187,24 @@ CREATE TABLE candidate_profile
     CONSTRAINT fk_candidate_user FOREIGN KEY (candidate_id)
         REFERENCES users (user_id),
     CONSTRAINT fk_candidate_province FOREIGN KEY (province_id)
-        REFERENCES province (province_id),
+        REFERENCES provinces (province_id),
     CONSTRAINT fk_candidate_administrative_unit FOREIGN KEY (administrative_unit_id)
-        REFERENCES administrative_unit (unit_id)
+        REFERENCES administrative_units (unit_id)
 );
 
 -- =========================
--- SKILL
+-- SKILLS
 -- =========================
-CREATE TABLE skill
+CREATE TABLE skills
 (
     skill_id   INT IDENTITY(1,1) PRIMARY KEY,
     skill_name NVARCHAR(100) NOT NULL UNIQUE
 );
 
 -- =========================
--- CANDIDATE SKILL
+-- CANDIDATE SKILLS
 -- =========================
-CREATE TABLE candidate_skill
+CREATE TABLE candidate_skills
 (
     candidate_id INT NOT NULL,
     skill_id     INT NOT NULL,
@@ -173,15 +212,15 @@ CREATE TABLE candidate_skill
     CONSTRAINT pk_candidate_skill PRIMARY KEY (candidate_id, skill_id),
 
     CONSTRAINT fk_candidate_skill_candidate FOREIGN KEY (candidate_id)
-        REFERENCES candidate_profile (candidate_id),
+        REFERENCES candidate_profiles (candidate_id),
     CONSTRAINT fk_candidate_skill_skill FOREIGN KEY (skill_id)
-        REFERENCES skill (skill_id)
+        REFERENCES skills (skill_id)
 );
 
 -- =========================
--- EDUCATION
+-- EDUCATIONS
 -- =========================
-CREATE TABLE education
+CREATE TABLE educations
 (
     education_id INT IDENTITY(1,1) PRIMARY KEY,
     candidate_id INT NOT NULL,
@@ -192,13 +231,13 @@ CREATE TABLE education
     end_date     DATE,
 
     CONSTRAINT fk_education_candidate FOREIGN KEY (candidate_id)
-        REFERENCES candidate_profile (candidate_id)
+        REFERENCES candidate_profiles (candidate_id)
 );
 
 -- =========================
--- EXPERIENCE
+-- EXPERIENCES
 -- =========================
-CREATE TABLE experience
+CREATE TABLE experiences
 (
     experience_id INT IDENTITY(1,1) PRIMARY KEY,
     candidate_id  INT NOT NULL,
@@ -209,13 +248,13 @@ CREATE TABLE experience
     end_date      DATE,
 
     CONSTRAINT fk_experience_candidate FOREIGN KEY (candidate_id)
-        REFERENCES candidate_profile (candidate_id)
+        REFERENCES candidate_profiles (candidate_id)
 );
 
 -- =========================
--- CV
+-- CVS
 -- =========================
-CREATE TABLE cv
+CREATE TABLE cvs
 (
     cv_id        INT IDENTITY(1,1) PRIMARY KEY,
     candidate_id INT          NOT NULL,
@@ -225,13 +264,13 @@ CREATE TABLE cv
     uploaded_at  DATETIME2     DEFAULT GETDATE(),
 
     CONSTRAINT fk_cv_candidate FOREIGN KEY (candidate_id)
-        REFERENCES candidate_profile (candidate_id)
+        REFERENCES candidate_profiles (candidate_id)
 );
 
 -- =========================
--- JOB POST
+-- JOB POSTS
 -- =========================
-CREATE TABLE job_post
+CREATE TABLE job_posts
 (
     job_id                  INT IDENTITY(1,1) PRIMARY KEY,
     recruiter_id            INT           NOT NULL,
@@ -264,21 +303,21 @@ CREATE TABLE job_post
         ),
 
     CONSTRAINT fk_job_post_recruiter FOREIGN KEY (recruiter_id)
-        REFERENCES recruiter (recruiter_id),
+        REFERENCES recruiters (recruiter_id),
     CONSTRAINT fk_job_post_industry FOREIGN KEY (industry_id)
-        REFERENCES industry (industry_id),
+        REFERENCES industries (industry_id),
     CONSTRAINT fk_job_post_admin FOREIGN KEY (approved_by)
         REFERENCES users (user_id),
     CONSTRAINT fk_job_post_province FOREIGN KEY (province_id)
-        REFERENCES province (province_id),
+        REFERENCES provinces (province_id),
     CONSTRAINT fk_job_post_administrative_unit FOREIGN KEY (administrative_unit_id)
-        REFERENCES administrative_unit (unit_id)
+        REFERENCES administrative_units (unit_id)
 );
 
 -- =========================
--- SAVED JOB
+-- SAVED JOBS
 -- =========================
-CREATE TABLE saved_job
+CREATE TABLE saved_jobs
 (
     candidate_id INT NOT NULL,
     job_id       INT NOT NULL,
@@ -287,15 +326,15 @@ CREATE TABLE saved_job
     CONSTRAINT pk_saved_job PRIMARY KEY (candidate_id, job_id),
 
     CONSTRAINT fk_saved_job_candidate FOREIGN KEY (candidate_id)
-        REFERENCES candidate_profile (candidate_id),
+        REFERENCES candidate_profiles (candidate_id),
     CONSTRAINT fk_saved_job_job FOREIGN KEY (job_id)
-        REFERENCES job_post (job_id)
+        REFERENCES job_posts (job_id)
 );
 
 -- =========================
--- APPLICATION
+-- APPLICATIONS
 -- =========================
-CREATE TABLE application
+CREATE TABLE applications
 (
     application_id INT IDENTITY(1,1) PRIMARY KEY,
     candidate_id   INT         NOT NULL,
@@ -310,17 +349,17 @@ CREATE TABLE application
     CONSTRAINT uq_application UNIQUE (candidate_id, job_id),
 
     CONSTRAINT fk_application_candidate FOREIGN KEY (candidate_id)
-        REFERENCES candidate_profile (candidate_id),
+        REFERENCES candidate_profiles (candidate_id),
     CONSTRAINT fk_application_job FOREIGN KEY (job_id)
-        REFERENCES job_post (job_id),
+        REFERENCES job_posts (job_id),
     CONSTRAINT fk_application_cv FOREIGN KEY (cv_id)
-        REFERENCES cv (cv_id)
+        REFERENCES cvs (cv_id)
 );
 
 -- =========================
--- APPLICATION STATUS HISTORY
+-- APPLICATION STATUS HISTORIES
 -- =========================
-CREATE TABLE application_status_history
+CREATE TABLE application_status_histories
 (
     history_id     INT IDENTITY(1,1) PRIMARY KEY,
     application_id INT NOT NULL,
@@ -330,15 +369,15 @@ CREATE TABLE application_status_history
     changed_at     DATETIME2 DEFAULT GETDATE(),
 
     CONSTRAINT fk_history_application FOREIGN KEY (application_id)
-        REFERENCES application (application_id),
+        REFERENCES applications (application_id),
     CONSTRAINT fk_history_user FOREIGN KEY (changed_by)
         REFERENCES users (user_id)
 );
 
 -- =========================
--- INTERVIEW
+-- INTERVIEWS
 -- =========================
-CREATE TABLE interview
+CREATE TABLE interviews
 (
     interview_id   INT IDENTITY(1,1) PRIMARY KEY,
     application_id INT       NOT NULL,
@@ -351,5 +390,19 @@ CREATE TABLE interview
         CONSTRAINT ck_interview_status CHECK (status IN ('SCHEDULED', 'COMPLETED', 'CANCELLED')),
 
     CONSTRAINT fk_interview_application FOREIGN KEY (application_id)
-        REFERENCES application (application_id)
+        REFERENCES applications (application_id)
+);
+
+-- =========================
+-- VERIFICATION TOKENS
+-- =========================
+CREATE TABLE verification_tokens
+(
+    token_id    INT IDENTITY(1,1) PRIMARY KEY,
+    token       VARCHAR(255) NOT NULL UNIQUE,
+    user_id     INT NOT NULL UNIQUE,
+    expiry_date DATETIME2 NOT NULL,
+
+    CONSTRAINT fk_verification_tokens_user FOREIGN KEY (user_id)
+        REFERENCES users (user_id) ON DELETE CASCADE
 );
