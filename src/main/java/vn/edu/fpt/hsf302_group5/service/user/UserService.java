@@ -1,18 +1,18 @@
 package vn.edu.fpt.hsf302_group5.service.user;
 
-import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequestDTO;
-import vn.edu.fpt.hsf302_group5.dto.user.UserRequertDTO;
+import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequest;
+import vn.edu.fpt.hsf302_group5.dto.user.UserRequest;
 import vn.edu.fpt.hsf302_group5.entity.User;
 
 public interface UserService {
 
-    Boolean registerUser(UserRequertDTO user);
+    Boolean registerUser(UserRequest user);
 
     void resendVerificationToken(String email);
 
     void save(User user);
 
-    void saveRecruiter(RecruiterRegisterRequestDTO recruiterRegisterRequestDTO);
+    void saveRecruiter(RecruiterRegisterRequest recruiterRegisterRequest);
 
     boolean existsByEmail(String email);
 }

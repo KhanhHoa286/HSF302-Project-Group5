@@ -10,7 +10,7 @@ import vn.edu.fpt.hsf302_group5.entity.enums.Gender;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RecruiterRegisterRequestDTO {
+public class RecruiterRegisterRequest {
 
     @NotBlank(message = "Không được để trống!")
     @Email(message = "Phải đúng định dạng của Email!")
@@ -18,7 +18,7 @@ public class RecruiterRegisterRequestDTO {
 
     @NotBlank(message = "Mật khẩu không được để trống!")
     @Size(min = 6, max = 255, message = "Mật khẩu phải từ 6 đến 255 ký tự!")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&*()!]).+$", message = "Mật khẩu phải bao gồm cả chữ thường, chữ hoa, chữ só và kí tự đặc biệt!")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&*()!]).+$", message = "Mật khẩu phải bao gồm cả chữ thường, chữ hoa, chữ số và kí tự đặc biệt!")
     private String password;
     private String confirmPassword;
 

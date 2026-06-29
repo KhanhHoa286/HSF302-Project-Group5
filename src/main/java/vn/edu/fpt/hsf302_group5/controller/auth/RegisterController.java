@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.hsf302_group5.dto.administrativeunit.AdministrativeUnitResponse;
 import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
-import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequestDTO;
-import vn.edu.fpt.hsf302_group5.dto.user.UserRequertDTO;
+import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequest;
+import vn.edu.fpt.hsf302_group5.dto.user.UserRequest;
 import vn.edu.fpt.hsf302_group5.entity.VerificationToken;
 import vn.edu.fpt.hsf302_group5.entity.enums.Gender;
 import vn.edu.fpt.hsf302_group5.service.administrativeunit.AdministrativeUnitService;
@@ -31,12 +31,12 @@ public class RegisterController {
 
     @GetMapping("/register")
     public String registerPage(Model model) {
-        model.addAttribute("userRequestDTO", new UserRequertDTO());
+        model.addAttribute("userRequestDTO", new UserRequest());
         return "pages/public/register";
     }
 
     @PostMapping("/register")
-    public String doRegister(@Valid @ModelAttribute("userRequestDTO") UserRequertDTO userRequestDTO, BindingResult bindingResult, @RequestParam(value = "acceptTerms", required = false) String[] acceptTerms, Model model) {
+    public String doRegister(@Valid @ModelAttribute("userRequestDTO") UserRequest userRequestDTO, BindingResult bindingResult, @RequestParam(value = "acceptTerms", required = false) String[] acceptTerms, Model model) {
         if (bindingResult.hasErrors()) {
             return "pages/public/register";
         }
@@ -94,7 +94,7 @@ public class RegisterController {
 
     @GetMapping("/register-recruiter")
     public String registerRecruiterPage(Model model) {
-        model.addAttribute("recruiterRegisterRequestDTO", new RecruiterRegisterRequestDTO());
+        model.addAttribute("recruiterRegisterRequestDTO", new RecruiterRegisterRequest());
         List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
         model.addAttribute("genders", Gender.values());
         model.addAttribute("provinceResponses",  provinceResponses);
@@ -108,7 +108,7 @@ public class RegisterController {
     }
 
     @PostMapping("/register-recruiter")
-    public String doRegisterRecruiter(@Valid @ModelAttribute("recruiterRegisterRequestDTO") RecruiterRegisterRequestDTO recruiterRegisterRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String doRegisterRecruiter(@Valid @ModelAttribute("recruiterRegisterRequestDTO") RecruiterRegisterRequest recruiterRegisterRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
             model.addAttribute("provinceResponses", provinceService.getListProvinceResponse());

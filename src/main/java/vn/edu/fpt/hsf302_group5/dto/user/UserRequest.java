@@ -9,7 +9,7 @@ import vn.edu.fpt.hsf302_group5.entity.enums.UserStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserRequertDTO {
+public class UserRequest {
     @NotBlank(message = "Email không được để trống!")
     @Email(message = "Email không đúng định dạng!")
     @Size(max = 255, message = "Email không được vượt quá 255 ký tự!")

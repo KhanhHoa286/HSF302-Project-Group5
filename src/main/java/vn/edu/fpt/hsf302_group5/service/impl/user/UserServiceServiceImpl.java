@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequestDTO;
-import vn.edu.fpt.hsf302_group5.dto.user.UserRequertDTO;
+import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequest;
+import vn.edu.fpt.hsf302_group5.dto.user.UserRequest;
 import vn.edu.fpt.hsf302_group5.entity.Company;
 import vn.edu.fpt.hsf302_group5.entity.Recruiter;
 import vn.edu.fpt.hsf302_group5.entity.User;
@@ -41,7 +41,7 @@ public class UserServiceServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Boolean registerUser(UserRequertDTO user) {
+    public Boolean registerUser(UserRequest user) {
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             throw new RuntimeException("Mật khẩu không khớp!");
         }
@@ -109,7 +109,7 @@ public class UserServiceServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void saveRecruiter(RecruiterRegisterRequestDTO dto) {
+    public void saveRecruiter(RecruiterRegisterRequest dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email đã tồn tại trên hệ thống!");
         }
