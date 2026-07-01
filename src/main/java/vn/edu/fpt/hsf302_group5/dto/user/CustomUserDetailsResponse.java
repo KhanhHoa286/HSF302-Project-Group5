@@ -4,17 +4,19 @@ import lombok.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import vn.edu.fpt.hsf302_group5.entity.enums.Gender;
 import vn.edu.fpt.hsf302_group5.entity.enums.UserStatus;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomUserDetailsResponse implements UserDetails {
+public class CustomUserDetailsResponse implements UserDetails, OAuth2User {
 
     private Integer id;
     private String fullName;
@@ -25,6 +27,12 @@ public class CustomUserDetailsResponse implements UserDetails {
     private String avatarUrl;
     private String email;
     private List<GrantedAuthority> authorities;
+    private Map<String, Object> attributes;
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -43,6 +51,11 @@ public class CustomUserDetailsResponse implements UserDetails {
 
     @Override
     public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getName() {
         return email;
     }
 }

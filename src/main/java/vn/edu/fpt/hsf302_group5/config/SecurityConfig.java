@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.util.AntPathMatcher;
+import vn.edu.fpt.hsf302_group5.service.impl.user.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity // Kích hoạt cơ chế bảo mật của Spring Security
@@ -35,7 +36,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF tạm thời để phát triển/kiểm thử
                 .authorizeHttpRequests(auth -> auth
@@ -56,6 +57,14 @@ public class SecurityConfig {
                                 response.sendRedirect("/login?error=badCredentials");
                             }
                         }))
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
+                .oauth2Login((oauth) -> oauth
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
