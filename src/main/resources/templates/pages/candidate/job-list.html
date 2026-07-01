@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<div th:replace="~{fragments/header.html :: header}"></div>
+<div th:replace="~{fragments/header.html :: header(activePage='jobs')}"></div>
 
 <div class="candidate-layout">
     <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>

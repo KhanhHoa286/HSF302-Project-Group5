@@ -1,5 +1,6 @@
 package vn.edu.fpt.hsf302_group5.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import vn.edu.fpt.hsf302_group5.entity.enums.EmploymentType;
@@ -122,6 +123,10 @@ public class JobPost {
     @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Application> applications = new HashSet<>();
+
+    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<JobSkill> jobSkills = new HashSet<>();
 
     public String getSalaryDisplay() {
         if (salaryMin == null && salaryMax == null) {
