@@ -45,6 +45,17 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 //                .authorities(grantedAuthorities)
 //                .build();
 
+        // Nếu đăng nhập thành công sẽ tạo
+        // UsernamePasswordAuthenticationToken authentication =
+        //    new UsernamePasswordAuthenticationToken(
+        //        customUserDetails,
+        //        null,
+        //        customUserDetails.getAuthorities()
+        //    );
+        // và lưu vào:
+        // SecurityContextHolder.getContext()
+        //        .setAuthentication(authentication);
+
         return CustomUserDetailsResponse.builder()
                 .status(user.getStatus())
                 .id(user.getUserId())
