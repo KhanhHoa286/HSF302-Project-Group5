@@ -68,20 +68,16 @@ public class UserServiceServiceImpl implements UserService {
 
         String linkRegisterConfirm = AppConstants.LINK_VERIFY_ACCOUNT + token;
 
-        emailService.sendVerificationEmail(newUser.getEmail(), linkRegisterConfirm);
+        emailService.sendVerificationEmail(newUser.getEmail(), linkRegisterConfirm, AppConstants.MESSAGE_VERYFI_ACCOUNT);
 
         return true;
     }
 
     @Transactional
     @Override
-    public void resendVerificationToken(String email) {
+    public void resendVerificationToken(String email, Boolean forgotpassword) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Email không tồn tại!"));
-
-        if (user.getStatus() == UserStatus.ACTIVE) {
-            throw new RuntimeException("Tài khoản đã được kích hoạt trước đó!");
-        }
 
         String token = UUID.randomUUID().toString();
         LocalDateTime expireDate = LocalDateTime.now().plusHours(AppConstants.VERRIFI_TOKEN_REGISTER);
@@ -98,8 +94,8 @@ public class UserServiceServiceImpl implements UserService {
         user.setVerificationToken(verificationToken);
         userRepository.save(user);
 
-        String linkRegisterConfirm = AppConstants.LINK_VERIFY_ACCOUNT + token;
-        emailService.sendVerificationEmail(user.getEmail(), linkRegisterConfirm);
+        String linkRegisterConfirm = forgotpassword == false ? AppConstants.LINK_VERIFY_ACCOUNT + token : AppConstants.LINK_RESET_PASSWORD + token;
+        emailService.sendVerificationEmail(user.getEmail(), linkRegisterConfirm, AppConstants.MESSAGE_VERYFI_ACCOUNT);
     }
 
     @Override
@@ -160,7 +156,7 @@ public class UserServiceServiceImpl implements UserService {
         user.setVerificationToken(verificationToken);
 
         String linkRegisterConfirm = AppConstants.LINK_VERIFY_ACCOUNT + token;
-        emailService.sendVerificationEmail(user.getEmail(), linkRegisterConfirm);
+        emailService.sendVerificationEmail(user.getEmail(), linkRegisterConfirm, AppConstants.MESSAGE_VERYFI_ACCOUNT);
     }
 
     @Override
@@ -183,7 +179,7 @@ public class UserServiceServiceImpl implements UserService {
         user.setVerificationToken(verificationToken);
         verificationTokenService.save(verificationToken);
         String linkResetPassword = AppConstants.LINK_RESET_PASSWORD + token;
-        emailService.sendVerificationEmail(email, linkResetPassword);
+        emailService.sendVerificationEmail(email, linkResetPassword, AppConstants.MESSAGE_FORGOT_PASSWORD);
     }
 
     @Transactional
@@ -196,6 +192,9 @@ public class UserServiceServiceImpl implements UserService {
             throw new RuntimeException("Mật khẩu phải chứa cả chữ hoa, chữ thường, chữ số và cả kí tự đặc biệt!");
         }
         User user = userRepository.findByToken(token);
+        if (user == null) {
+            throw new RuntimeException("Không tìm thấy người dùng!");
+        }
         user.setPasswordHash(passwordEncoder.encode(password));
         user.setVerificationToken(null);
         userRepository.save(user);

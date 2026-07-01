@@ -28,7 +28,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng với email " + username)); //ném về UsernameNotFoundException để có thể quay lại trang login báo rằng không có user có email như thế
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng với email " + username)); //ném về UsernameNotFoundException để có thể quay lại trang login báo rằng không có user có email này
 
         Set<Permission> permissions = user.getRole().getPermissions();
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();

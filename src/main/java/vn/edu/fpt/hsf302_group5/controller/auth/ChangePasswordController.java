@@ -28,6 +28,7 @@ public class ChangePasswordController {
             return "redirect:/forgot-password";
         }
         redirectAttributes.addAttribute("email", email);
+        redirectAttributes.addFlashAttribute("forgotPassword", true);
         return "redirect:/register-success";
     }
 
@@ -51,7 +52,7 @@ public class ChangePasswordController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/reset-password";
         }
-        model.addAttribute("success", "Đổi mật khẩu thành công, vui lòng đăng nhập!");
+        redirectAttributes.addFlashAttribute("success", "Đổi mật khẩu thành công, vui lòng đăng nhập!");
         return "redirect:/login";
     }
 

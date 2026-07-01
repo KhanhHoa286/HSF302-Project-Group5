@@ -8,7 +8,7 @@ public interface UserService {
 
     Boolean registerUser(UserRequest user);
 
-    void resendVerificationToken(String email);
+    void resendVerificationToken(String email, Boolean forgotpassword);
 
     void save(User user);
 
