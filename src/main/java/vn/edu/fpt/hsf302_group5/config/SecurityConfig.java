@@ -62,9 +62,10 @@ public class SecurityConfig {
                 )
                 .oauth2Login((oauth) -> oauth
                         .loginPage("/login")
+                        .redirectionEndpoint((redirection) -> redirection.baseUri("/login/oauth2/code/*")) // * có thể là gg hoặc github...
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
-                        )
+                        ) //Sau khi lấy được thông tin user từ Google đưa nó cho customOAuth2UserService xử lý
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
