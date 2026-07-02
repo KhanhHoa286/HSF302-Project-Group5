@@ -16,13 +16,13 @@ public interface JobPostService {
 
       Page<JobPostResponse> getJobPostsByFilter(String searchKeyword, Integer industryId, Integer provinceId, BigDecimal minSalary, int page);
 
-      JobPost craeteJob(JobPostFormRequest jobPostForm);
+      JobPost craeteJob(JobPostFormRequest jobPostForm, int userId);
 
       JobPostDetailResponse getJobPostDetaiDTOByJobPostId(Integer jobPostId);
 
       JobPost getJobPostById(Integer jobId);
 
-      Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page);
+      Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page,int recruiterId);
 
 //      void updateStatusJobPost(Integer jobPostId,JobStatus jobStatus);
 }

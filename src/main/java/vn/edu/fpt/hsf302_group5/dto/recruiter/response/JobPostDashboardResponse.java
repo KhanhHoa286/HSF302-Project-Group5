@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class JobPostDashboardResponse {
+    private Integer jobId;
     private String title;
     private LocalDateTime postedDate;
-    private Integer vacancies;
+    private Long vacancies;
     private JobStatus status;
 }

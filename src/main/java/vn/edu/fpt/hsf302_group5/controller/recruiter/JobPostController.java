@@ -2,6 +2,7 @@ package vn.edu.fpt.hsf302_group5.controller.recruiter;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import vn.edu.fpt.hsf302_group5.dto.industry.IndustryResponse;
 import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.JobPostFormRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.SkillResponse;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.EmploymentType;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobLevel;
@@ -65,9 +67,10 @@ public class JobPostController {
     public String listJobPosts(Model model,
                                @RequestParam(name = "page",defaultValue = "0")int page,
                                @RequestParam(value = "text_search",required = false) String textSearch,
-                               @RequestParam(value = "job_status",required = false)JobStatus jobStatus) {
+                               @RequestParam(value = "job_status",required = false)JobStatus jobStatus,
+                            @AuthenticationPrincipal CustomUserDetailsResponse user) {
         //
-        model.addAttribute("jobPostDashboardList",jobPostService.getJobPostDashboard(textSearch,jobStatus,page));
+        model.addAttribute("jobPostDashboardList",jobPostService.getJobPostDashboard(textSearch,jobStatus,page,user.getId()));
         model.addAttribute("textSearch",textSearch);
         model.addAttribute("jobStatus",jobStatus);
         model.addAttribute("statistic", jobPostService.getStatistic());
@@ -85,13 +88,13 @@ public class JobPostController {
     }
 
     @PostMapping("/create-job")
-    public String createJob(@Valid @ModelAttribute(name="jobPostForm")JobPostFormRequest jobPostForm, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public String createJob(@Valid @ModelAttribute(name="jobPostForm")JobPostFormRequest jobPostForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal CustomUserDetailsResponse user){
         //
         if(bindingResult.hasErrors()) {
             return "pages/recruiter/create-job";
         }
         //
-        JobPost jobPost = jobPostService.craeteJob(jobPostForm);
+        JobPost jobPost = jobPostService.craeteJob(jobPostForm,user.getId());
         if(jobPost != null) {
             redirectAttributes.addFlashAttribute("addSuccess", "Tạo mới công việc thành công!");
         }else{

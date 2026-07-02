@@ -60,10 +60,10 @@ public class JobPostServiceImpl implements JobPostService {
 
     @Override
     @Transactional
-    public JobPost craeteJob(JobPostFormRequest jobPostForm) {
+    public JobPost craeteJob(JobPostFormRequest jobPostForm,int userId) {
         //đợi xong login lấy id ở session
         JobPost jobPost = jobPostMapper.toEntity(jobPostForm);
-        jobPost.setRecruiterId(2);
+        jobPost.setRecruiterId(userId);
         jobPost.setStatus(JobStatus.PENDING);
         //insert dữ liệu vào job_skill
         if(jobPostForm.getSkillsId() != null && !jobPostForm.getSkillsId().isEmpty()) {
@@ -95,7 +95,7 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page) {
+    public Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page, int recruiterId) {
         if(textSearch == null || textSearch.isEmpty()) {
             textSearch = null;
         }
@@ -104,7 +104,7 @@ public class JobPostServiceImpl implements JobPostService {
         }
         Pageable pageable = PageRequest.of(page,AppConstants.NUMBER_PAGE_PER_BLOCK);
 
-        return jobPostRepository.getJobPostDashboard(textSearch,jobStatus,pageable);
+        return jobPostRepository.getJobPostDashboard(recruiterId,textSearch,jobStatus,pageable);
     }
 
 //    @Override
