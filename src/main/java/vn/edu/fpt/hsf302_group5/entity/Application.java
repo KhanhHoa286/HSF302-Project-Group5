@@ -64,5 +64,83 @@ public class Application {
     @OneToMany(mappedBy = "application", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<Interview> interviews = new HashSet<>();
+
+    public String getCandidateFullName() {
+        return (candidateProfile != null && candidateProfile.getUser() != null) 
+            ? candidateProfile.getUser().getFullName() : null;
+    }
+
+    public String getCandidateEmail() {
+        return (candidateProfile != null && candidateProfile.getUser() != null) 
+            ? candidateProfile.getUser().getEmail() : null;
+    }
+
+    public String getCandidatePhone() {
+        return (candidateProfile != null && candidateProfile.getUser() != null) 
+            ? candidateProfile.getUser().getPhone() : null;
+    }
+
+    public String getCandidateAvatarUrl() {
+        return (candidateProfile != null && candidateProfile.getUser() != null) 
+            ? candidateProfile.getUser().getAvatarUrl() : null;
+    }
+
+    public String getJobTitle() {
+        return (jobPost != null) ? jobPost.getTitle() : null;
+    }
+
+    public java.time.LocalDate getCandidateDateOfBirth() {
+        return (candidateProfile != null) ? candidateProfile.getDateOfBirth() : null;
+    }
+
+    public String getCandidateAddressDetail() {
+        return (candidateProfile != null) ? candidateProfile.getAddressDetail() : null;
+    }
+
+    public String getCandidateProvinceName() {
+        return (candidateProfile != null && candidateProfile.getProvince() != null) 
+            ? candidateProfile.getProvince().getProvinceName() : null;
+    }
+
+    public String getCandidateSummary() {
+        return (candidateProfile != null) ? candidateProfile.getSummary() : null;
+    }
+
+    public java.util.List<String> getCandidateSkills() {
+        if (candidateProfile == null || candidateProfile.getSkills() == null) {
+            return java.util.List.of();
+        }
+        return candidateProfile.getSkills().stream()
+                .map(cs -> cs.getSkill().getSkillName())
+                .toList();
+    }
+
+    public java.util.Set<Education> getCandidateEducations() {
+        return (candidateProfile != null) ? candidateProfile.getEducations() : null;
+    }
+
+    public java.util.Set<Experience> getCandidateExperiences() {
+        return (candidateProfile != null) ? candidateProfile.getExperiences() : null;
+    }
+
+    public String getCvName() {
+        return (cv != null) ? cv.getCvName() : null;
+    }
+
+    public String getCvUrl() {
+        return (cv != null) ? cv.getFileUrl() : null;
+    }
+
+    public String getCandidateGender() {
+        if (candidateProfile != null) {
+            if (candidateProfile.getUser() != null && candidateProfile.getUser().getGender() != null) {
+                return candidateProfile.getUser().getGender().name();
+            }
+            if (candidateProfile.getGender() != null) {
+                return candidateProfile.getGender().name();
+            }
+        }
+        return null;
+    }
 }
 
