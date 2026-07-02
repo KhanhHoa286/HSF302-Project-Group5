@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequest;
 import vn.edu.fpt.hsf302_group5.dto.user.UserRequest;
+import vn.edu.fpt.hsf302_group5.entity.CandidateProfile;
 import vn.edu.fpt.hsf302_group5.entity.Company;
 import vn.edu.fpt.hsf302_group5.entity.Recruiter;
 import vn.edu.fpt.hsf302_group5.entity.User;
@@ -54,7 +55,14 @@ public class UserServiceServiceImpl implements UserService {
         newUser.setPasswordHash(passwordEncoder.encode(newUser.getPasswordHash()));
         newUser.setRole(roleRepository.findByRoleName(UserRole.CANDIDATE.name()));
 
-        userRepository.save(newUser); // Hibernate đang quản lý chính object newUser trong Persistence Context và cập nhật thuộc tính id của object đó.
+        newUser = userRepository.save(newUser); // Hibernate đang quản lý chính object newUser trong Persistence Context và cập nhật thuộc tính id của object đó.
+
+        CandidateProfile profile = CandidateProfile.builder()
+                .candidateId(newUser.getUserId())
+                .user(newUser)
+                .build();
+        newUser.setCandidateProfile(profile);
+        userRepository.save(newUser);
 
         String token = UUID.randomUUID().toString();
         LocalDateTime expireDate = LocalDateTime.now().plusHours(AppConstants.VERRIFI_TOKEN_REGISTER);
