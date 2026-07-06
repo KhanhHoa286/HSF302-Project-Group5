@@ -54,14 +54,22 @@ public class RegisterController {
     }
 
     @GetMapping("/register-success")
-    public String registerSuccessPage(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "resent", required = false) Boolean resent, Model model) {
+    public String registerSuccessPage(@RequestParam(value = "email", required = false) String email, 
+                                      @RequestParam(value = "resent", required = false) Boolean resent, 
+                                      @RequestParam(value = "error", required = false) String error,
+                                      @RequestParam(value = "forgotPassword", required = false, defaultValue = "false") boolean forgotPassword,
+                                      Model model) {
         model.addAttribute("email", email);
         model.addAttribute("resent", resent);
+        model.addAttribute("error", error);
+        model.addAttribute("forgotPassword", forgotPassword);
         return "pages/public/register-success";
     }
 
     @GetMapping("/resend-verification")
-    public String resendVerification(@RequestParam("email") String email, @RequestParam("forgotpassword") Boolean forgotpassword ,RedirectAttributes redirectAttributes) {
+    public String resendVerification(@RequestParam("email") String email, 
+                                     @RequestParam(value = "forgotpassword", required = false, defaultValue = "false") boolean forgotpassword, 
+                                     RedirectAttributes redirectAttributes) {
         try {
             userService.resendVerificationToken(email, forgotpassword);
             redirectAttributes.addAttribute("email", email);
@@ -70,6 +78,7 @@ public class RegisterController {
             redirectAttributes.addAttribute("email", email);
             redirectAttributes.addAttribute("error", e.getMessage());
         }
+        redirectAttributes.addAttribute("forgotPassword", forgotpassword);
         return "redirect:/register-success";
     }
 
