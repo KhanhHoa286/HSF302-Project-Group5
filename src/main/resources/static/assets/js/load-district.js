@@ -1,5 +1,5 @@
 
-function loadDistrict(provinceId) {
+function loadDistrict(provinceId,preSelectedUnitId) {
 
     const unitSelect = document.getElementById("administrativeUnitId");
     let htmlDistrictOption;
@@ -8,12 +8,15 @@ function loadDistrict(provinceId) {
         unitSelect.innerHTML = htmlDistrictOption;
         return;
     }
+    const savedIdStr = preSelectedUnitId ? String(preSelectedUnitId).trim() : null;
     axios.get(`/api/recruiter/load-district?province_id=${provinceId}`)
         .then(response =>{
             const data = response.data;
             htmlDistrictOption = '<option value="" disabled selected>Chọn quận/huyện</option>';
             data.forEach(district => {
-                htmlDistrictOption += `<option value="${district.unitId}">${district.unitName}</option>`;
+                const currentIdStr = String(district.unitId).trim();
+                const isSelected = (savedIdStr && currentIdStr === savedIdStr) ? 'selected' : '';
+                htmlDistrictOption += `<option value="${district.unitId}" ${isSelected}>${district.unitName}</option>`;
             })
             unitSelect.innerHTML = htmlDistrictOption;
         })
@@ -21,3 +24,17 @@ function loadDistrict(provinceId) {
             console.log("Không tìm được mã tỉnh!", error);
         })
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Gọi đúng cái ID mà th:field="*{provinceId}" tự sinh ra dưới trình duyệt nè em
+    const provinceSelect = document.getElementById("provinceId");
+
+    if (provinceSelect) {
+        const currentProvinceId = provinceSelect.value;
+        const preSelectedUnitId = provinceSelect.getAttribute("data-saved-district");
+
+        if (currentProvinceId) {
+            loadDistrict(currentProvinceId, preSelectedUnitId);
+        }
+    }
+});

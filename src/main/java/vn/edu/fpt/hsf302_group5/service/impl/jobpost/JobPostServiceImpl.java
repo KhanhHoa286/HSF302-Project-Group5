@@ -20,12 +20,15 @@ import vn.edu.fpt.hsf302_group5.entity.enums.JobLevel;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 import vn.edu.fpt.hsf302_group5.mapper.JobPostMapper;
 import vn.edu.fpt.hsf302_group5.repository.jobpost.JobPostRepository;
+import vn.edu.fpt.hsf302_group5.repository.jobskill.JobSkillRepository;
 import vn.edu.fpt.hsf302_group5.repository.skill.SkillRepository;
 import vn.edu.fpt.hsf302_group5.service.jobpost.JobPostService;
 import vn.edu.fpt.hsf302_group5.util.AppConstants;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -34,6 +37,7 @@ public class JobPostServiceImpl implements JobPostService {
     private final JobPostRepository jobPostRepository;
     private final JobPostMapper jobPostMapper;
     private final SkillRepository skillRepository;
+    private final JobSkillRepository jobSkillRepository;
 
     @Override
     public StatisticResponse getStatistic() {
@@ -62,7 +66,7 @@ public class JobPostServiceImpl implements JobPostService {
     @Transactional
     public JobPost craeteJob(JobPostFormRequest jobPostForm,int userId) {
         //đợi xong login lấy id ở session
-        JobPost jobPost = jobPostMapper.toEntity(jobPostForm);
+        JobPost jobPost = jobPostMapper.toEntityCreateForm(jobPostForm);
         jobPost.setRecruiterId(userId);
         jobPost.setStatus(JobStatus.PENDING);
         //insert dữ liệu vào job_skill
@@ -122,5 +126,38 @@ public class JobPostServiceImpl implements JobPostService {
 //        jobPostRepository.save(jobPost);
 //    }
 
+    @Override
+    @Transactional
+    public JobPost updateJob(JobPostFormRequest jobPostForm) {
+        // tìm ra job id đó
+        JobPost jobPost = jobPostRepository.findById(jobPostForm.getJobPostId())
+                .orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
+        // bắn nó sang cho mapper để tiến hành ghi đè thuộc tính mới lên cho jobPost này
+        jobPostMapper.updateJob(jobPostForm, jobPost);
+        // sau khi ghi đè xong thì ta có 1 jobPost với các thuộc tính mới và giữ nguyên jobPost id,...
+        // tiếp theo là lấy mảng skills mới trong jobPost này ra tinh chỉnh lại
+        //insert dữ liệu vào job_skill
+        jobSkillRepository.deleteByJobPostJobId(jobPost.getJobId());
+        if (jobPostForm.getSkillsId() != null && !jobPostForm.getSkillsId().isEmpty()) {
+            List<JobSkill> newSkillsToSave = new ArrayList<>();
 
+            for (Integer skillId : jobPostForm.getSkillsId()) {
+                JobSkill jobSkill = new JobSkill();
+                jobSkill.setJobPost(jobPost);
+                jobSkill.setSkill(skillRepository.getReferenceById(skillId));
+
+                newSkillsToSave.add(jobSkill);
+            }
+            jobSkillRepository.saveAll(newSkillsToSave);
+        }
+        //
+        return jobPostRepository.save(jobPost);
+    }
+
+    @Override
+    public JobPostFormRequest updateFormRequest(Integer id) {
+        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
+        JobPostFormRequest jobPostFormRequest = jobPostMapper.toEntityUpdateForm(jobPost);
+        return jobPostFormRequest;
+    }
 }

@@ -25,4 +25,8 @@ public interface JobPostService {
       Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page,int recruiterId);
 
 //      void updateStatusJobPost(Integer jobPostId,JobStatus jobStatus);
+
+      JobPost updateJob(JobPostFormRequest jobPostForm);
+
+      JobPostFormRequest updateFormRequest(Integer id);
 }
