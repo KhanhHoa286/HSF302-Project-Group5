@@ -107,8 +107,8 @@
                             <span class="badge badge-soft-secondary" th:if="${job.status.name == 'CLOSED'}">Đã đóng</span>
                         </td>
                         <td class="text-end">
-                            <a href="job-detail.html" class="btn btn-sm btn-outline-primary-custom me-1" title="Xem chi tiết"><i class="bi bi-eye"></i></a>
-                            <a href="edit-job.html" class="btn btn-sm btn-outline-primary-custom me-1" title="Chỉnh sửa"><i class="bi bi-pencil"></i></a>
+                            <a th:href="@{/recruiter/job-detail/{id}(id=${job.jobId})}" class="btn btn-sm btn-outline-primary-custom me-1" title="Xem chi tiết"><i class="bi bi-eye"></i></a>
+                            <a th:href="@{/recruiter/update-job/{id}(id=${job.jobId})}" class="btn btn-sm btn-outline-primary-custom me-1" title="Chỉnh sửa"><i class="bi bi-pencil"></i></a>
 <!--                            <button class="btn btn-sm btn-outline-danger" title="Đóng tin" data-bs-toggle="modal" data-bs-target="#actionModal"><i class="bi bi-stop-circle"></i></button>-->
 <!--                            <button class="btn btn-sm btn-outline-primary-custom" title="Mở tin tin" data-bs-toggle="modal" data-bs-target="#actionModal"><i class="bi bi-arrow-clockwise"></i></button>-->
                         </td>
