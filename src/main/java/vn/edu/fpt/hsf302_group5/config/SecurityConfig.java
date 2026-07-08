@@ -1,8 +1,11 @@
 package vn.edu.fpt.hsf302_group5.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,11 +17,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.util.AntPathMatcher;
+import vn.edu.fpt.hsf302_group5.service.impl.user.CustomOAuth2UserService;
+import vn.edu.fpt.hsf302_group5.service.user.CustomUserDetailsService;
 
 @Configuration
-@EnableWebSecurity // Kích hoạt cơ chế bảo mật của Spring Security
+@EnableWebSecurity // Kích hoạt cơ chế bảo mật của Spring Security , nên dùng cách method
 @EnableMethodSecurity // bật phân quyền ở level phương thức với @PreAuthorize
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -35,7 +43,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public AuthenticationManager authenticationManager() throws Exception{
+        return new ProviderManager(authenticationProvider(customUserDetailsService, passwordEncoder()));
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF tạm thời để phát triển/kiểm thử
                 .authorizeHttpRequests(auth -> auth
@@ -57,12 +70,19 @@ public class SecurityConfig {
                             }
                         }))
                         .defaultSuccessUrl("/", true)
-                        .permitAll()
+                )
+                .oauth2Login((oauth) -> oauth
+                        .loginPage("/login")
+                        .redirectionEndpoint((redirection) -> redirection.baseUri("/login/oauth2/code/*")) // * có thể là gg hoặc github...
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        ) //Sau khi lấy được thông tin user từ Google đưa nó cho customOAuth2UserService xử lý
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout") // POST
                         .logoutSuccessUrl("/")
-                        .permitAll()
+                        .clearAuthentication(true)
                 )
                 .build();
     }

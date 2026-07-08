@@ -98,17 +98,17 @@
                     <tbody>
                     <tr th:if="${jobPostDashboardList.isEmpty()}"><td class="text-center" colspan="5" th:text="'Danh sách tin tuyển dụng trống!'"></td></tr>
                     <tr th:each="job : ${jobPostDashboardList.content}">
-                        <td><a href="#" class="fw-bold text-decoration-none text-primary" th:text="${job.title}"></a></td>
+                        <td><a th:href="@{/recruiter/applicant-list(jobId=${job.jobId})}" class="fw-bold text-decoration-none text-primary" th:text="${job.title}"></a></td>
                         <td class="text-muted" th:text="${#temporals.format(job.postedDate,'dd-MM-yyyy')}"></td>
-                        <td class="text-center fw-bold text-success"><a href="applicant-list.html" class="text-decoration-none text-success" th:text="${job.vacancies}"></a></td>
+                        <td class="text-center fw-bold text-success"><a th:href="@{/recruiter/applicant-list(jobId=${job.jobId})}" class="text-decoration-none text-success" th:text="${job.vacancies}"></a></td>
                         <td><span class="badge badge-soft-success" th:if="${job.status.name == 'APPROVED'}">Đang tuyển</span>
                             <span class="badge badge-soft-warning" th:if="${job.status.name == 'PENDING'}">Chờ duyệt</span>
                             <span class="badge badge-soft-danger" th:if="${job.status.name == 'REJECTED'}">Bị từ chối</span>
                             <span class="badge badge-soft-secondary" th:if="${job.status.name == 'CLOSED'}">Đã đóng</span>
                         </td>
                         <td class="text-end">
-                            <a href="job-detail.html" class="btn btn-sm btn-outline-primary-custom me-1" title="Xem chi tiết"><i class="bi bi-eye"></i></a>
-                            <a href="edit-job.html" class="btn btn-sm btn-outline-primary-custom me-1" title="Chỉnh sửa"><i class="bi bi-pencil"></i></a>
+                            <a th:href="@{/recruiter/job-detail/{id}(id=${job.jobId})}" class="btn btn-sm btn-outline-primary-custom me-1" title="Xem chi tiết"><i class="bi bi-eye"></i></a>
+                            <a th:href="@{/recruiter/update-job/{id}(id=${job.jobId})}" class="btn btn-sm btn-outline-primary-custom me-1" title="Chỉnh sửa"><i class="bi bi-pencil"></i></a>
 <!--                            <button class="btn btn-sm btn-outline-danger" title="Đóng tin" data-bs-toggle="modal" data-bs-target="#actionModal"><i class="bi bi-stop-circle"></i></button>-->
 <!--                            <button class="btn btn-sm btn-outline-primary-custom" title="Mở tin tin" data-bs-toggle="modal" data-bs-target="#actionModal"><i class="bi bi-arrow-clockwise"></i></button>-->
                         </td>

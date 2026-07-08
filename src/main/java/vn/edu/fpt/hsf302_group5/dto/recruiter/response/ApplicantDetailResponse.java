@@ -43,28 +43,5 @@ public class ApplicantDetailResponse {
     // CV files
     private String cvName;
     private String cvUrl;
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class EducationDto {
-        private String schoolName;
-        private String degree;
-        private String major;
-        private LocalDate startDate;
-        private LocalDate endDate;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ExperienceDto {
-        private String companyName;
-        private String position;
-        private String description;
-        private LocalDate startDate;
-        private LocalDate endDate;
-    }
 }
+

@@ -29,24 +29,46 @@ public class ListJobController {
     private final JobPostService jobPostService;
 
     @GetMapping("/jobs/list-job")
-    public String listJob(Model model, @RequestParam(name = "industry", required = false) Integer industryId, @RequestParam(name = "search-keyword", required = false) String search_keyword, @RequestParam(name = "province", required = false) Integer provinceId, @RequestParam(name = "minSalary", required = false) BigDecimal minSalary, @RequestParam(name = "page", defaultValue = "0") int page) {
+    public String listJob(Model model,
+                          @RequestParam(name = "page", defaultValue = "0") int page,
+                          @RequestParam(value = "filterLogicInOtherConditions", required = false, defaultValue = "AND") String filterLogicInOtherConditions,
+                          @RequestParam(value = "filterLogicInSameConditions", required = false, defaultValue = "AND") String filterLogicInSameConditions,
+                          @RequestParam(value = "search-keyword", required = false) List<String> searchKeyword,
+                          @RequestParam(value = "search-keyword-operator", required = false) List<String> searchKeywordOperators,
+                          @RequestParam(value = "province", required = false) List<Integer> provinceId,
+                          @RequestParam(value = "province-operator", required = false) List<String> provinceOperators,
+                          @RequestParam(value = "industry", required = false) List<Integer> industryId,
+                          @RequestParam(value = "industry-operator", required = false) List<String> industryOperators,
+                          @RequestParam(value = "salary", required = false) List<BigDecimal> salary,
+                          @RequestParam(value = "salary-operator", required = false) List<String> salaryOperators) {
+
         List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
         List<IndustryResponse> industryResponses = industryService.getAllIndustryResponse();
 
-        Page<JobPostResponse> jobPage = jobPostService.getJobPostsByFilter(search_keyword, industryId, provinceId,minSalary, page);
-        int startPage = (jobPage.getNumber() / AppConstants.NUMBER_PAGE_PER_BLOCK) * AppConstants.NUMBER_PAGE_PER_BLOCK;
-        int endPage = Math.min(startPage + AppConstants.NUMBER_PAGE_PER_BLOCK - 1, jobPage.getTotalPages() - 1);
+        // Page<JobPostResponse> jobPage = jobPostService.getJobPostsByFilter(null, null, null, null, page);
 
-        model.addAttribute("jobPage", jobPage);
+        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, salary, salaryOperators);
+
+
+        int startPage = (jobPageBySpecification.getNumber() / AppConstants.NUMBER_PAGE_PER_BLOCK) * AppConstants.NUMBER_PAGE_PER_BLOCK;
+        int endPage = Math.min(startPage + AppConstants.NUMBER_PAGE_PER_BLOCK - 1, jobPageBySpecification.getTotalPages() - 1);
+
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        model.addAttribute("industryId", industryId);
-        model.addAttribute("provinceId", provinceId);
-        model.addAttribute("jobPostResponses", jobPage);
-        model.addAttribute("minSalary", minSalary);
-        model.addAttribute("searchKeyword", search_keyword);
+        model.addAttribute("jobPage", jobPageBySpecification);
         model.addAttribute("provinceResponses", provinceResponses);
         model.addAttribute("industryResponses", industryResponses);
+
+        model.addAttribute("searchKeyword", searchKeyword);
+        model.addAttribute("searchKeywordOperators", searchKeywordOperators);
+        model.addAttribute("provinceId", provinceId);
+        model.addAttribute("provinceOperators", provinceOperators);
+        model.addAttribute("industryId", industryId);
+        model.addAttribute("industryOperators", industryOperators);
+        model.addAttribute("salary", salary);
+        model.addAttribute("salaryOperators", salaryOperators);
+        model.addAttribute("filterLogicInOtherConditions", filterLogicInOtherConditions);
+        model.addAttribute("filterLogicInSameConditions", filterLogicInSameConditions);
         return "pages/candidate/job-list";
     }
 

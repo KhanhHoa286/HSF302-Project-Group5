@@ -22,54 +22,90 @@
         <h3 class="fw-bold mb-4">Danh sách việc làm</h3>
 
         <div class="row">
-            <div class="col-lg-3 mb-4">
-                <div class="card card-custom filter-card p-3">
+            <div class="col-lg-5 mb-4">
+                <div class="card card-custom filter-card p-3 shadow-sm" style="border-radius: 12px;">
                     <h5 class="fw-bold mb-3">Bộ lọc tìm kiếm</h5>
-                    <form th:action="@{/candidate/jobs/list-job}" method="get">
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Từ khóa</label>
-                            <input type="text" name="search-keyword" th:value="${searchKeyword}" class="form-control"
-                                   placeholder="Tên công việc...">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Ngành nghề</label>
-                            <select class="form-select" name="industry">
-                                <option value="-1" th:selected="${industryId == null}">Tất cả</option>
-                                <option th:each="industryResponse : ${industryResponses}"
-                                        th:text="${industryResponse.getIndustryName()}"
-                                        th:value="${industryResponse.getIndustryId()}"
-                                        th:selected="${industryResponse.getIndustryId() == industryId}"></option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">Địa điểm</label>
-                            <select class="form-select" name="province">
-                                <option value="-1" th:selected="${provinceId == null}">Tất cả</option>
-                                <option th:each="provinceResponse : ${provinceResponses}"
-                                        th:text="${provinceResponse.getProvinceName()}"
-                                        th:value="${provinceResponse.getProvinceId()}"
-                                        th:selected="${provinceResponse.getProvinceId() == provinceId}"></option>
-                            </select>
-                        </div>
 
-                        <div class="mb-4">
-                            <label class="form-label text-muted small fw-bold">Mức lương tối thiểu (VNĐ)</label>
-                            <div class="row g-2">
-                                <div class="col-12">
-                                    <input type="number" name="minSalary" th:value="${minSalary}" class="form-control"
-                                           placeholder="Tối thiểu" min="0">
+                    <form th:action="@{/candidate/jobs/list-job}" method="get" id="filterForm">
+                        <!-- Logic selection -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold d-block mb-2">Logic giữa các điều kiện
+                                khác nhau:</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="filterLogicInOtherConditions"
+                                           id="logicAndInOtherConditions" value="AND" th:checked="${filterLogicInOtherConditions == 'AND' || filterLogicInOtherConditions == null}">
+                                    <label class="form-check-label fw-semibold"
+                                           for="logicAndInOtherConditions">AND</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="filterLogicInOtherConditions"
+                                           id="logicOrInOtherConditions" value="OR" th:checked="${filterLogicInOtherConditions == 'OR'}">
+                                    <label class="form-check-label text-muted" for="logicOrInOtherConditions">OR</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold d-block mb-2">Logic giữa các điều kiện
+                                giống nhau:</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="filterLogicInSameConditions"
+                                           id="logicAndInSameConditions" value="AND" th:checked="${filterLogicInSameConditions == 'AND' || filterLogicInSameConditions == null}">
+                                    <label class="form-check-label fw-semibold"
+                                           for="logicAndInSameConditions">AND</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="filterLogicInSameConditions"
+                                           id="logicOrInSameConditions" value="OR" th:checked="${filterLogicInSameConditions == 'OR'}">
+                                    <label class="form-check-label text-muted" for="logicOrInSameConditions">OR</label>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary-custom w-100">Lọc kết quả</button>
+                        <hr class="my-3 text-muted">
+
+                        <div class="row g-2 mb-2 text-muted small fw-bold align-items-center">
+                            <div class="col-4">Field</div>
+                            <div class="col-3">Operator</div>
+                            <div class="col-4">Value</div>
+                            <div class="col-1"></div>
+                        </div>
+
+                        <!-- Filter rows container -->
+                        <div id="filterRowsContainer">
+                            <!-- Dynamic rows will be inserted here -->
+                        </div>
+
+                        <div class="text-center my-3">
+                            <button type="button" class="btn btn-sm btn-outline-secondary w-100 py-2"
+                                    id="btnAddCondition" style="border-style: dashed;">
+                                <i class="bi bi-plus-circle me-1"></i>Thêm điều kiện
+                            </button>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom w-100 py-2">Tìm kiếm</button>
                     </form>
                 </div>
             </div>
 
-            <div class="col-lg-9">
+            <!-- Hidden templates for select options -->
+            <div id="industryOptionsTemplate" style="display: none;">
+                <option value="-1">Tất cả</option>
+                <option th:each="industryResponse : ${industryResponses}"
+                        th:text="${industryResponse.getIndustryName()}"
+                        th:value="${industryResponse.getIndustryId()}"></option>
+            </div>
+            <div id="provinceOptionsTemplate" style="display: none;">
+                <option value="-1">Tất cả</option>
+                <option th:each="provinceResponse : ${provinceResponses}"
+                        th:text="${provinceResponse.getProvinceName()}"
+                        th:value="${provinceResponse.getProvinceId()}"></option>
+            </div>
+
+            <div class="col-lg-7">
                 <div class="row g-3">
-                    <div class="col-md-6" th:each="jobPostResponse : ${jobPostResponses}">
+                    <div class="col-md-6" th:each="jobPostResponse : ${jobPage.content}">
                         <div class="card card-custom p-3 h-100 d-flex flex-column">
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 <img src="https://ui-avatars.com/api/?name=Tech+Corp&background=random&color=fff&size=60"
@@ -96,7 +132,8 @@
                                 </span>
                             </div>
                             <div class="mt-auto">
-                                <a th:href="@{/candidate/jobs/job-detail/{id}(id=${jobPostResponse.getJobId()})}" class="btn btn-outline-primary-custom w-100">Xem chi tiết</a>
+                                <a th:href="@{/candidate/jobs/job-detail/{id}(id=${jobPostResponse.getJobId()})}"
+                                   class="btn btn-outline-primary-custom w-100">Xem chi tiết</a>
                             </div>
                         </div>
                     </div>
@@ -109,12 +146,19 @@
                         <li class="page-item"
                             th:classappend="${jobPage.first} ? 'disabled'">
                             <a class="page-link"
-                               th:href="@{/candidate/jobs/list-job(page=${jobPage.number - 1},
-                        industry=${selectedIndustryId},
-                        province=${selectedProvinceId},
-                        search-keyword=${searchKeyword},
-                        minSalary=${minSalary},
-                        maxSalary=${maxSalary})}">
+                               th:href="@{/candidate/jobs/list-job(
+                                   page=${jobPage.number - 1},
+                                   filterLogicInOtherConditions=${filterLogicInOtherConditions},
+                                   filterLogicInSameConditions=${filterLogicInSameConditions},
+                                   'search-keyword'=${searchKeyword},
+                                   'search-keyword-operator'=${searchKeywordOperators},
+                                   province=${provinceId},
+                                   'province-operator'=${provinceOperators},
+                                   industry=${industryId},
+                                   'industry-operator'=${industryOperators},
+                                   salary=${salary},
+                                   'salary-operator'=${salaryOperators}
+                               )}">
                                 Trước
                             </a>
                         </li>
@@ -126,12 +170,19 @@
 
                             <a class="page-link"
                                th:text="${i + 1}"
-                               th:href="@{/candidate/jobs/list-job(page=${i},
-                        industry=${selectedIndustryId},
-                        province=${selectedProvinceId},
-                        search-keyword=${searchKeyword},
-                        minSalary=${minSalary},
-                        maxSalary=${maxSalary})}">
+                               th:href="@{/candidate/jobs/list-job(
+                                   page=${i},
+                                   filterLogicInOtherConditions=${filterLogicInOtherConditions},
+                                   filterLogicInSameConditions=${filterLogicInSameConditions},
+                                   'search-keyword'=${searchKeyword},
+                                   'search-keyword-operator'=${searchKeywordOperators},
+                                   province=${provinceId},
+                                   'province-operator'=${provinceOperators},
+                                   industry=${industryId},
+                                   'industry-operator'=${industryOperators},
+                                   salary=${salary},
+                                   'salary-operator'=${salaryOperators}
+                               )}">
                             </a>
 
                         </li>
@@ -140,12 +191,19 @@
                         <li class="page-item"
                             th:classappend="${jobPage.last} ? 'disabled'">
                             <a class="page-link"
-                               th:href="@{/candidate/jobs/list-job(page=${jobPage.number + 1},
-                        industry=${selectedIndustryId},
-                        province=${selectedProvinceId},
-                        search-keyword=${searchKeyword},
-                        minSalary=${minSalary},
-                        maxSalary=${maxSalary})}">
+                               th:href="@{/candidate/jobs/list-job(
+                                   page=${jobPage.number + 1},
+                                   filterLogicInOtherConditions=${filterLogicInOtherConditions},
+                                   filterLogicInSameConditions=${filterLogicInSameConditions},
+                                   'search-keyword'=${searchKeyword},
+                                   'search-keyword-operator'=${searchKeywordOperators},
+                                   province=${provinceId},
+                                   'province-operator'=${provinceOperators},
+                                   industry=${industryId},
+                                   'industry-operator'=${industryOperators},
+                                   salary=${salary},
+                                   'salary-operator'=${salaryOperators}
+                               )}">
                                 Sau
                             </a>
                         </li>
@@ -160,6 +218,176 @@
 <div th:replace="~{fragments/footer.html :: footer}"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const container = document.getElementById('filterRowsContainer');
+        const btnAddCondition = document.getElementById('btnAddCondition');
+        const filterForm = document.getElementById('filterForm');
+
+        // Click nút để thêm dòng điều kiện mới
+        btnAddCondition.addEventListener('click', () => {
+            createRow('keyword', '', '');
+        });
+
+        // Lấy danh sách option từ template ẩn
+        const industryHtml = document.getElementById('industryOptionsTemplate').innerHTML;
+        //Chỉ lấy nội dung bên trong (Không lấy thẻ cha chứa ID) tức là lấy thẻ option bên trong
+        const provinceHtml = document.getElementById('provinceOptionsTemplate').innerHTML;
+
+        // Cấu hình các trường tìm kiếm
+        const fields = {
+            keyword: {
+                label: 'Tiêu đề',
+                type: 'text',
+                name: 'search-keyword',
+                operatorName: 'search-keyword-operator',
+                operators: ['Contains', 'Equals', 'Starts with', 'Ends with']
+            },
+            industry: {
+                label: 'Ngành nghề',
+                type: 'select',
+                name: 'industry',
+                operatorName: 'industry-operator',
+                optionsHtml: industryHtml,
+                operators: ['=']
+            },
+            province: {
+                label: 'Địa điểm',
+                type: 'select',
+                name: 'province',
+                operatorName: 'province-operator',
+                optionsHtml: provinceHtml,
+                operators: ['=']
+            },
+            salary: {
+                label: 'Lương', 
+                type: 'number', 
+                name: 'salary', 
+                operatorName: 'salary-operator',
+                operators: ['>=', '>', '<=', '<']
+            }
+        };
+
+        // Hàm cập nhật cột Operator và Value dựa vào Field đang chọn
+        function updateInputs(row, key, initOp, initVal) {
+            const selectOperator = row.querySelector('.operator-select');
+            const valueContainer = row.querySelector('.value-container');
+            const field = fields[key]; // gọi thuộc tính key trong obj fields
+
+            // Cập nhật Operator
+            let operatorHtml = "";
+            field.operators.forEach(op => {
+                operatorHtml += `<option value="${op}" ${op === initOp ? 'selected' : ''}>${op}</option>`;
+            });
+
+            selectOperator.innerHTML = operatorHtml;
+            selectOperator.name = field.operatorName;
+
+            // Cập nhật ô nhập Value (select hoặc input)
+            if (field.type === 'select') {
+                valueContainer.innerHTML = `<select class="form-select form-select-sm val-input" name="${field.name}">${field.optionsHtml}</select>`;
+                if (initVal !== null && initVal !== undefined && initVal !== '') {
+                    valueContainer.querySelector('select').value = initVal;
+                }
+            } else {
+                valueContainer.innerHTML = `<input type="${field.type}" class="form-control form-control-sm val-input" name="${field.name}" placeholder="Nhập..." value="${initVal !== null && initVal !== undefined ? initVal : ''}">`;
+            }
+        }
+
+        // Hàm thêm một dòng điều kiện mới
+        // Nếu người gọi hàm không truyền giá trị cho tham số đó, hãy lấy giá trị mặc định để chạy.
+        function createRow(fieldType, operatorVal, valueVal) {
+            const row = document.createElement('div');
+            row.className = 'row g-2 mb-2 align-items-center filter-row';
+
+            // Tạo danh sách chọn các trường tìm kiếm
+            let fieldOptionsHtml = '';
+            for (const [key, field] of Object.entries(fields)) {
+                fieldOptionsHtml += `<option value="${key}" ${key === fieldType ? 'selected' : ''}>${field.label}</option>`;
+            }
+
+            row.innerHTML = `
+                <div class="col-4">
+                    <select class="form-select form-select-sm field-select">${fieldOptionsHtml}</select>
+                </div>
+                <div class="col-3">
+                    <select class="form-select form-select-sm operator-select"></select>
+                </div>
+                <div class="col-4 value-container"></div>
+                <div class="col-1 text-end">
+                    <button type="button" class="btn btn-link text-danger p-0 border-0 btn-delete"><i class="bi bi-trash"></i></button>
+                </div>
+            `;
+
+            container.appendChild(row);
+
+            const selectField = row.querySelector('.field-select');
+            const btnDelete = row.querySelector('.btn-delete');
+
+            // Lắng nghe sự kiện đổi trường tìm kiếm
+            selectField.addEventListener('change', () => {
+                updateInputs(row, selectField.value, '', '');
+            });
+
+            // Lắng nghe sự kiện xóa dòng
+            btnDelete.addEventListener('click', () => {
+                row.remove();
+            });
+
+        // Khởi tạo các ô nhập liệu mặc định
+            updateInputs(row, fieldType, operatorVal, valueVal);
+        }
+
+        const searchKeywords = [[${searchKeyword}]] || [];
+        const searchKeywordOps = [[${searchKeywordOperators}]] || [];
+        const provinceIds = [[${provinceId}]] || [];
+        const provinceOps = [[${provinceOperators}]] || [];
+        const industryIds = [[${industryId}]] || [];
+        const industryOps = [[${industryOperators}]] || [];
+        const salaries = [[${salary}]] || [];
+        const salaryOps = [[${salaryOperators}]] || [];
+
+        let hasInitial = false;
+
+        if (searchKeywords && searchKeywords.length > 0) {
+            searchKeywords.forEach((kw, idx) => {
+                const op = (searchKeywordOps && searchKeywordOps[idx]) ? searchKeywordOps[idx] : 'Contains';
+                createRow('keyword', op, kw);
+                hasInitial = true;
+            });
+        }
+
+        if (provinceIds && provinceIds.length > 0) {
+            provinceIds.forEach((pid, idx) => {
+                const op = (provinceOps && provinceOps[idx]) ? provinceOps[idx] : '=';
+                createRow('province', op, pid);
+                hasInitial = true;
+            });
+        }
+
+        if (industryIds && industryIds.length > 0) {
+            industryIds.forEach((iid, idx) => {
+                const op = (industryOps && industryOps[idx]) ? industryOps[idx] : '=';
+                createRow('industry', op, iid);
+                hasInitial = true;
+            });
+        }
+
+        if (salaries && salaries.length > 0) {
+            salaries.forEach((sal, idx) => {
+                const op = (salaryOps && salaryOps[idx]) ? salaryOps[idx] : '>=';
+                createRow('salary', op, sal);
+                hasInitial = true;
+            });
+        }
+
+        // Nếu không có bộ lọc cũ, mặc định tạo 1 dòng Tiêu đề trống
+        if (!hasInitial) {
+            createRow('keyword', '', '');
+        }
+    });
+</script>
 
 </body>
 </html>

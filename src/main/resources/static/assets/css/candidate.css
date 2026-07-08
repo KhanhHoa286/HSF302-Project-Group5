@@ -19,6 +19,27 @@
     height: calc(100vh - 70px); /* Chiều cao cố định */
     overflow-y: auto; /* Nếu menu quá dài thì sinh ra thanh cuộn dọc */
     padding: 20px 0; /* Khoảng cách lề trên dưới 20px */
+    transition: width 0.3s ease; /* Hiệu ứng mượt mà khi thu phóng */
+}
+
+/* Khi sidebar bị thu nhỏ */
+.candidate-sidebar.collapsed {
+    width: 70px;
+    overflow-x: hidden;
+}
+
+.candidate-sidebar.collapsed .sidebar-menu span {
+    display: none; /* Ẩn chữ đi */
+}
+
+.candidate-sidebar.collapsed .sidebar-menu a {
+    justify-content: center; /* Đưa icon vào giữa */
+    padding: 12px 0;
+    border-left-width: 0;
+}
+
+.candidate-sidebar.collapsed .sidebar-menu i {
+    margin-right: 0; /* Bỏ khoảng cách phải của icon */
 }
 
 /* Nội dung chính bên phải của ứng viên */

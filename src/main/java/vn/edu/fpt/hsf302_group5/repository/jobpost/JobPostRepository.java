@@ -3,6 +3,7 @@ package vn.edu.fpt.hsf302_group5.repository.jobpost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
+public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSpecificationExecutor<JobPost>{
     @Query("""
             SELECT new vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse(
             COUNT(j),
@@ -109,21 +110,29 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
     long countByStatus(JobStatus status);
 
     @Query("""
-        SELECT new vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDashboardResponse(j.title,
+        SELECT new vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDashboardResponse(
+         j.jobId,
+         j.title,
          j.postedDate,
-         j.vacancies,
+         COUNT(a.applicationId),
          j.status
          ) 
         FROM JobPost j 
-        WHERE (:textSearch is null 
+        LEFT JOIN j.applications a
+        WHERE 
+        j.recruiterId = :recruiterId
+        and (:textSearch is null 
         or lower(j.title) like lower(concat('%', :textSearch, '%')))
         and (:statusSearch is null
         or j.status = :statusSearch
         )     
+        GROUP BY j.jobId, j.title,j.postedDate,j.status
 """)
     Page<JobPostDashboardResponse> getJobPostDashboard(
+            @Param("recruiterId")Integer recruiterId,
             @Param("textSearch") String textSearch,
             @Param("statusSearch") JobStatus statusSearch,
             Pageable pageable
+
     );
 }
