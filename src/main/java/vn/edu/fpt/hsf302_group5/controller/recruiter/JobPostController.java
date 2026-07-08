@@ -2,6 +2,7 @@ package vn.edu.fpt.hsf302_group5.controller.recruiter;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +12,9 @@ import vn.edu.fpt.hsf302_group5.dto.industry.IndustryResponse;
 import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.JobPostFormRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.SkillResponse;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
+import vn.edu.fpt.hsf302_group5.entity.JobSkill;
 import vn.edu.fpt.hsf302_group5.entity.enums.EmploymentType;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobLevel;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
@@ -65,9 +68,10 @@ public class JobPostController {
     public String listJobPosts(Model model,
                                @RequestParam(name = "page",defaultValue = "0")int page,
                                @RequestParam(value = "text_search",required = false) String textSearch,
-                               @RequestParam(value = "job_status",required = false)JobStatus jobStatus) {
+                               @RequestParam(value = "job_status",required = false)JobStatus jobStatus,
+                            @AuthenticationPrincipal CustomUserDetailsResponse user) {
         //
-        model.addAttribute("jobPostDashboardList",jobPostService.getJobPostDashboard(textSearch,jobStatus,page));
+        model.addAttribute("jobPostDashboardList",jobPostService.getJobPostDashboard(textSearch,jobStatus,page,user.getId()));
         model.addAttribute("textSearch",textSearch);
         model.addAttribute("jobStatus",jobStatus);
         model.addAttribute("statistic", jobPostService.getStatistic());
@@ -81,21 +85,38 @@ public class JobPostController {
         //
         model.addAttribute("jobPostForm", new JobPostFormRequest());
         //
-        return "pages/recruiter/create-job";
+        return "pages/recruiter/job-form";
     }
 
-    @PostMapping("/create-job")
-    public String createJob(@Valid @ModelAttribute(name="jobPostForm")JobPostFormRequest jobPostForm, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    @GetMapping("/update-job/{id}")
+    public String updateJob(Model model,@PathVariable(name = "id") Integer id) {
+        JobPostFormRequest jobPostFormRequest = jobPostService.updateFormRequest(id);
+        model.addAttribute("jobPostForm", jobPostService.updateFormRequest(id));
+        return "pages/recruiter/job-form";
+    }
+
+
+    @PostMapping("/save-job")
+    public String createJob(@Valid @ModelAttribute(name="jobPostForm")JobPostFormRequest jobPostForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal CustomUserDetailsResponse user){
         //
         if(bindingResult.hasErrors()) {
-            return "pages/recruiter/create-job";
+            return "pages/recruiter/job-form";
         }
         //
-        JobPost jobPost = jobPostService.craeteJob(jobPostForm);
-        if(jobPost != null) {
-            redirectAttributes.addFlashAttribute("addSuccess", "Tạo mới công việc thành công!");
+        if(jobPostForm.getJobPostId() == null) {
+            JobPost jobPost = jobPostService.craeteJob(jobPostForm,user.getId());
+            if (jobPost != null) {
+                redirectAttributes.addFlashAttribute("addSuccess", "Tạo mới công việc thành công!");
+            } else {
+                redirectAttributes.addFlashAttribute("addFail", "Tạo mới công việc thất bại!");
+            }
         }else{
-            redirectAttributes.addFlashAttribute("addFail", "Tạo mới công việc thất bại!");
+            JobPost jobPost = jobPostService.updateJob(jobPostForm);
+            if (jobPost != null) {
+                redirectAttributes.addFlashAttribute("addSuccess", "Cập nhật công việc thành công!");
+            } else {
+                redirectAttributes.addFlashAttribute("addFail", "Cập nhật công việc thất bại!");
+            }
         }
         return "redirect:/recruiter/create-job";
     }

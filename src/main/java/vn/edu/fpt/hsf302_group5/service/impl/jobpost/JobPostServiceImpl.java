@@ -19,6 +19,7 @@ import vn.edu.fpt.hsf302_group5.entity.Skill;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 import vn.edu.fpt.hsf302_group5.mapper.JobPostMapper;
 import vn.edu.fpt.hsf302_group5.repository.jobpost.JobPostRepository;
+import vn.edu.fpt.hsf302_group5.repository.jobskill.JobSkillRepository;
 import vn.edu.fpt.hsf302_group5.repository.skill.SkillRepository;
 import vn.edu.fpt.hsf302_group5.service.jobpost.JobPostService;
 import vn.edu.fpt.hsf302_group5.specification.JobPostSpecification;
@@ -36,6 +37,7 @@ public class JobPostServiceImpl implements JobPostService {
     private final JobPostRepository jobPostRepository;
     private final JobPostMapper jobPostMapper;
     private final SkillRepository skillRepository;
+    private final JobSkillRepository jobSkillRepository;
 
     @Override
     public StatisticResponse getStatistic() {
@@ -62,10 +64,10 @@ public class JobPostServiceImpl implements JobPostService {
 
     @Override
     @Transactional
-    public JobPost craeteJob(JobPostFormRequest jobPostForm) {
+    public JobPost craeteJob(JobPostFormRequest jobPostForm, int userId) {
         //đợi xong login lấy id ở session
-        JobPost jobPost = jobPostMapper.toEntity(jobPostForm);
-        jobPost.setRecruiterId(2);
+        JobPost jobPost = jobPostMapper.toEntityCreateForm(jobPostForm);
+        jobPost.setRecruiterId(userId);
         jobPost.setStatus(JobStatus.PENDING);
         //insert dữ liệu vào job_skill
         if (jobPostForm.getSkillsId() != null && !jobPostForm.getSkillsId().isEmpty()) {
@@ -97,7 +99,7 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page) {
+    public Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page, int recruiterId) {
         if (textSearch == null || textSearch.isEmpty()) {
             textSearch = null;
         }
@@ -106,7 +108,7 @@ public class JobPostServiceImpl implements JobPostService {
         }
         Pageable pageable = PageRequest.of(page, AppConstants.NUMBER_PAGE_PER_BLOCK);
 
-        return jobPostRepository.getJobPostDashboard(textSearch, jobStatus, pageable);
+        return jobPostRepository.getJobPostDashboard(recruiterId, textSearch, jobStatus, pageable);
     }
 
     @Override
@@ -131,13 +133,11 @@ public class JobPostServiceImpl implements JobPostService {
 
         Specification<JobPost> spectitle = Specification.unrestricted();
         for (int i = 0; i < searchKeyword.size(); i++) {
-            if (i < searchKeywordOperators.size()) {
-                Specification<JobPost> title = JobPostSpecification.buildTitleSpec(searchKeywordOperators.get(i), searchKeyword.get(i));
-                if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
-                    spectitle = spectitle.and(title);
-                } else {
-                    spectitle = spectitle.or(title);
-                }
+            Specification<JobPost> title = JobPostSpecification.buildTitleSpec(searchKeywordOperators.get(i), searchKeyword.get(i));
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                spectitle = spectitle.and(title);
+            } else {
+                spectitle = spectitle.or(title);
             }
         }
 
@@ -161,13 +161,11 @@ public class JobPostServiceImpl implements JobPostService {
 
         Specification<JobPost> specSalary = Specification.unrestricted();
         for (int i = 0; i < salary.size(); i++) {
-            if (i < salaryOperators.size()) {
-                Specification<JobPost> salarySpec = JobPostSpecification.buildSalarySpec(salaryOperators.get(i), salary.get(i));
-                if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
-                    specSalary = specSalary.and(salarySpec);
-                } else {
-                    specSalary = specSalary.or(salarySpec);
-                }
+            Specification<JobPost> salarySpec = JobPostSpecification.buildSalarySpec(salaryOperators.get(i), salary.get(i));
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                specSalary = specSalary.and(salarySpec);
+            } else {
+                specSalary = specSalary.or(salarySpec);
             }
         }
 
@@ -180,8 +178,7 @@ public class JobPostServiceImpl implements JobPostService {
         Page<JobPost> jobPosts = jobPostRepository.findAll(spec, pageable);
 
         return jobPosts.map(jobPost -> {
-            return jobPostMapper.toDto(jobPost)
-                    ;
+            return jobPostMapper.toDto(jobPost);
         });
     }
 
@@ -200,5 +197,38 @@ public class JobPostServiceImpl implements JobPostService {
 //        jobPostRepository.save(jobPost);
 //    }
 
+    @Override
+    @Transactional
+    public JobPost updateJob(JobPostFormRequest jobPostForm) {
+        // tìm ra job id đó
+        JobPost jobPost = jobPostRepository.findById(jobPostForm.getJobPostId())
+                .orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
+        // bắn nó sang cho mapper để tiến hành ghi đè thuộc tính mới lên cho jobPost này
+        jobPostMapper.updateJob(jobPostForm, jobPost);
+        // sau khi ghi đè xong thì ta có 1 jobPost với các thuộc tính mới và giữ nguyên jobPost id,...
+        // tiếp theo là lấy mảng skills mới trong jobPost này ra tinh chỉnh lại
+        //insert dữ liệu vào job_skill
+        jobSkillRepository.deleteByJobPostJobId(jobPost.getJobId());
+        if (jobPostForm.getSkillsId() != null && !jobPostForm.getSkillsId().isEmpty()) {
+            List<JobSkill> newSkillsToSave = new ArrayList<>();
 
+            for (Integer skillId : jobPostForm.getSkillsId()) {
+                JobSkill jobSkill = new JobSkill();
+                jobSkill.setJobPost(jobPost);
+                jobSkill.setSkill(skillRepository.getReferenceById(skillId));
+
+                newSkillsToSave.add(jobSkill);
+            }
+            jobSkillRepository.saveAll(newSkillsToSave);
+        }
+        //
+        return jobPostRepository.save(jobPost);
+    }
+
+    @Override
+    public JobPostFormRequest updateFormRequest(Integer id) {
+        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
+        JobPostFormRequest jobPostFormRequest = jobPostMapper.toEntityUpdateForm(jobPost);
+        return jobPostFormRequest;
+    }
 }

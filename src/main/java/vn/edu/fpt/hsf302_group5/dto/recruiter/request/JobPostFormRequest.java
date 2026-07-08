@@ -18,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class JobPostFormRequest {
+    private Integer jobPostId;
+    
     @NotBlank(message = "Vui lòng nhập đầy đủ thông tin tiêu đề!")
     private String title;
 
