@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import vn.edu.fpt.hsf302_group5.entity.Industry;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
+import vn.edu.fpt.hsf302_group5.entity.JobPost_;
 import vn.edu.fpt.hsf302_group5.entity.Province;
 
 import java.math.BigDecimal;
@@ -12,13 +13,13 @@ public class JobPostSpecification {
 
     public static Specification<JobPost> containTitle(String keyword) {
         return ((root, query, criteriaBuilder) -> {
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), "%" + keyword.toLowerCase() + "%");
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get(JobPost_.title)), "%" + keyword.toLowerCase() + "%");
         });
     }
 
     public static Specification<JobPost> equalTitle(String keyword) {
         return ((root, query, criteriaBuilder) -> {
-            return criteriaBuilder.equal(root.get("title"), keyword);
+            return criteriaBuilder.equal(root.get(JobPost_.title), keyword);
         });
     }
 
