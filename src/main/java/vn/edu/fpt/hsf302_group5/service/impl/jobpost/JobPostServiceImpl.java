@@ -114,16 +114,16 @@ public class JobPostServiceImpl implements JobPostService {
     @Override
     public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> salaryOperators) {
 
-        if (searchKeyword == null || searchKeyword.isEmpty()) {
+        if (searchKeyword == null) {
             searchKeyword = new ArrayList<>();
         }
-        if (provinceId == null || provinceId.isEmpty()) {
+        if (provinceId == null) {
             provinceId = new ArrayList<>();
         }
-        if (industryId == null || industryId.isEmpty()) {
+        if (industryId == null) {
             industryId = new ArrayList<>();
         }
-        if (salary == null || salary.isEmpty()) {
+        if (salary == null) {
             salary = new ArrayList<>();
         }
 

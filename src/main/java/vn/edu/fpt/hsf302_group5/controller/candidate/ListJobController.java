@@ -42,16 +42,6 @@ public class ListJobController {
                           @RequestParam(value = "salary", required = false) List<BigDecimal> salary,
                           @RequestParam(value = "salary-operator", required = false) List<String> salaryOperators) {
 
-
-        if (searchKeyword == null) searchKeyword = new java.util.ArrayList<>();
-        if (searchKeywordOperators == null) searchKeywordOperators = new java.util.ArrayList<>();
-        if (provinceId == null) provinceId = new java.util.ArrayList<>();
-        if (provinceOperators == null) provinceOperators = new java.util.ArrayList<>();
-        if (industryId == null) industryId = new java.util.ArrayList<>();
-        if (industryOperators == null) industryOperators = new java.util.ArrayList<>();
-        if (salary == null) salary = new java.util.ArrayList<>();
-        if (salaryOperators == null) salaryOperators = new java.util.ArrayList<>();
-
         List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
         List<IndustryResponse> industryResponses = industryService.getAllIndustryResponse();
 
