@@ -124,7 +124,7 @@ public class JobPost {
     @Builder.Default
     private Set<Application> applications = new HashSet<>();
 
-    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<JobSkill> jobSkills = new HashSet<>();
 
