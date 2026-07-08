@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Doanh nghiệp - JobPortal Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/assets/css/common.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/admin.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="admin-layout">
+    <div th:replace="~{fragments/admin-sidebar :: admin-sidebar('company-management')}"></div>
+
+    <main class="admin-content">
+        <!-- Nút quay lại -->
+        <div class="mb-3">
+            <a th:href="@{/admin/companies/list}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Quay lại danh sách
+            </a>
+        </div>
+
+        <!-- Alert thông báo Flash -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> <span th:text="${successMessage}">Thành công</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="row">
+            <!-- Cột trái: Thông tin doanh nghiệp -->
+            <div class="col-lg-8 mb-4">
+                <div class="card card-custom p-4 shadow-sm mb-4">
+                    <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+                        <img th:src="${#strings.isEmpty(company.logoUrl) ? 'https://ui-avatars.com/api/?name=' + company.companyName + '&background=random&color=fff&size=60' : company.logoUrl}"
+                             class="company-logo-md rounded border" alt="Logo">
+                        <div>
+                            <h3 class="fw-bold text-primary mb-1" th:text="${company.companyName}">FPT Software</h3>
+                            <a th:if="${!#strings.isEmpty(company.website)}" th:href="${company.website}" target="_blank" class="text-decoration-none text-muted" th:text="${company.website}">https://fpt.com</a>
+                            <span th:if="${#strings.isEmpty(company.website)}" class="text-muted small">Không có website</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <strong class="d-block text-secondary mb-1">Địa chỉ chi tiết</strong>
+                            <span th:text="${company.addressDetail}">Tòa nhà F-Town, Quận 9</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong class="d-block text-secondary mb-1">Khu vực (Tỉnh/Thành phố)</strong>
+                            <span th:text="${company.provinceName}">Hồ Chí Minh</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong class="d-block text-secondary mb-1">Đơn vị hành chính</strong>
+                            <span th:text="${company.administrativeUnitName}">Phường Tân Phú</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong class="d-block text-secondary mb-1">Ngày tham gia hệ thống</strong>
+                            <span th:text="${#temporals.format(company.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2026</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-dark border-bottom pb-2">Mô tả doanh nghiệp</h5>
+                        <div class="text-muted text-pre-line" th:text="${#strings.isEmpty(company.description) ? 'Không có mô tả chi tiết.' : company.description}">Mô tả...</div>
+                    </div>
+
+                    <!-- Danh sách lĩnh vực/ngành nghề kinh doanh -->
+                    <div class="mb-0">
+                        <h5 class="fw-bold text-dark border-bottom pb-2">Lĩnh vực hoạt động</h5>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span th:each="ind : ${company.industries}" class="badge bg-light text-primary border border-primary-subtle" th:text="${ind}">Công nghệ thông tin</span>
+                            <span th:if="${#lists.isEmpty(company.industries)}" class="text-muted">Chưa cập nhật ngành nghề hoạt động.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột phải: Thông tin người đại diện & Cập nhật trạng thái -->
+            <div class="col-lg-4">
+                <!-- Card trạng thái hoạt động -->
+                <div class="card card-custom p-4 shadow-sm mb-4">
+                    <h5 class="fw-bold mb-3 border-bottom pb-2 text-dark">Trạng thái Doanh nghiệp</h5>
+                    
+                    <div class="d-flex align-items-center justify-content-between mb-0">
+                        <span>Trạng thái hiện tại:</span>
+                        <span th:if="${company.status == 'ACTIVE'}" class="badge bg-success fs-6">Đang hoạt động</span>
+                        <span th:if="${company.status == 'INACTIVE'}" class="badge bg-secondary fs-6">Đang khóa</span>
+                    </div>
+                </div>
+
+                <!-- Card thông tin Nhà tuyển dụng đại diện (Recruiter) -->
+                <div class="card card-custom p-4 shadow-sm" th:if="${company.recruiterId != null}">
+                    <h5 class="fw-bold mb-3 border-bottom pb-2 text-dark">Người đại diện (Recruiter)</h5>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <img th:src="${#strings.isEmpty(company.recruiterAvatarUrl) ? 'https://ui-avatars.com/api/?name=Recruiter&background=007bff&color=fff&size=48' : company.recruiterAvatarUrl}"
+                             class="recruiter-avatar rounded-circle border" alt="Avatar">
+                        <div>
+                            <h6 class="fw-bold mb-1" th:text="${company.recruiterName}">Tên Nhà tuyển dụng</h6>
+                            <small class="text-muted d-block" th:text="${company.recruiterEmail}">recruiter@email.com</small>
+                            <small class="text-muted d-block" th:text="${company.recruiterPhone}">0123456789</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
