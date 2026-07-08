@@ -14,26 +14,9 @@
             </a>
         </li>
         <li>
-            <a th:href="@{/admin/company-management}" th:classappend="${activePage == 'company-management' ? 'active' : ''}">
+            <a th:href="@{/admin/companies/list}" th:classappend="${activePage == 'company-management' ? 'active' : ''}">
                 <i class="bi bi-buildings"></i> Quản lý doanh nghiệp
             </a>
-        </li>
-        <li>
-            <a th:href="@{/admin/industry-management}" th:classappend="${activePage == 'industry-management' ? 'active' : ''}">
-                <i class="bi bi-tags"></i> Quản lý ngành nghề
-            </a>
-        </li>
-    </ul>
-    <div class="px-4 mt-4 mb-3">
-        <small class="text-secondary fw-bold text-uppercase">Tài khoản</small>
-    </div>
-    <ul class="sidebar-menu">
-        <li>
-            <form th:action="@{/logout}" method="post" class="m-0">
-                <button type="submit" class="sidebar-logout-btn border-0 bg-transparent w-100 text-start">
-                    <i class="bi bi-box-arrow-right"></i> Đăng xuất
-                </button>
-            </form>
         </li>
     </ul>
 </nav>

@@ -43,7 +43,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
         options.put("use_filename", true);
         options.put("unique_filename", true);
-        options.put("folder", "Project_HSF302"); // Uploads inside the Project_HSF302 folder
+        options.put("folder", "Project_HSF302");
 
         if (publicId != null && !publicId.trim().isEmpty()) {
             options.put("public_id", publicId);
