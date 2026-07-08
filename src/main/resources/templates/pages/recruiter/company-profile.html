@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
@@ -19,66 +19,91 @@
     <div th:replace="~{fragments/recruiter-sidebar :: recruiter-sidebar}"></div>
     
     <main class="recruiter-content">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold mb-0">Hồ sơ doanh nghiệp</h3>
-        <button class="btn btn-primary-custom px-4"><i class="bi bi-floppy me-2"></i>Lưu thông tin</button>
-      </div>
+      <form th:action="@{/recruiter/company-profile}" method="POST" th:object="${companyProfileForm}" enctype="multipart/form-data">
+        <!-- Hidden input to retain the existing logo URL if no new logo is uploaded -->
+        <input type="hidden" th:field="*{logoUrl}">
 
-      <div class="row">
-        <!-- Thông tin cơ bản & Logo -->
-        <div class="col-lg-8">
-          <div class="card card-custom p-4 mb-4">
-            <h5 class="fw-bold border-bottom pb-2 mb-4">Thông tin cơ bản</h5>
-            <div class="row g-3">
-              <div class="col-md-12">
-                <label class="form-label fw-bold">Tên công ty</label>
-                <input type="text" class="form-control" placeholder="Nhập tên công ty" value="TechCorp Vietnam JSC">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="fw-bold mb-0">Hồ sơ doanh nghiệp</h3>
+          <button type="submit" class="btn btn-primary-custom px-4"><i class="bi bi-floppy me-2"></i>Lưu thông tin</button>
+        </div>
+
+        <!-- Notification Alerts -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <span th:text="${successMessage}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <span th:text="${errorMessage}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="row">
+          <!-- Basic Info & Description -->
+          <div class="col-lg-8">
+            <div class="card card-custom p-4 mb-4">
+              <h5 class="fw-bold border-bottom pb-2 mb-4">Thông tin cơ bản</h5>
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label class="form-label fw-bold">Tên công ty <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" placeholder="Nhập tên công ty" th:field="*{companyName}">
+                  <span class="text-danger small" th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}"></span>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label fw-bold">Website</label>
+                  <input type="url" class="form-control" placeholder="https://" th:field="*{website}">
+                  <span class="text-danger small" th:if="${#fields.hasErrors('website')}" th:errors="*{website}"></span>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">Email liên hệ <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control" placeholder="Email" th:field="*{email}">
+                  <span class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">Số điện thoại <span class="text-danger">*</span></label>
+                  <input type="tel" class="form-control" placeholder="Số điện thoại" th:field="*{phone}">
+                  <span class="text-danger small" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+                </div>
               </div>
-              <div class="col-md-12">
-                <label class="form-label fw-bold">Website</label>
-                <input type="url" class="form-control" placeholder="https://" value="https://techcorp.vn">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Email liên hệ</label>
-                <input type="email" class="form-control" placeholder="Email" value="contact@techcorp.vn">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Số điện thoại</label>
-                <input type="tel" class="form-control" placeholder="Số điện thoại" value="028 1234 5678">
-              </div>
+            </div>
+            
+            <div class="card card-custom p-4 mb-4">
+              <h5 class="fw-bold border-bottom pb-2 mb-4">Giới thiệu doanh nghiệp</h5>
+              <textarea class="form-control" rows="6" placeholder="Nhập giới thiệu về công ty của bạn..." th:field="*{description}"></textarea>
+              <span class="text-danger small" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
             </div>
           </div>
           
-          <div class="card card-custom p-4 mb-4">
-            <h5 class="fw-bold border-bottom pb-2 mb-4">Giới thiệu doanh nghiệp</h5>
-            <textarea class="form-control" rows="6" placeholder="Nhập giới thiệu về công ty của bạn..."></textarea>
-          </div>
-        </div>
-        
-        <div class="col-lg-4">
-          <div class="card card-custom p-4 mb-4">
-            <h5 class="fw-bold border-bottom pb-2 mb-4">Logo công ty</h5>
-            <div class="logo-upload-area mb-3">
-              <i class="bi bi-cloud-arrow-up display-4 text-muted mb-3 d-block"></i>
-              <span class="fw-500">Kéo thả logo vào đây</span>
-              <p class="text-muted small mt-2">Định dạng: JPG, PNG. Max: 2MB.</p>
+          <!-- Logo & Address -->
+          <div class="col-lg-4">
+            <div class="card card-custom p-4 mb-4">
+              <h5 class="fw-bold border-bottom pb-2 mb-4">Logo công ty</h5>
+              <div class="logo-upload-area mb-3 text-center p-3 border border-dashed rounded" style="cursor: pointer;">
+                <i class="bi bi-cloud-arrow-up display-4 text-muted mb-3 d-block"></i>
+                <span class="fw-500">Nhấp vào đây để chọn logo</span>
+                <p class="text-muted small mt-2 mb-0">Định dạng: JPG, PNG. Max: 2MB.</p>
+                <input type="file" id="logoFileInput" th:field="*{logoFile}" accept="image/png, image/jpeg" style="display: none;">
+              </div>
+              <span class="text-danger small d-block text-center mb-2" th:if="${#fields.hasErrors('logoFile')}" th:errors="*{logoFile}"></span>
+              
+              <div class="text-center">
+                <img id="logoPreview" th:src="${companyProfileForm.logoUrl != null && !companyProfileForm.logoUrl.isEmpty() ? companyProfileForm.logoUrl : 'https://ui-avatars.com/api/?name=Upload+Logo&background=e9ecef&color=adb5bd&size=150'}" class="img-thumbnail rounded" style="max-height: 150px; max-width: 100%; object-fit: contain;" alt="Preview">
+              </div>
             </div>
-            <div class="text-center">
-              <img src="https://ui-avatars.com/api/?name=Upload+Logo&background=e9ecef&color=adb5bd&size=150" class="img-thumbnail rounded" alt="Preview">
-            </div>
-          </div>
-          
-          <div class="card card-custom p-4">
-            <h5 class="fw-bold border-bottom pb-2 mb-4">Thông tin tuyển dụng</h5>
-
-
-            <div class="mb-0">
-              <label class="form-label fw-bold">Địa chỉ</label>
-              <textarea class="form-control" rows="3">Tòa nhà Etown, Quận Tân Bình, TP. HCM</textarea>
+            
+            <div class="card card-custom p-4">
+              <h5 class="fw-bold border-bottom pb-2 mb-4">Địa chỉ</h5>
+              <div class="mb-0">
+                <label class="form-label fw-bold">Địa chỉ chi tiết</label>
+                <textarea class="form-control" rows="3" placeholder="Nhập địa chỉ của công ty..." th:field="*{addressDetail}"></textarea>
+                <span class="text-danger small" th:if="${#fields.hasErrors('addressDetail')}" th:errors="*{addressDetail}"></span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </main>
   </div>
 
@@ -86,6 +111,46 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadArea = document.querySelector('.logo-upload-area');
+      const fileInput = document.getElementById('logoFileInput');
+      const preview = document.getElementById('logoPreview');
+
+      if (uploadArea && fileInput) {
+        uploadArea.addEventListener('click', () => {
+          fileInput.click();
+        });
+      }
+
+      if (fileInput && preview) {
+        fileInput.addEventListener('change', function() {
+          const file = this.files[0];
+          if (file) {
+            // Validate size (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+              alert('Kích thước ảnh không được vượt quá 2MB!');
+              this.value = '';
+              return;
+            }
+            
+            // Validate type
+            const fileType = file.type;
+            if (fileType !== 'image/jpeg' && fileType !== 'image/png') {
+              alert('Chỉ chấp nhận định dạng JPG hoặc PNG!');
+              this.value = '';
+              return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              preview.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
-

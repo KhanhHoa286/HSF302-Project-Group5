@@ -2,18 +2,14 @@ package vn.edu.fpt.hsf302_group5.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.ApplicantResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.ApplicantDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.EducationDto;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.ExperienceDto;
 import vn.edu.fpt.hsf302_group5.entity.Application;
-import vn.edu.fpt.hsf302_group5.entity.CandidateSkill;
 import vn.edu.fpt.hsf302_group5.entity.Education;
 import vn.edu.fpt.hsf302_group5.entity.Experience;
 
-import java.util.List;
-import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface ApplicationMapper {
