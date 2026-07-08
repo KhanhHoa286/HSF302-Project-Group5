@@ -68,5 +68,13 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<CompanyIndustry> companyIndustries = new HashSet<>();
+
+    public String getRecruiterUserEmail() {
+        return (recruiter != null && recruiter.getUser() != null) ? recruiter.getUser().getEmail() : null;
+    }
+
+    public String getRecruiterUserPhone() {
+        return (recruiter != null && recruiter.getUser() != null) ? recruiter.getUser().getPhone() : null;
+    }
 }
 
