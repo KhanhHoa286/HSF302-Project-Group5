@@ -129,7 +129,7 @@ public class JobPostServiceImpl implements JobPostService {
 
         Pageable pageable = PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE, Sort.by("postedDate").descending());
 
-        Specification<JobPost> spec = Specification.unrestricted();
+        Specification<JobPost> spec = Specification.unrestricted(); // không có điều kiện nào, trả về Specification tương đương  Specification.where(null) với bản cũ
 
         Specification<JobPost> spectitle = Specification.unrestricted();
         for (int i = 0; i < searchKeyword.size(); i++) {

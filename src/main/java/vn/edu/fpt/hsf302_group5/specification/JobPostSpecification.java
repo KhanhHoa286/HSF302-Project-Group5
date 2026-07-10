@@ -73,6 +73,14 @@ public class JobPostSpecification {
         });
     }
 
+    public static Specification<JobPost> sortBySalaryMin() {
+        return ((root, query, criteriaBuilder) -> {
+            query.orderBy(criteriaBuilder.asc(root.get(JobPost_.salaryMin)));
+            return criteriaBuilder.conjunction();
+        });
+    }
+
+
     public static Specification<JobPost> buildTitleSpec(String operator, String value) {
         switch (operator.toLowerCase()) {
             case "contains":
