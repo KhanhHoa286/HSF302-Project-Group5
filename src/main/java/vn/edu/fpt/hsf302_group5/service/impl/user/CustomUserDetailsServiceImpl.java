@@ -35,7 +35,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
         Set<Permission> permissions = user.getRole().getPermissions();
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         for (Permission permission : permissions) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(permission.getPermissionName()));
+            grantedAuthorities.add(new SimpleGrantedAuthority(permission.getPermissionCode()));
         }
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
 

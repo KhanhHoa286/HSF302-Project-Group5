@@ -17,8 +17,11 @@ import vn.edu.fpt.hsf302_group5.entity.enums.CompanyStatus;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 import vn.edu.fpt.hsf302_group5.service.user.AdminService;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
     private final AdminService adminService;
     public AdminController(AdminService adminService){
@@ -66,6 +69,7 @@ public class AdminController {
         return "pages/admin/job-detail-approval";
     }
     @PostMapping("/jobs/{id}/action")
+    @PreAuthorize("hasAuthority('JOB_APPROVE')")
     public String approveJob(
             @PathVariable Integer id,
             @RequestParam("status") JobStatus status,

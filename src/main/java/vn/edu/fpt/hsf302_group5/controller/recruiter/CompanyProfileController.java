@@ -16,9 +16,12 @@ import vn.edu.fpt.hsf302_group5.dto.recruiter.request.CompanyProfileRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.CompanyProfileResponse;
 import vn.edu.fpt.hsf302_group5.service.company.CompanyService;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @Controller
 @RequestMapping("/recruiter")
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('RECRUITER')")
 public class CompanyProfileController {
 
     private final CompanyService companyService;
@@ -52,6 +55,7 @@ public class CompanyProfileController {
     }
 
     @PostMapping("/company-profile")
+    @PreAuthorize("hasAuthority('COMPANY_UPDATE')")
     public String updateCompanyProfile(
             @Valid @ModelAttribute("companyProfileForm") CompanyProfileRequest form,
             BindingResult bindingResult,

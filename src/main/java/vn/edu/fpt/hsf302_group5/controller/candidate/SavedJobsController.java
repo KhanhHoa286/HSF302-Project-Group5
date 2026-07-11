@@ -15,9 +15,12 @@ import vn.edu.fpt.hsf302_group5.repository.user.UserRepository;
 import vn.edu.fpt.hsf302_group5.service.savedjob.SavedJobService;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/candidate")
+@PreAuthorize("hasAuthority('CANDIDATE')")
 public class SavedJobsController {
 
     private final SavedJobService savedJobService;

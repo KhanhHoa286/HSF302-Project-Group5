@@ -75,7 +75,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         if (user.getRole().getPermissions() != null) {
             for (Permission permission : user.getRole().getPermissions()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority(permission.getPermissionName()));
+                grantedAuthorities.add(new SimpleGrantedAuthority(permission.getPermissionCode()));
             }
         }
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));

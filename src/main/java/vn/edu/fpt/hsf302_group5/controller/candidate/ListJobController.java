@@ -18,9 +18,12 @@ import vn.edu.fpt.hsf302_group5.util.AppConstants;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/candidate")
+@PreAuthorize("hasAnyAuthority('CANDIDATE', 'RECRUITER', 'ADMIN')")
 public class ListJobController {
 
 
