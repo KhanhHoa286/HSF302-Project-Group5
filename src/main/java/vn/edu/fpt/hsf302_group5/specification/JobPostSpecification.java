@@ -8,6 +8,7 @@ import vn.edu.fpt.hsf302_group5.entity.JobPost_;
 import vn.edu.fpt.hsf302_group5.entity.Province;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class JobPostSpecification {
 
@@ -80,6 +81,35 @@ public class JobPostSpecification {
         });
     }
 
+    public static Specification<JobPost> greatThanExpireDate(LocalDate expiredDate) {
+        return ((root, query, criteriaBuilder) -> {
+          return criteriaBuilder.greaterThan(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+        });
+    }
+
+    public static Specification<JobPost> equalExpireDate(LocalDate expiredDate) {
+        return ((root, query, criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+        });
+    }
+
+    public static Specification<JobPost> greatThanOrEqualExpireDate(LocalDate expiredDate) {
+        return ((root, query, criteriaBuilder) -> {
+            return criteriaBuilder.greaterThanOrEqualTo(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+        });
+    }
+
+    public static Specification<JobPost> lessThanOrEqualExpireDate(LocalDate expiredDate) {
+        return ((root, query, criteriaBuilder) -> {
+           return criteriaBuilder.lessThanOrEqualTo(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+        });
+    }
+
+    public static Specification<JobPost> lessThanExpireDate(LocalDate expiredDate) {
+        return ((root, query, criteriaBuilder) -> {
+           return criteriaBuilder.lessThan(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+        });
+    }
 
     public static Specification<JobPost> buildTitleSpec(String operator, String value) {
         switch (operator.toLowerCase()) {
@@ -106,6 +136,23 @@ public class JobPostSpecification {
                 return JobPostSpecification.lessThanOrEqualSalary(bigDecimal);
             case "<":
                 return JobPostSpecification.lessThanSalary(bigDecimal);
+            default:
+                return Specification.unrestricted();
+        }
+    }
+
+    public static Specification<JobPost> buildExpireSpec(LocalDate localDate, String s) {
+        switch (s.toLowerCase()) {
+            case ">" :
+                return greatThanExpireDate(localDate);
+            case ">=":
+                return greatThanOrEqualExpireDate(localDate);
+            case "<":
+                return lessThanExpireDate(localDate);
+            case "<=":
+                return lessThanOrEqualExpireDate(localDate);
+            case "=":
+                return equalExpireDate(localDate);
             default:
                 return Specification.unrestricted();
         }

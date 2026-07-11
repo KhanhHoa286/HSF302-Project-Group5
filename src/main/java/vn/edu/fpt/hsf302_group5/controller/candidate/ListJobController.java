@@ -16,6 +16,7 @@ import vn.edu.fpt.hsf302_group5.service.province.ProvinceService;
 import vn.edu.fpt.hsf302_group5.util.AppConstants;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,14 +44,16 @@ public class ListJobController {
                           @RequestParam(value = "industry", required = false) List<Integer> industryId,
                           @RequestParam(value = "industry-operator", required = false) List<String> industryOperators,
                           @RequestParam(value = "salary", required = false) List<BigDecimal> salary,
-                          @RequestParam(value = "salary-operator", required = false) List<String> salaryOperators) {
+                          @RequestParam(value = "salary-operator", required = false) List<String> salaryOperators,
+                          @RequestParam(value = "expire", required = false)List<LocalDate> expireDate,
+                          @RequestParam(value = "expire-operator", required = false) List<String> expireOperator) {
 
         List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
         List<IndustryResponse> industryResponses = industryService.getAllIndustryResponse();
 
         // Page<JobPostResponse> jobPage = jobPostService.getJobPostsByFilter(null, null, null, null, page);
 
-        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, salary, salaryOperators);
+        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, salary, salaryOperators, expireDate, expireOperator);
 
 
         int startPage = (jobPageBySpecification.getNumber() / AppConstants.NUMBER_PAGE_PER_BLOCK) * AppConstants.NUMBER_PAGE_PER_BLOCK;

@@ -35,15 +35,15 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider( //chịu trách nhiệm thực hiện quá trình xác thực (Authentication) thông tin đăng nhập từ cơ sở dữ liệu.
-            UserDetailsService userDetailsService, 
-            PasswordEncoder passwordEncoder) {
+                                                             UserDetailsService userDetailsService,
+                                                             PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception{
+    public AuthenticationManager authenticationManager() throws Exception {
         return new ProviderManager(authenticationProvider(customUserDetailsService, passwordEncoder()));
     }
 
@@ -79,10 +79,16 @@ public class SecurityConfig {
                         ) //Sau khi lấy được thông tin user từ Google đưa nó cho customOAuth2UserService xử lý
                         .defaultSuccessUrl("/", true)
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/logout") // POST
-                        .logoutSuccessUrl("/")
-                        .clearAuthentication(true)
+                .rememberMe(httpSecurityRememberMeConfigurer -> {
+                    httpSecurityRememberMeConfigurer.key(System.getProperty("REMEMBER_ME_KEY"));
+                    httpSecurityRememberMeConfigurer.rememberMeParameter("remember-me");
+                    httpSecurityRememberMeConfigurer.tokenValiditySeconds(60 * 60 * 24 * 30);
+                })
+                .logout(logout -> {
+                            logout.logoutUrl("/logout"); // POST
+                            logout.logoutSuccessUrl("/");
+                            logout.clearAuthentication(true);
+                        }
                 )
                 .build();
     }

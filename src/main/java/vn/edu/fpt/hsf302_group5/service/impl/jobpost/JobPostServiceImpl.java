@@ -26,6 +26,7 @@ import vn.edu.fpt.hsf302_group5.specification.JobPostSpecification;
 import vn.edu.fpt.hsf302_group5.util.AppConstants;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -112,7 +113,7 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> salaryOperators) {
+    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> salaryOperators, List<LocalDate> expireDate, List<String> operators) {
 
         if (searchKeyword == null) {
             searchKeyword = new ArrayList<>();
@@ -126,6 +127,10 @@ public class JobPostServiceImpl implements JobPostService {
         if (salary == null) {
             salary = new ArrayList<>();
         }
+        if (expireDate == null) {
+            expireDate = new ArrayList<>();
+        }
+
 
         Pageable pageable = PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE, Sort.by("postedDate").descending());
 
@@ -138,6 +143,16 @@ public class JobPostServiceImpl implements JobPostService {
                 spectitle = spectitle.and(title);
             } else {
                 spectitle = spectitle.or(title);
+            }
+        }
+
+        Specification<JobPost> specExpire = Specification.unrestricted();
+        for (int i = 0; i < expireDate.size(); i++) {
+            Specification<JobPost> expireSpec = JobPostSpecification.buildExpireSpec(expireDate.get(i), operators.get(i));
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                specExpire = specExpire.and(expireSpec);
+            } else {
+                specExpire = specExpire.or(expireSpec);
             }
         }
 
@@ -170,9 +185,9 @@ public class JobPostServiceImpl implements JobPostService {
         }
 
         if (filterLogicInOtherConditions.equalsIgnoreCase("AND")) {
-            spec = spec.and(spectitle).and(specProvince).and(specIndustry).and(specSalary);
+            spec = spec.and(spectitle).and(specProvince).and(specIndustry).and(specSalary).and(specExpire);
         } else {
-            spec = spec.or(spectitle).or(specProvince).or(specIndustry).or(specSalary);
+            spec = spec.or(spectitle).or(specProvince).or(specIndustry).or(specSalary).or(specExpire);
         }
 
         Page<JobPost> jobPosts = jobPostRepository.findAll(spec, pageable);

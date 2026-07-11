@@ -47,7 +47,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
-            // Đăng ký mới ứng viên nếu chưa có tài khoản
             user = User.builder()
                     .email(email)
                     .fullName(name != null ? name : "Google User")
@@ -58,14 +57,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .build();
             user = userRepository.save(user);
 
-            // Tạo CandidateProfile đi kèm
             CandidateProfile candidateProfile = CandidateProfile.builder()
                     .candidateId(user.getUserId())
                     .gender(user.getGender())
                     .build();
             candidateProfileRepository.save(candidateProfile);
         } else {
-            // Cập nhật ảnh đại diện nếu ảnh từ Google có sự thay đổi
             if (picture != null && !picture.equals(user.getAvatarUrl())) {
                 user.setAvatarUrl(picture);
                 userRepository.save(user);
