@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,123 +12,135 @@
     <link rel="stylesheet" th:href="@{/assets/css/common.css}">
     <link rel="stylesheet" th:href="@{/assets/css/candidate.css}">
 </head>
+
 <body>
 
-<!-- Header Placeholder -->
-<div th:replace="~{fragments/header.html :: header}"></div>
+    <!-- Header Placeholder -->
+    <div th:replace="~{fragments/header.html :: header}"></div>
 
-<div class="candidate-layout">
-    <!-- Sidebar Placeholder -->
-    <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
+    <div class="candidate-layout">
+        <!-- Sidebar Placeholder -->
+        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
 
-    <main class="candidate-content">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="job-list.html" class="text-decoration-none">Việc làm</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Chi tiết việc làm</li>
-            </ol>
-        </nav>
+        <main class="candidate-content">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="job-list.html" class="text-decoration-none">Việc làm</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Chi tiết việc làm</li>
+                </ol>
+            </nav>
 
-        <div class="row">
-            <!-- Cột trái: Thông tin -->
-            <div class="col-lg-8 mb-4">
-                <div class="card card-custom p-4 mb-4">
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <img th:src="${jobPostDetailDTO.companyUrl != null && !jobPostDetailDTO.companyUrl.isEmpty() ? jobPostDetailDTO.companyUrl : 'https://ui-avatars.com/api/?name=' + jobPostDetailDTO.companyName}" alt="Company" class="rounded border p-1" style="width: 80px; height: 80px; object-fit: contain;">
-                        <div>
-                            <h3 class="fw-bold mb-1 text-primary" th:text="${jobPostDetailDTO.jobtitle != null ? jobPostDetailDTO.jobtitle : ''}">Senior Frontend Developer (ReactJS)</h3>
-                            <p class="text-muted mb-0 fs-5" th:text="${jobPostDetailDTO.companyName}">TechCorp Vietnam JSC</p>
+            <div class="row">
+                <!-- Cột trái: Thông tin -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card card-custom p-4 mb-4">
+                        <div class="d-flex align-items-center gap-3 mb-4">
+                            <img th:src="${jobPostDetailDTO.companyUrl != null && !jobPostDetailDTO.companyUrl.isEmpty() ? jobPostDetailDTO.companyUrl : 'https://ui-avatars.com/api/?name=' + jobPostDetailDTO.companyName}"
+                                alt="Company" class="rounded border p-1"
+                                style="width: 80px; height: 80px; object-fit: contain;">
+                            <div>
+                                <h3 class="fw-bold mb-1 text-primary"
+                                    th:text="${jobPostDetailDTO.jobtitle != null ? jobPostDetailDTO.jobtitle : ''}">
+                                    Senior Frontend Developer (ReactJS)</h3>
+                                <p class="text-muted mb-0 fs-5" th:text="${jobPostDetailDTO.companyName}">TechCorp
+                                    Vietnam JSC</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row text-muted mb-4 g-3">
-                        <div class="col-md-6">
-                            <i class="bi bi-cash text-success me-2"></i><strong>Mức lương:</strong> <span th:text="${jobPostDetailDTO.salaryDisplay}"></span>
+                        <div class="row text-muted mb-4 g-3">
+                            <div class="col-md-6">
+                                <i class="bi bi-cash text-success me-2"></i><strong>Mức lương:</strong> <span
+                                    th:text="${jobPostDetailDTO.salaryDisplay}"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <i class="bi bi-geo-alt text-primary me-2"></i><strong>Địa điểm:</strong><span
+                                    th:text="${(jobPostDetailDTO.locationDetail != null ? jobPostDetailDTO.locationDetail : '') +(jobPostDetailDTO.administrativeUnitName != null ? ', ' + jobPostDetailDTO.administrativeUnitName : '') + (jobPostDetailDTO.companyProvinceAddress != null ? ', ' + jobPostDetailDTO.companyProvinceAddress : '')}"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <i class="bi bi-briefcase text-warning me-2"></i><strong>Kinh nghiệm:</strong><span
+                                    th:text="${jobPostDetailDTO.experienceLevel != null ? jobPostDetailDTO.experienceLevel : ''}"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <i class="bi bi-person-workspace text-info me-2"></i><strong>Hình thức:</strong><span
+                                    th:text="${jobPostDetailDTO.employmentType != null ? jobPostDetailDTO.employmentType : ''}"></span>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <i class="bi bi-geo-alt text-primary me-2"></i><strong>Địa điểm:</strong><span th:text="${(jobPostDetailDTO.locationDetail != null ? jobPostDetailDTO.locationDetail : '') +(jobPostDetailDTO.administrativeUnitName != null ? ', ' + jobPostDetailDTO.administrativeUnitName : '') + (jobPostDetailDTO.companyProvinceAddress != null ? ', ' + jobPostDetailDTO.companyProvinceAddress : '')}"></span>
+
+                        <hr class="mb-4">
+
+                        <div class="mb-4">
+                            <h5 class="fw-bold mb-3">Mô tả công việc</h5>
+
+                            <div style="white-space: pre-line;" th:utext="${jobPostDetailDTO.description}">
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <i class="bi bi-briefcase text-warning me-2"></i><strong>Kinh nghiệm:</strong><span th:text="${jobPostDetailDTO.experienceLevel != null ? jobPostDetailDTO.experienceLevel : ''}"></span>
+
+                        <div class="mb-4">
+                            <h5 class="fw-bold mb-3">Yêu cầu ứng viên</h5>
+
+                            <div style="white-space: pre-line;" th:utext="${jobPostDetailDTO.requirement}">
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <i class="bi bi-person-workspace text-info me-2"></i><strong>Hình thức:</strong><span th:text="${jobPostDetailDTO.employmentType != null ? jobPostDetailDTO.employmentType : ''}"></span>
-                        </div>
-                    </div>
 
-                    <hr class="mb-4">
+                        <div class="mb-0">
+                            <h5 class="fw-bold mb-3">Quyền lợi</h5>
 
-                    <div class="mb-4">
-                        <h5 class="fw-bold mb-3">Mô tả công việc</h5>
-
-                        <div style="white-space: pre-line;"
-                             th:utext="${jobPostDetailDTO.description}">
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <h5 class="fw-bold mb-3">Yêu cầu ứng viên</h5>
-
-                        <div style="white-space: pre-line;"
-                             th:utext="${jobPostDetailDTO.requirement}">
-                        </div>
-                    </div>
-
-                    <div class="mb-0">
-                        <h5 class="fw-bold mb-3">Quyền lợi</h5>
-
-                        <div style="white-space: pre-line;"
-                             th:text="${jobPostDetailDTO.benefit != null ? jobPostDetailDTO.benefit : ''}">
+                            <div style="white-space: pre-line;"
+                                th:text="${jobPostDetailDTO.benefit != null ? jobPostDetailDTO.benefit : ''}">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Cột phải: Thao tác -->
-            <div class="col-lg-4">
-                <div class="card card-custom p-4 sticky-top" style="top: 90px;">
-                    <button class="btn btn-primary-custom btn-lg w-100 mb-3 fw-bold shadow-sm">
-                        <i class="bi bi-send-fill me-2"></i> Ứng tuyển ngay
-                    </button>
-                    <!-- Nút Lưu việc làm (nếu chưa lưu) -->
-                    <form th:if="${!isSaved}" th:action="@{/candidate/saved-jobs/save}" method="post">
-                        <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}"/>
-                        <button type="submit" class="btn btn-outline-primary-custom btn-lg w-100 mb-4 fw-bold">
-                            <i class="bi bi-heart me-2"></i> Lưu việc làm
+                <!-- Cột phải: Thao tác -->
+                <div class="col-lg-4">
+                    <div class="card card-custom p-4 sticky-top" style="top: 90px;">
+                        <button class="btn btn-primary-custom btn-lg w-100 mb-3 fw-bold shadow-sm">
+                            <i class="bi bi-send-fill me-2"></i> Ứng tuyển ngay
                         </button>
-                    </form>
-                    
-                    <!-- Nút Đã lưu việc làm (nếu đã lưu) -->
-                    <form th:if="${isSaved}" th:action="@{/candidate/saved-jobs/unsave}" method="post">
-                        <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}"/>
-                        <input type="hidden" name="redirectUrl" th:value="'/candidate/jobs/job-detail/' + ${jobPostDetailDTO.id}"/>
-                        <button type="submit" class="btn btn-primary-custom btn-lg w-100 mb-4 fw-bold">
-                            <i class="bi bi-heart-fill me-2"></i> Đã lưu việc làm
-                        </button>
-                    </form>
+                        <!-- Nút Lưu việc làm (nếu chưa lưu) -->
+                        <form th:if="${!isSaved}" th:action="@{/candidate/saved-jobs/save}" method="post">
+                            <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}" />
+                            <button type="submit" class="btn btn-outline-primary-custom btn-lg w-100 mb-4 fw-bold">
+                                <i class="bi bi-heart me-2"></i> Lưu việc làm
+                            </button>
+                        </form>
 
-                    <h6 class="fw-bold mb-3">Thông tin nhanh</h6>
-                    <ul class="list-unstyled text-muted small">
-                        <li class="mb-2 d-flex justify-content-between">
-                            <span>Ngày đăng:</span>
-                            <span class="text-dark fw-500" th:text="${#temporals.format(jobPostDetailDTO.postedDate, 'dd/MM/yyyy')}">10/11/2026</span>
-                        </li>
-                        <li class="mb-2 d-flex justify-content-between">
-                            <span>Hạn nộp:</span>
-                            <span class="text-danger fw-bold" th:text="${#temporals.format(jobPostDetailDTO.expiredDate, 'dd/MM/yyyy')}">30/11/2026</span>
-                        </li>
-                    </ul>
+                        <!-- Nút Đã lưu việc làm (nếu đã lưu) -->
+                        <form th:if="${isSaved}" th:action="@{/candidate/saved-jobs/unsave}" method="post">
+                            <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}" />
+                            <input type="hidden" name="redirectUrl"
+                                th:value="'/candidate/jobs/job-detail/' + ${jobPostDetailDTO.id}" />
+                            <button type="submit" class="btn btn-primary-custom btn-lg w-100 mb-4 fw-bold">
+                                <i class="bi bi-heart-fill me-2"></i> Đã lưu việc làm
+                            </button>
+                        </form>
+
+                        <h6 class="fw-bold mb-3">Thông tin nhanh</h6>
+                        <ul class="list-unstyled text-muted small">
+                            <li class="mb-2 d-flex justify-content-between">
+                                <span>Ngày đăng:</span>
+                                <span class="text-dark fw-500"
+                                    th:text="${#temporals.format(jobPostDetailDTO.postedDate, 'dd/MM/yyyy')}">10/11/2026</span>
+                            </li>
+                            <li class="mb-2 d-flex justify-content-between">
+                                <span>Hạn nộp:</span>
+                                <span class="text-danger fw-bold"
+                                    th:text="${#temporals.format(jobPostDetailDTO.expiredDate, 'dd/MM/yyyy')}">30/11/2026</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
-</div>
+        </main>
+    </div>
 
-<!-- Footer Placeholder -->
-<div th:replace="~{fragments/footer.html :: footer}"></div>
+    <!-- Footer Placeholder -->
+    <div th:replace="~{fragments/footer.html :: footer}"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

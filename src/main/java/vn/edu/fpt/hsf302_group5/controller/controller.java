@@ -28,6 +28,11 @@ public class controller {
         return "pages/candidate/profile";
     }
 
+    @GetMapping("/test5")
+    public String test5(){
+        return "pages/candidate/upload-cv";
+    }
+
 
     @GetMapping("/")
     public String test6(){
