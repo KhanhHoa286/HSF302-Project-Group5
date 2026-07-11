@@ -23,6 +23,7 @@ public class SavedJobsController {
     private final SavedJobService savedJobService;
     private final UserRepository userRepository;
 
+    //LinhNHHE194585
     @GetMapping("/saved-jobs")
     public String savedJobs(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
@@ -38,6 +39,7 @@ public class SavedJobsController {
         return "pages/candidate/saved-jobs";
     }
 
+    //LinhNHHE194585
     @PostMapping("/saved-jobs/save")
     public String saveJob(@RequestParam Integer jobId, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
@@ -51,6 +53,7 @@ public class SavedJobsController {
         return "redirect:/candidate/jobs/job-detail/" + jobId;
     }
 
+    //LinhNHHE194585
     @PostMapping("/saved-jobs/unsave")
     public String unsaveJob(@RequestParam Integer jobId,
                             @RequestParam(required = false) String redirectUrl,
