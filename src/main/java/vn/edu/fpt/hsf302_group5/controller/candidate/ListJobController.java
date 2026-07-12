@@ -73,6 +73,8 @@ public class ListJobController {
         model.addAttribute("industryOperators", industryOperators);
         model.addAttribute("salary", salary);
         model.addAttribute("salaryOperators", salaryOperators);
+        model.addAttribute("expireDate", expireDate);
+        model.addAttribute("expireOperator", expireOperator);
         model.addAttribute("filterLogicInOtherConditions", filterLogicInOtherConditions);
         model.addAttribute("filterLogicInSameConditions", filterLogicInSameConditions);
         return "pages/candidate/job-list";

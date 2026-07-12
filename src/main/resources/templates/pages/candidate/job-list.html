@@ -358,6 +358,8 @@
         const industryOps = [[${industryOperators}]] || [];
         const salaries = [[${salary}]] || [];
         const salaryOps = [[${salaryOperators}]] || [];
+        const expireDate = [[${expireDate}]] || [];
+        const expireOperator = [[${expireOperator}]] || [];
 
         let hasInitial = false;
 
@@ -365,6 +367,14 @@
             searchKeywords.forEach((kw, idx) => {
                 const op = (searchKeywordOps && searchKeywordOps[idx]) ? searchKeywordOps[idx] : 'Contains';
                 createRow('keyword', op, kw);
+                hasInitial = true;
+            });
+        }
+
+        if (expireDate && expireOperator && expireOperator.length > 0) {
+            expireDate.forEach((keyword, index) => {
+                const op = (expireOperator && expireOperator[index]) ? expireOperator[index] : '=';
+                createRow('expire', op, keyword);
                 hasInitial = true;
             });
         }
