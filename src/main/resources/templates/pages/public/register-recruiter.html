@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <form th:action="@{/register-recruiter}" method="post" th:object="${recruiterRegisterRequestDTO}">
+        <form th:action="@{/register-recruiter}" method="post" th:object="${recruiterRegisterRequestDTO}" enctype="multipart/form-data">
             <div th:if="${errors}" class="alert alert-danger mb-3" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
                 <span th:text="${errors}"></span>
@@ -72,16 +72,6 @@
                     <strong>Khuyên dùng:</strong> Nếu không có sự đồng ý, chuyên viên sẽ không thể liên hệ để hỗ trợ Quý khách xác thực tài khoản nhanh chóng & đăng tin kịp thời.
                 </div>
             </div>
-
-            <!-- Google Registration -->
-            <div class="mb-4">
-                <a href="#" class="btn btn-google-recruiter">
-                    <img src="https://img.icons8.com/color/20/000000/google-logo.png" alt="Google Logo">
-                    Đăng ký bằng Google
-                </a>
-            </div>
-
-            <div class="topcv-divider">Hoặc bằng email</div>
 
             <!-- Email, Password Section -->
             <div class="row">
@@ -173,12 +163,12 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="topcv-label">Logo URL</label>
+                    <label class="topcv-label">Logo công ty</label>
                     <div class="topcv-input-group">
-                        <i class="bi bi-image prefix-icon"></i>
-                        <input type="url" th:field="*{logoUrl}" class="form-control" placeholder="https://example.com/logo.png">
+                        <i class="bi bi-upload prefix-icon"></i>
+                        <input type="file" th:field="*{logoFile}" class="form-control" accept="image/*">
                     </div>
-                    <span class="text-danger small" th:if="${#fields.hasErrors('logoUrl')}" th:errors="*{logoUrl}"></span>
+                    <span class="text-danger small" th:if="${#fields.hasErrors('logoFile')}" th:errors="*{logoFile}"></span>
                 </div>
 
 

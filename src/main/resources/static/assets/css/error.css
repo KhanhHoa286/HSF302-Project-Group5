@@ -1,0 +1,167 @@
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+.error-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 3rem;
+    max-width: 550px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    position: relative;
+}
+.error-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    z-index: -1;
+    border-radius: 26px;
+    opacity: 0.15;
+}
+.icon-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+}
+.error-code {
+    font-size: 5.5rem;
+    font-weight: 900;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+.error-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #f1f5f9;
+}
+.error-desc {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+}
+.btn-custom {
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    padding: 0.8rem 2.2rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+.btn-custom:hover {
+    transform: translateY(-2px);
+    color: #ffffff;
+}
+.btn-outline-custom {
+    background: transparent;
+    color: #94a3b8;
+    border: 1px solid rgba(255,255,255,0.15);
+    font-weight: 600;
+    padding: 0.8rem 1.8rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+.btn-outline-custom:hover {
+    background: rgba(255,255,255,0.05);
+    color: #f1f5f9;
+    border-color: rgba(255,255,255,0.3);
+}
+
+.error-forbidden::before {
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+}
+.error-forbidden .icon-container {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+    animation: pulse-forbidden 2s infinite ease-in-out;
+}
+.error-forbidden .error-code {
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    -webkit-background-clip: text;
+}
+.error-forbidden .btn-custom {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+.error-forbidden .btn-custom:hover {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+}
+@keyframes pulse-forbidden {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(245, 158, 11, 0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(245, 158, 11, 0.4); }
+}
+
+.error-notfound::before {
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+}
+.error-notfound .icon-container {
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+    animation: pulse-notfound 2s infinite ease-in-out;
+}
+.error-notfound .error-code {
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    -webkit-background-clip: text;
+}
+.error-notfound .btn-custom {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+.error-notfound .btn-custom:hover {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+}
+@keyframes pulse-notfound {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(99, 102, 241, 0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(99, 102, 241, 0.4); }
+}
+
+.error-server::before {
+    background: linear-gradient(135deg, #ef4444, #f43f5e);
+}
+.error-server .icon-container {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);
+    animation: pulse-server 2s infinite ease-in-out;
+}
+.error-server .error-code {
+    background: linear-gradient(135deg, #ef4444, #f43f5e);
+    -webkit-background-clip: text;
+}
+.error-server .btn-custom {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+.error-server .btn-custom:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+}
+@keyframes pulse-server {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(239, 68, 68, 0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(239, 68, 68, 0.4); }
+}
