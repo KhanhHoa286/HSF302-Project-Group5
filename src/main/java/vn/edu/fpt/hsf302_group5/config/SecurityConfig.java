@@ -69,7 +69,23 @@ public class SecurityConfig {
                                 response.sendRedirect("/login?error=badCredentials");
                             }
                         }))
-                        .defaultSuccessUrl("/", true)
+                        .successHandler((request, response, authentication) -> {
+                            var authorities = authentication.getAuthorities();
+                            String redirectUrl = "/";
+                            for (var authority : authorities) {
+                                if (authority.getAuthority().equals("CANDIDATE")) {
+                                    redirectUrl = "/candidate/profile";
+                                    break;
+                                } else if (authority.getAuthority().equals("RECRUITER")) {
+                                    redirectUrl = "/recruiter/company-profile";
+                                    break;
+                                } else if (authority.getAuthority().equals("ADMIN")) {
+                                    redirectUrl = "/admin/dashboard";
+                                    break;
+                                }
+                            }
+                            response.sendRedirect(redirectUrl);
+                        })
                 )
                 .oauth2Login((oauth) -> oauth
                         .loginPage("/login")
@@ -77,7 +93,23 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         ) //Sau khi lấy được thông tin user từ Google đưa nó cho customOAuth2UserService xử lý
-                        .defaultSuccessUrl("/", true)
+                        .successHandler((request, response, authentication) -> {
+                            var authorities = authentication.getAuthorities();
+                            String redirectUrl = "/";
+                            for (var authority : authorities) {
+                                if (authority.getAuthority().equals("CANDIDATE")) {
+                                    redirectUrl = "/candidate/profile";
+                                    break;
+                                } else if (authority.getAuthority().equals("RECRUITER")) {
+                                    redirectUrl = "/recruiter/company-profile";
+                                    break;
+                                } else if (authority.getAuthority().equals("ADMIN")) {
+                                    redirectUrl = "/admin/dashboard";
+                                    break;
+                                }
+                            }
+                            response.sendRedirect(redirectUrl);
+                        })
                 )
                 .rememberMe(httpSecurityRememberMeConfigurer -> {
                     httpSecurityRememberMeConfigurer.key(System.getProperty("REMEMBER_ME_KEY"));
