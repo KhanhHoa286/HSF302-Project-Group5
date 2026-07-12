@@ -18,7 +18,7 @@
             </a>
         </li>
         <li>
-            <a href="profile.html">
+            <a th:href="@{/candidate/profile}">
                 <i class="bi bi-person"></i> <span>Hồ sơ cá nhân</span>
             </a>
         </li>
@@ -40,24 +40,22 @@
     </ul>
 
     <script>
-        (function  () {
+        (function () {
             const sidebar = document.getElementById('candidateSidebar');
             const toggleBtn = document.getElementById('sidebarToggleBtn');
             const toggleIcon = document.getElementById('sidebarToggleIcon');
 
             if (!sidebar || !toggleBtn || !toggleIcon) return;
 
-            // Restore state from localStorage
             const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
             if (isCollapsed) {
                 sidebar.classList.add('collapsed');
                 toggleIcon.className = 'bi bi-chevron-right';
             }
 
-            // Toggle action
-            toggleBtn.addEventListener('click', functio n () {
+            toggleBtn.addEventListener('click', function () {
                 const collapsed = sidebar.classList.toggle('collapsed');
-                localStorage.setItem('sidebar-collapsed', collapsed ? 'true' : 'false')   // Toggle icon direction
+                localStorage.setItem('sidebar-collapsed', collapsed ? 'true' : 'false');
                 if (collapsed) {
                     toggleIcon.className = 'bi bi-chevron-right';
                 } else {
