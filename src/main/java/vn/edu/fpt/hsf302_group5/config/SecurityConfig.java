@@ -74,7 +74,7 @@ public class SecurityConfig {
                             String redirectUrl = "/";
                             for (var authority : authorities) {
                                 if (authority.getAuthority().equals("CANDIDATE")) {
-                                    redirectUrl = "/candidate/profile";
+                                    redirectUrl = "/";
                                     break;
                                 } else if (authority.getAuthority().equals("RECRUITER")) {
                                     redirectUrl = "/recruiter/company-profile";
@@ -98,7 +98,7 @@ public class SecurityConfig {
                             String redirectUrl = "/";
                             for (var authority : authorities) {
                                 if (authority.getAuthority().equals("CANDIDATE")) {
-                                    redirectUrl = "/candidate/profile";
+                                    redirectUrl = "/";
                                     break;
                                 } else if (authority.getAuthority().equals("RECRUITER")) {
                                     redirectUrl = "/recruiter/company-profile";

@@ -1,5 +1,6 @@
 package vn.edu.fpt.hsf302_group5.specification;
 
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import vn.edu.fpt.hsf302_group5.entity.Industry;
@@ -14,7 +15,7 @@ public class JobPostSpecification {
 
     public static Specification<JobPost> containTitle(String keyword) {
         return ((root, query, criteriaBuilder) -> {
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get(JobPost_.title)), "%" + keyword.toLowerCase() + "%");
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get(JobPost_.title)), "%" + keyword.toLowerCase() + "%"); //chỉ ra thuộc tính title của entity. Là định nghĩa (metadata)
         });
     }
 
@@ -76,7 +77,7 @@ public class JobPostSpecification {
 
     public static Specification<JobPost> sortBySalaryMin() {
         return ((root, query, criteriaBuilder) -> {
-            query.orderBy(criteriaBuilder.asc(root.get(JobPost_.salaryMin)));
+            query.orderBy(criteriaBuilder.asc(root.get(JobPost_.salaryMin))); // JPA Static Metamodel để dùng cần bật JPA Static Metamodel Generator. Đây là một annotation processor sẽ tự sinh các lớp Entity_ khi biên dịch.
             return criteriaBuilder.conjunction();
         });
     }
@@ -89,7 +90,7 @@ public class JobPostSpecification {
 
     public static Specification<JobPost> equalExpireDate(LocalDate expiredDate) {
         return ((root, query, criteriaBuilder) -> {
-            return criteriaBuilder.equal(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+            return criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay()), criteriaBuilder.lessThan(root.get(JobPost_.expiredDate), expiredDate.plusDays(1).atStartOfDay()));
         });
     }
 

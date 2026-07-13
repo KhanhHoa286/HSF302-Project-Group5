@@ -124,7 +124,7 @@
                             <div class="d-flex flex-column gap-2 text-muted small mb-3 flex-grow-1">
                                 <span>
                                     <i class="bi bi-cash text-success me-2"></i>
-                                    <span th:text="${jobPostResponse.getSalaryDisplay()}"></span>
+                                    <span th:text="${jobPostResponse.salaryMin != null && jobPostResponse.salaryMax != null ? #numbers.formatDecimal(jobPostResponse.salaryMin, 0, 'COMMA', 0, 'POINT') + ' - ' + #numbers.formatDecimal(jobPostResponse.salaryMax, 0, 'COMMA', 0, 'POINT') + ' đ' : 'Thỏa thuận'}"></span>
                                 </span>
                                 <span>
                                     <i class="bi bi-geo-alt me-2"></i>
