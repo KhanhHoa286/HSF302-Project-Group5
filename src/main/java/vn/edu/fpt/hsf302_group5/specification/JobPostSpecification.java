@@ -2,6 +2,7 @@ package vn.edu.fpt.hsf302_group5.specification;
 
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
+import org.springframework.beans.factory.BeanRegistry;
 import org.springframework.data.jpa.domain.Specification;
 import vn.edu.fpt.hsf302_group5.entity.Industry;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
@@ -44,6 +45,61 @@ public class JobPostSpecification {
         }));
     }
 
+    public static Specification<JobPost> sortByJobId(String operation) {
+        return ((root, query, criteriaBuilder) -> {
+            if (operation.equals("asc")) {
+                query.orderBy(criteriaBuilder.asc(root.get(JobPost_.jobId)));
+            } else {
+                query.orderBy(criteriaBuilder.desc(root.get(JobPost_.jobId)));
+            }
+            return criteriaBuilder.conjunction();
+        });
+    }
+
+    public static Specification<JobPost> sortbyTitle(String operation) {
+        return ((root, query, criteriaBuilder) -> {
+            if (operation.equals("asc")) {
+                query.orderBy(criteriaBuilder.asc(root.get(JobPost_.title)));
+            } else {
+                query.orderBy(criteriaBuilder.desc(root.get(JobPost_.title)));
+            }
+            return criteriaBuilder.conjunction();
+        });
+    }
+
+    public static Specification<JobPost> sortBySalaryMin(String operation) {
+        return ((root, query, criteriaBuilder) -> {
+            if (operation.equals("asc")) {
+                query.orderBy(criteriaBuilder.asc(root.get(JobPost_.salaryMin)));
+            } else {
+                query.orderBy(criteriaBuilder.desc(root.get(JobPost_.salaryMin)));
+            }
+            return criteriaBuilder.conjunction();
+        });
+    }
+
+    public static Specification<JobPost> sortBySalaryMax(String operation) {
+        return ((root, query, criteriaBuilder) -> {
+            if (operation.equals("asc")) {
+                query.orderBy(criteriaBuilder.asc(root.get(JobPost_.salaryMax)));
+            } else {
+                query.orderBy(criteriaBuilder.desc(root.get(JobPost_.salaryMax)));
+            }
+            return criteriaBuilder.conjunction();
+        });
+    }
+
+    public static Specification<JobPost> sortByPostedDate(String operation) {
+        return ((root, query, criteriaBuilder) -> {
+            if (operation.equals("asc")) {
+                query.orderBy(criteriaBuilder.asc(root.get(JobPost_.postedDate)));
+            } else {
+                query.orderBy(criteriaBuilder.desc(root.get(JobPost_.postedDate)));
+            }
+            return criteriaBuilder.conjunction();
+        });
+    }
+
     public static Specification<JobPost> hasProvice(Integer provinceId) {
         return ((root, query, criteriaBuilder) -> {
             Join<JobPost, Province> province = root.join("province");
@@ -84,7 +140,7 @@ public class JobPostSpecification {
 
     public static Specification<JobPost> greatThanExpireDate(LocalDate expiredDate) {
         return ((root, query, criteriaBuilder) -> {
-          return criteriaBuilder.greaterThan(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+            return criteriaBuilder.greaterThan(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
         });
     }
 
@@ -102,13 +158,13 @@ public class JobPostSpecification {
 
     public static Specification<JobPost> lessThanOrEqualExpireDate(LocalDate expiredDate) {
         return ((root, query, criteriaBuilder) -> {
-           return criteriaBuilder.lessThanOrEqualTo(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+            return criteriaBuilder.lessThanOrEqualTo(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
         });
     }
 
     public static Specification<JobPost> lessThanExpireDate(LocalDate expiredDate) {
         return ((root, query, criteriaBuilder) -> {
-           return criteriaBuilder.lessThan(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
+            return criteriaBuilder.lessThan(root.get(JobPost_.expiredDate), expiredDate.atStartOfDay());
         });
     }
 
@@ -144,7 +200,7 @@ public class JobPostSpecification {
 
     public static Specification<JobPost> buildExpireSpec(LocalDate localDate, String s) {
         switch (s.toLowerCase()) {
-            case ">" :
+            case ">":
                 return greatThanExpireDate(localDate);
             case ">=":
                 return greatThanOrEqualExpireDate(localDate);
@@ -154,6 +210,23 @@ public class JobPostSpecification {
                 return lessThanOrEqualExpireDate(localDate);
             case "=":
                 return equalExpireDate(localDate);
+            default:
+                return Specification.unrestricted();
+        }
+    }
+
+    public static Specification<JobPost> bulidSort(String s, String s1) {
+        switch (s.toLowerCase()) {
+            case "jobId":
+                return sortByJobId(s1);
+            case "title":
+                return sortbyTitle(s1);
+            case "salaryMin":
+                return sortBySalaryMin(s1);
+            case "salaryMax":
+                return sortBySalaryMax(s1);
+            case "postedDate":
+                return sortByPostedDate(s1);
             default:
                 return Specification.unrestricted();
         }

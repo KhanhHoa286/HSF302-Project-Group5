@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.hsf302_group5.dto.industry.IndustryResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
 import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
+import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.service.industry.IndustryService;
 import vn.edu.fpt.hsf302_group5.service.jobpost.JobPostService;
 import vn.edu.fpt.hsf302_group5.service.province.ProvinceService;
@@ -17,6 +18,7 @@ import vn.edu.fpt.hsf302_group5.util.AppConstants;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,18 +48,26 @@ public class ListJobController {
                           @RequestParam(value = "salary", required = false) List<BigDecimal> salary,
                           @RequestParam(value = "salary-operator", required = false) List<String> salaryOperators,
                           @RequestParam(value = "expire", required = false)List<LocalDate> expireDate,
-                          @RequestParam(value = "expire-operator", required = false) List<String> expireOperator) {
+                          @RequestParam(value = "expire-operator", required = false) List<String> expireOperator,@RequestParam(value = "sort", required = false)List<String> sort,
+                          @RequestParam(value = "sort-operator", required = false) List<String> sortOperator) {
 
         List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
         List<IndustryResponse> industryResponses = industryService.getAllIndustryResponse();
 
         // Page<JobPostResponse> jobPage = jobPostService.getJobPostsByFilter(null, null, null, null, page);
 
-        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, salary, salaryOperators, expireDate, expireOperator);
+        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, salary, salaryOperators, expireDate, expireOperator, sort, sortOperator);
 
 
         int startPage = (jobPageBySpecification.getNumber() / AppConstants.NUMBER_PAGE_PER_BLOCK) * AppConstants.NUMBER_PAGE_PER_BLOCK;
         int endPage = Math.min(startPage + AppConstants.NUMBER_PAGE_PER_BLOCK - 1, jobPageBySpecification.getTotalPages() - 1);
+
+        List<String> fields = new ArrayList<>();
+        fields.add("jobId");
+        fields.add("title");
+        fields.add("salaryMin");
+        fields.add("salaryMax");
+        fields.add("postedDate");
 
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
@@ -65,6 +75,7 @@ public class ListJobController {
         model.addAttribute("provinceResponses", provinceResponses);
         model.addAttribute("industryResponses", industryResponses);
 
+        model.addAttribute("fields", fields);
         model.addAttribute("searchKeyword", searchKeyword);
         model.addAttribute("searchKeywordOperators", searchKeywordOperators);
         model.addAttribute("provinceId", provinceId);
@@ -75,6 +86,8 @@ public class ListJobController {
         model.addAttribute("salaryOperators", salaryOperators);
         model.addAttribute("expireDate", expireDate);
         model.addAttribute("expireOperator", expireOperator);
+        model.addAttribute("sort", sort);
+        model.addAttribute("sortOperator", sortOperator);
         model.addAttribute("filterLogicInOtherConditions", filterLogicInOtherConditions);
         model.addAttribute("filterLogicInSameConditions", filterLogicInSameConditions);
         return "pages/candidate/job-list";

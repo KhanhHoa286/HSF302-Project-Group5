@@ -113,7 +113,7 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> salaryOperators, List<LocalDate> expireDate, List<String> operators) {
+    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> salaryOperators, List<LocalDate> expireDate, List<String> operators, List<String> sort, List<String> sortOperator) {
 
         if (searchKeyword == null) {
             searchKeyword = new ArrayList<>();
@@ -131,8 +131,18 @@ public class JobPostServiceImpl implements JobPostService {
             expireDate = new ArrayList<>();
         }
 
-
-        Pageable pageable = PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE, Sort.by("postedDate").descending());
+        List<Sort.Order> orders = new ArrayList<>();
+        if (sort != null) {
+            for (int i = 0; i < sort.size(); i++) {
+                String field = sort.get(i);
+                String direction = sortOperator.get(i);
+                Sort.Direction dir = "asc".equalsIgnoreCase(direction) ? Sort.Direction.ASC : Sort.Direction.DESC;
+                orders.add(new Sort.Order(dir, field));
+            }
+        }
+        Pageable pageable = orders.isEmpty()
+                ? PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE)
+                : PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE, Sort.by(orders));
 
         Specification<JobPost> spec = Specification.unrestricted(); // không có điều kiện nào, trả về Specification. tương đương  Specification.where(null) với bản cũ
 
