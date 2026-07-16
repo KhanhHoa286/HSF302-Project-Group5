@@ -2,6 +2,7 @@ package vn.edu.fpt.hsf302_group5.repository.jobpost;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,7 @@ import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
@@ -134,4 +136,7 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer> {
             Pageable pageable
 
     );
+
+    @EntityGraph(attributePaths = {"recruiter","company", "jobSkills", "jobSkills.skill","province"})
+    Optional<JobPost> findByJobPostId(Integer id);
 }

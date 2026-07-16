@@ -29,4 +29,6 @@ public interface JobPostService {
       JobPost updateJob(JobPostFormRequest jobPostForm);
 
       JobPostFormRequest updateFormRequest(Integer id);
+
+      JobPostDetailResponse getJobPostDetail(Integer id);
 }

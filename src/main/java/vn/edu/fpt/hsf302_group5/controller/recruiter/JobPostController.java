@@ -120,4 +120,10 @@ public class JobPostController {
         }
         return "redirect:/recruiter/create-job";
     }
+
+    @GetMapping("/job-detail/{id}")
+    public String showJobDetail(Model model) {
+
+        return "pages/recruiter/job-detail";
+    }
 }

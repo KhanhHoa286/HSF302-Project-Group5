@@ -111,21 +111,6 @@ public class JobPostServiceImpl implements JobPostService {
         return jobPostRepository.getJobPostDashboard(recruiterId,textSearch,jobStatus,pageable);
     }
 
-//    @Override
-//    @Transactional
-//    public void updateStatusJobPost(Integer jobPostId, JobStatus jobStatus) {
-//        // tìm ra job có id đc truyền vào
-//        JobPost jobPost = jobPostRepository.findById(jobPostId)
-//                .orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
-//
-//        if(JobStatus.APPROVED == jobStatus) {
-//            jobPost.setStatus(JobStatus.APPROVED);
-//        }else if(JobStatus.CLOSED == jobStatus) {
-//            jobPost.setStatus(JobStatus.CLOSED);
-//        }
-//        jobPostRepository.save(jobPost);
-//    }
-
     @Override
     @Transactional
     public JobPost updateJob(JobPostFormRequest jobPostForm) {
@@ -157,7 +142,16 @@ public class JobPostServiceImpl implements JobPostService {
     @Override
     public JobPostFormRequest updateFormRequest(Integer id) {
         JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
-        JobPostFormRequest jobPostFormRequest = jobPostMapper.toEntityUpdateForm(jobPost);
+        JobPostFormRequest jobPostFormRequest = jobPostMapper.toDtoUpdateForm(jobPost);
         return jobPostFormRequest;
+    }
+
+    @Override
+    public JobPostDetailResponse getJobPostDetail(Integer id) {
+        //
+        JobPost jobPost = jobPostRepository.findByJobPostId(id).orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
+
+        //
+        return null;
     }
 }
