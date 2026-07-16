@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Lỗi hệ thống - JobPortal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/css/error.css">
+</head>
+<body>
+    <div class="error-card error-server">
+        <div class="icon-container">
+            <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem;"></i>
+        </div>
+        <div class="error-code">500</div>
+        <h2 class="error-title">Lỗi hệ thống!</h2>
+        <p class="error-desc">
+            Máy chủ đã gặp lỗi không mong muốn khi xử lý yêu cầu này. Vui lòng quay lại sau ít phút hoặc báo cáo vấn đề cho bộ phận kỹ thuật hỗ trợ.
+        </p>
+        <div class="d-flex justify-content-center">
+            <button type="button" onclick="history.back()" class="btn-outline-custom">Quay lại</button>
+            <a th:href="@{/}" class="btn-custom">Trang chủ</a>
+        </div>
+    </div>
+</body>
+</html>

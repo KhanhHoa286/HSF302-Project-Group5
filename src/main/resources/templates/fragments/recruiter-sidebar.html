@@ -9,9 +9,14 @@
             </a>
         </li>
         <li>
+            <a th:href="@{/candidate/jobs/list-job}">
+                <i class="bi bi-search"></i> Danh sách việc làm
+            </a>
+        </li>
+        <li>
              <a th:href="@{/recruiter/company-profile}">
                 <i class="bi bi-building"></i> Hồ sơ doanh nghiệp
-                </a>
+             </a>
         </li>
     </ul>
     <div class="px-4 mt-4 mb-3">
@@ -19,7 +24,8 @@
     </div>
     <ul class="sidebar-menu">
         <li>
-            <a href="../public/login.html" class="text-danger">
+            <form th:action="@{/logout}" method="post" id="recruiterLogoutForm" class="d-none"></form>
+            <a href="javascript:void(0)" onclick="document.getElementById('recruiterLogoutForm').submit()" class="text-danger">
                 <i class="bi bi-box-arrow-right"></i> Đăng xuất
             </a>
         </li>

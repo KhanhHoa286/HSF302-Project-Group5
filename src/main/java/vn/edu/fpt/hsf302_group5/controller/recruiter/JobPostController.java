@@ -25,9 +25,12 @@ import vn.edu.fpt.hsf302_group5.service.skill.SkillService;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @Controller
 @RequestMapping("/recruiter")
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('RECRUITER')")
 public class JobPostController {
     private final JobPostService jobPostService;
     private final ProvinceService provinceService;
@@ -81,6 +84,7 @@ public class JobPostController {
 
 
     @GetMapping("/create-job")
+    @PreAuthorize("hasAuthority('JOB_CREATE')")
     public String createJob(Model model) {
         //
         model.addAttribute("jobPostForm", new JobPostFormRequest());
@@ -89,6 +93,7 @@ public class JobPostController {
     }
 
     @GetMapping("/update-job/{id}")
+    @PreAuthorize("hasAuthority('JOB_UPDATE')")
     public String updateJob(Model model,@PathVariable(name = "id") Integer id) {
         JobPostFormRequest jobPostFormRequest = jobPostService.updateFormRequest(id);
         model.addAttribute("jobPostForm", jobPostService.updateFormRequest(id));
@@ -97,6 +102,7 @@ public class JobPostController {
 
 
     @PostMapping("/save-job")
+    @PreAuthorize("hasAnyAuthority('JOB_CREATE', 'JOB_UPDATE')")
     public String createJob(@Valid @ModelAttribute(name="jobPostForm")JobPostFormRequest jobPostForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal CustomUserDetailsResponse user){
         //
         if(bindingResult.hasErrors()) {

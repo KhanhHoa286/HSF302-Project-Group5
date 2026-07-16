@@ -14,6 +14,8 @@ public class CompanyDashboardResponse {
     private String logoUrl;
     private String status;
     private LocalDateTime createdAt;
+    private String email;
+    private String website;
 
     // Constructor phục vụ cho JPQL Projection
     public CompanyDashboardResponse(Integer companyId, String companyName, String logoUrl, vn.edu.fpt.hsf302_group5.entity.enums.CompanyStatus status, LocalDateTime createdAt) {

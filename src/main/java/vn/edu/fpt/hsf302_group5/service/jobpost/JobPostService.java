@@ -10,6 +10,8 @@ import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface JobPostService {
       StatisticResponse getStatistic();
@@ -23,6 +25,8 @@ public interface JobPostService {
       JobPost getJobPostById(Integer jobId);
 
       Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page,int recruiterId);
+
+      Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> operators, List<LocalDate> expireDate, List<String> salaryOperators, List<String> sort, List<String> sortOperator);
 
 //      void updateStatusJobPost(Integer jobPostId,JobStatus jobStatus);
 

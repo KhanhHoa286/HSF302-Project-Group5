@@ -4,28 +4,29 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.JobPostFormRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDashboardResponse;
-import vn.edu.fpt.hsf302_group5.dto.recruiter.response.SkillResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.JobSkill;
 import vn.edu.fpt.hsf302_group5.entity.Skill;
-import vn.edu.fpt.hsf302_group5.entity.enums.EmploymentType;
-import vn.edu.fpt.hsf302_group5.entity.enums.JobLevel;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 import vn.edu.fpt.hsf302_group5.mapper.JobPostMapper;
 import vn.edu.fpt.hsf302_group5.repository.jobpost.JobPostRepository;
 import vn.edu.fpt.hsf302_group5.repository.jobskill.JobSkillRepository;
 import vn.edu.fpt.hsf302_group5.repository.skill.SkillRepository;
 import vn.edu.fpt.hsf302_group5.service.jobpost.JobPostService;
+import vn.edu.fpt.hsf302_group5.specification.JobPostSpecification;
 import vn.edu.fpt.hsf302_group5.util.AppConstants;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -64,15 +65,15 @@ public class JobPostServiceImpl implements JobPostService {
 
     @Override
     @Transactional
-    public JobPost craeteJob(JobPostFormRequest jobPostForm,int userId) {
+    public JobPost craeteJob(JobPostFormRequest jobPostForm, int userId) {
         //đợi xong login lấy id ở session
         JobPost jobPost = jobPostMapper.toEntityCreateForm(jobPostForm);
         jobPost.setRecruiterId(userId);
         jobPost.setStatus(JobStatus.PENDING);
         //insert dữ liệu vào job_skill
-        if(jobPostForm.getSkillsId() != null && !jobPostForm.getSkillsId().isEmpty()) {
+        if (jobPostForm.getSkillsId() != null && !jobPostForm.getSkillsId().isEmpty()) {
             Set<JobSkill> setJobSkills = new HashSet<>();
-            for(Integer skillId : jobPostForm.getSkillsId()) {
+            for (Integer skillId : jobPostForm.getSkillsId()) {
                 JobSkill jobSkill = new JobSkill();
                 jobSkill.setJobPost(jobPost);
 
@@ -100,15 +101,110 @@ public class JobPostServiceImpl implements JobPostService {
 
     @Override
     public Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page, int recruiterId) {
-        if(textSearch == null || textSearch.isEmpty()) {
+        if (textSearch == null || textSearch.isEmpty()) {
             textSearch = null;
         }
-        if(jobStatus == null) {
+        if (jobStatus == null) {
             jobStatus = null;
         }
-        Pageable pageable = PageRequest.of(page,AppConstants.NUMBER_PAGE_PER_BLOCK);
+        Pageable pageable = PageRequest.of(page, AppConstants.NUMBER_PAGE_PER_BLOCK);
 
-        return jobPostRepository.getJobPostDashboard(recruiterId,textSearch,jobStatus,pageable);
+        return jobPostRepository.getJobPostDashboard(recruiterId, textSearch, jobStatus, pageable);
+    }
+
+    @Override
+    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> salaryOperators, List<LocalDate> expireDate, List<String> operators, List<String> sort, List<String> sortOperator) {
+
+        if (searchKeyword == null) {
+            searchKeyword = new ArrayList<>();
+        }
+        if (provinceId == null) {
+            provinceId = new ArrayList<>();
+        }
+        if (industryId == null) {
+            industryId = new ArrayList<>();
+        }
+        if (salary == null) {
+            salary = new ArrayList<>();
+        }
+        if (expireDate == null) {
+            expireDate = new ArrayList<>();
+        }
+
+        List<Sort.Order> orders = new ArrayList<>();
+        if (sort != null) {
+            for (int i = 0; i < sort.size(); i++) {
+                String field = sort.get(i);
+                String direction = sortOperator.get(i);
+                Sort.Direction dir = "asc".equalsIgnoreCase(direction) ? Sort.Direction.ASC : Sort.Direction.DESC;
+                orders.add(new Sort.Order(dir, field));
+            }
+        }
+        Pageable pageable = orders.isEmpty()
+                ? PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE)
+                : PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE, Sort.by(orders));
+
+        Specification<JobPost> spec = Specification.unrestricted(); // không có điều kiện nào, trả về Specification. tương đương  Specification.where(null) với bản cũ
+
+        Specification<JobPost> spectitle = Specification.unrestricted();
+        for (int i = 0; i < searchKeyword.size(); i++) {
+            Specification<JobPost> title = JobPostSpecification.buildTitleSpec(searchKeywordOperators.get(i), searchKeyword.get(i));
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                spectitle = spectitle.and(title);
+            } else {
+                spectitle = spectitle.or(title);
+            }
+        }
+
+        Specification<JobPost> specExpire = Specification.unrestricted();
+        for (int i = 0; i < expireDate.size(); i++) {
+            Specification<JobPost> expireSpec = JobPostSpecification.buildExpireSpec(expireDate.get(i), operators.get(i));
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                specExpire = specExpire.and(expireSpec);
+            } else {
+                specExpire = specExpire.or(expireSpec);
+            }
+        }
+
+        Specification<JobPost> specProvince = Specification.unrestricted();
+        for (int i = 0; i < provinceId.size(); i++) {
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                specProvince = specProvince.and(JobPostSpecification.hasProvice(provinceId.get(i)));
+            } else {
+                specProvince = specProvince.or(JobPostSpecification.hasProvice(provinceId.get(i)));
+            }
+        }
+
+        Specification<JobPost> specIndustry = Specification.unrestricted();
+        for (int i = 0; i < industryId.size(); i++) {
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                specIndustry = specIndustry.and(JobPostSpecification.hasIndustry(industryId.get(i)));
+            } else {
+                specIndustry = specIndustry.or(JobPostSpecification.hasIndustry(industryId.get(i)));
+            }
+        }
+
+        Specification<JobPost> specSalary = Specification.unrestricted();
+        for (int i = 0; i < salary.size(); i++) {
+            Specification<JobPost> salarySpec = JobPostSpecification.buildSalarySpec(salaryOperators.get(i), salary.get(i));
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                specSalary = specSalary.and(salarySpec);
+            } else {
+                specSalary = specSalary.or(salarySpec);
+            }
+        }
+
+        if (filterLogicInOtherConditions.equalsIgnoreCase("AND")) {
+            spec = spec.and(spectitle).and(specProvince).and(specIndustry).and(specSalary).and(specExpire);
+        } else {
+            spec = spec.or(spectitle).or(specProvince).or(specIndustry).or(specSalary).or(specExpire);
+        }
+
+        Page<JobPost> jobPosts = jobPostRepository.findAll(spec, pageable);
+
+        return jobPosts.map(jobPost -> {
+            return jobPostMapper.toDto(jobPost);
+        });
     }
 
     @Override

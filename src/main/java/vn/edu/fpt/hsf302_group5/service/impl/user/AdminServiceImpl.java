@@ -1,23 +1,23 @@
 package vn.edu.fpt.hsf302_group5.service.impl.user;
 
-
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDashboardResponse;
+import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.JobPostDashboardResponse;
 import vn.edu.fpt.hsf302_group5.entity.Company;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
+import vn.edu.fpt.hsf302_group5.entity.enums.CompanyStatus;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 import vn.edu.fpt.hsf302_group5.entity.enums.UserRole;
+import vn.edu.fpt.hsf302_group5.mapper.CompanyMapper;
 import vn.edu.fpt.hsf302_group5.repository.company.CompanyRepository;
 import vn.edu.fpt.hsf302_group5.repository.user.UserRepository;
 import vn.edu.fpt.hsf302_group5.repository.jobpost.JobPostRepository;
 import vn.edu.fpt.hsf302_group5.service.user.AdminService;
-import org.springframework.data.domain.Sort;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -27,11 +27,14 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final JobPostRepository jobPostRepository;
+    private final CompanyMapper companyMapper;
 
-    public AdminServiceImpl(UserRepository userRepository, CompanyRepository companyRepository, JobPostRepository jobPostRepository){
+    public AdminServiceImpl(UserRepository userRepository, CompanyRepository companyRepository,
+            JobPostRepository jobPostRepository, CompanyMapper companyMapper) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.jobPostRepository = jobPostRepository;
+        this.companyMapper = companyMapper;
     }
 
     @Override
@@ -64,8 +67,7 @@ public class AdminServiceImpl implements AdminService {
                     job.getTitle(),
                     job.getRecruiter().getCompany().getCompanyName(),
                     job.getStatus(),
-                    job.getPostedDate()
-            ));
+                    job.getPostedDate()));
         }
         return recentPendingJobs;
     }
@@ -80,16 +82,18 @@ public class AdminServiceImpl implements AdminService {
                     comp.getCompanyName(),
                     comp.getLogoUrl(),
                     comp.getStatus(),
-                    comp.getCreatedAt()
-            ));
+                    comp.getCreatedAt()));
         }
         return recentCompanies;
     }
 
     @Override
     public Page<JobPostDashboardResponse> getJobPostForApproval(String keyword, JobStatus status, Pageable pageable) {
-        if(keyword != null && keyword.trim().isEmpty()){
-            keyword = null;
+        if (keyword != null) {
+            keyword = keyword.trim();
+            if (keyword.isEmpty()) {
+                keyword = null;
+            }
         }
         Page<JobPost> entityPage = jobPostRepository.findAllForApproval(status, keyword, pageable);
         return entityPage.map(job -> new JobPostDashboardResponse(
@@ -97,8 +101,7 @@ public class AdminServiceImpl implements AdminService {
                 job.getTitle(),
                 job.getRecruiter().getCompany().getCompanyName(),
                 job.getStatus(),
-                job.getPostedDate()
-        ));
+                job.getPostedDate()));
     }
 
     @Override
@@ -107,17 +110,51 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public JobPost getJobPostById(int id) {
+    public JobPost getJobPostById(Integer id) {
         return jobPostRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("khong tim thay tin tuyen dung voi ID: "+ id));
+                .orElseThrow(() -> new IllegalArgumentException("khong tim thay tin tuyen dung voi ID: " + id));
     }
 
     @Override
-    public void updateJobPostStatus(int id, JobStatus status, String comment) {
+    public void updateJobPostStatus(Integer id, JobStatus status, String comment) {
         JobPost jobPost = jobPostRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException(" khong tim thay tin tuyen dung voi ID: "+ id));
+                .orElseThrow(() -> new IllegalArgumentException(" khong tim thay tin tuyen dung voi ID: " + id));
         jobPost.setStatus(status);
         jobPost.setAdminComment(comment);
         jobPostRepository.save(jobPost);
     }
+
+    @Override
+    public Page<CompanyDashboardResponse> getAllCompanies(String keyword, CompanyStatus status, Pageable pageable) {
+        if (keyword != null) {
+            keyword = keyword.trim();
+            if (keyword.isEmpty()) {
+                keyword = null;
+            }
+        }
+        Page<Company> entityPage = companyRepository.findAllCompany(status, keyword, pageable);
+        return entityPage.map(companyMapper::toDashboardResponse);
+    }
+
+    @Override
+    public long countCompaniesByStatus(CompanyStatus status) {
+        return companyRepository.countByStatus(status);
+    }
+
+    @Override
+    public CompanyDetailResponse getCompanyById(Integer companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new IllegalArgumentException("Khong tim thay doanh nghiep voi ID:" + companyId));
+        return companyMapper.toDetailResponse(company);
+    }
+
+    @Override
+    public void updateCompanyStatus(Integer companyId, CompanyStatus status) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new IllegalArgumentException("Khong tim thay doanh nghiep voi ID:" + companyId));
+        company.setStatus(status);
+        company.setUpdatedAt(LocalDateTime.now());
+        companyRepository.save(company);
+    }
+
 }

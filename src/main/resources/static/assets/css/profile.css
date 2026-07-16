@@ -1,0 +1,113 @@
+.profile-section {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    background: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 24px;
+}
+.profile-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+}
+.profile-section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e293b;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.skill-tag {
+    display: inline-block;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.skill-tag:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+.btn-primary-custom {
+    background: #4f46e5;
+    color: #ffffff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-primary-custom:hover {
+    background: #4338ca;
+    color: #ffffff;
+}
+.btn-outline-primary-custom {
+    background: transparent;
+    color: #4f46e5;
+    border: 2px solid #4f46e5;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+.btn-outline-primary-custom:hover {
+    background: #4f46e5;
+    color: #ffffff;
+}
+.timeline {
+    list-style-type: none;
+    position: relative;
+    padding-left: 30px;
+    margin-top: 10px;
+}
+.timeline:before {
+    content: ' ';
+    background: #cbd5e1;
+    display: inline-block;
+    position: absolute;
+    left: 9px;
+    width: 2px;
+    height: 100%;
+    z-index: 400;
+}
+.timeline li {
+    margin: 20px 0;
+    position: relative;
+}
+.timeline-badge {
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 0.8em;
+    text-align: center;
+    position: absolute;
+    top: 4px;
+    left: -30px;
+    background-color: #4f46e5;
+    z-index: 100;
+    border-radius: 50%;
+}
+.timeline-panel {
+    padding: 0 10px;
+}
+.avatar-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #f1f5f9;
+}
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

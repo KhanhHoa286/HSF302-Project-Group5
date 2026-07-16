@@ -3,6 +3,7 @@ package vn.edu.fpt.hsf302_group5.dto.user;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.fpt.hsf302_group5.entity.enums.Gender;
 
 @Getter
@@ -37,8 +38,8 @@ public class RecruiterRegisterRequest {
 
     @NotNull(message = "Tên tỉnh không được để trống!")
     private Integer provinceId;
-    @NotNull(message = "Tên phường/xã không được để trống!")
 
+    @NotNull(message = "Tên phường/xã không được để trống!")
     private Integer administratorUnitId;
 
     @NotBlank(message = "Địa chỉ cụ thể không được để trống!")
@@ -46,5 +47,6 @@ public class RecruiterRegisterRequest {
 
     private String website;
     private String logoUrl;
+    private MultipartFile logoFile;
 
 }

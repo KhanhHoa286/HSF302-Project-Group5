@@ -2957,7 +2957,12 @@ VALUES
     ('recruiter2@viettel.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Lê Thu Hà', '0901000003', NULL, (SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), 'ACTIVE'),
     ('candidate1@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Nguyễn Văn An', '0901000004', NULL, (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
     ('candidate2@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Trần Thị Mai', '0901000005', NULL, (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
-    ('candidate3@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Phạm Đức Long', '0901000006', NULL, (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE');
+    ('candidate3@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Phạm Đức Long', '0901000006', NULL, (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
+    ('recruiter_traphaco@traphaco.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Nguyễn Văn A', '0901000007', NULL, (SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), 'ACTIVE'),
+    ('recruiter_microsoft@microsoft.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'John Smith', '0901000008', NULL, (SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), 'ACTIVE'),
+    ('recruiter_google@google.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Jane Doe', '0901000009', NULL, (SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), 'ACTIVE'),
+    ('recruiter_apple@apple.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Steve Jobless', '0901000010', NULL, (SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), 'ACTIVE'),
+    ('recruiter_oracle@oracle.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Larry Ellison Jr', '0901000011', NULL, (SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), 'ACTIVE');
 
 -- =========================
 -- COMPANY
@@ -2990,6 +2995,71 @@ VALUES
             FROM administrative_units
             WHERE unit_code = 'HN_ME_TRI'
         )
+    ),
+    (
+        N'Traphaco',
+        'https://theme.hstatic.net/1000129896/1001236985/14/logo.png?v=116',
+        'https://traphaco.com.vn',
+        N'Công ty cổ phần Traphaco',
+        N'75 Yên Ninh, Ba Đình',
+        1,
+        (
+            SELECT unit_id
+            FROM administrative_units
+            WHERE unit_code = 'HN_BA_DINH'
+        )
+    ),
+    (
+        N'Microsoft',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1280px-Microsoft_logo.svg.png?_=20210729021049',
+        'https://microsoft.com',
+        N'Tập đoàn công nghệ đa quốc gia Microsoft',
+        N'Tòa nhà Keangnam, Cầu Giấy',
+        1,
+        (
+            SELECT TOP 1 unit_id
+            FROM administrative_units
+            WHERE province_id = 1
+        )
+    ),
+    (
+        N'Google',
+        'https://yt3.googleusercontent.com/tb4KvfywCzldPMVsaRnGRV3hZIgKYWg4V3J5ulhcbK6EZSMHjm39QqmyOYaT11Y6ec2JBPnl5w=s160-c-k-c0x00ffffff-no-rj',
+        'https://google.com',
+        N'Tập đoàn công nghệ đa quốc gia Google',
+        N'Phố Duy Tân, Cầu Giấy',
+        1,
+        (
+            SELECT TOP 1 unit_id
+            FROM administrative_units
+            WHERE province_id = 1
+        )
+    ),
+    (
+        N'Apple',
+        'https://substackcdn.com/image/fetch/$s_!G1lk!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8ed3d547-94ff-48e1-9f20-8c14a7030a02_2000x2000.jpeg',
+        'https://apple.com',
+        N'Tập đoàn công nghệ đa quốc gia Apple',
+        N'Quận 1',
+        2,
+        (
+            SELECT TOP 1 unit_id
+            FROM administrative_units
+            WHERE province_id = 2
+        )
+    ),
+    (
+        N'Oracle',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8utW214eQvjYzsUULfvtyPQbUm3191GVMgKeKRC6lDg&s=10',
+        'https://oracle.com',
+        N'Tập đoàn công nghệ đa quốc gia Oracle',
+        N'Quận 3',
+        2,
+        (
+            SELECT TOP 1 unit_id
+            FROM administrative_units
+            WHERE province_id = 2
+        )
     );
 
 -- =========================
@@ -3000,7 +3070,12 @@ INSERT INTO recruiters
 (recruiter_id, company_id)
 VALUES
     (2,1),
-    (3,2);
+    (3,2),
+    (7,3), -- recruiter_traphaco -> Traphaco
+    (8,4), -- recruiter_microsoft -> Microsoft
+    (9,5), -- recruiter_google -> Google
+    (10,6), -- recruiter_apple -> Apple
+    (11,7); -- recruiter_oracle -> Oracle
 
 -- =========================
 -- INDUSTRY
@@ -3739,6 +3814,201 @@ VALUES
  1,
  (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
  18000000,28000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- Job 34: Traphaco
+(7,1,'MID',2,
+ N'Kỹ sư Phần mềm (ERP & Data)',
+ N'Tham gia phát triển và vận hành hệ thống ERP của công ty Dược Traphaco',
+ N'Kinh nghiệm C#, SQL Server, có hiểu biết về hệ thống quản lý dược phẩm',
+ N'75 Yên Ninh, Ba Đình',
+ 1,
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
+ 15000000,25000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- Job 35: Microsoft
+(8,1,'SENIOR',3,
+ N'Senior Cloud Solutions Architect',
+ N'Thiết kế và triển khai kiến trúc giải pháp Cloud Azure cho đối tác lớn',
+ N'Kinh nghiệm Azure, Kubernetes, Microservices, tiếng Anh thành thạo',
+ N'Keangnam Landmark, Cầu Giấy',
+ 1,
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
+ 40000000,70000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- Job 36: Google
+(9,2,'SENIOR',2,
+ N'Senior Machine Learning Research Engineer',
+ N'Nghiên cứu và phát triển các mô hình ngôn ngữ lớn (LLM) và Generative AI',
+ N'Python, TensorFlow, PyTorch, có công bố khoa học hoặc kinh nghiệm tương đương',
+ N'Phố Duy Tân, Cầu Giấy',
+ 1,
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=1),
+ 50000000,90000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- Job 37: Apple
+(10,1,'MID',2,
+ N'iOS Swift Developer',
+ N'Phát triển ứng dụng di động trên nền tảng iOS sử dụng Swift & SwiftUI',
+ N'Kinh nghiệm lập trình Swift, iOS SDK, SwiftUI, Git',
+ N'Quận 1',
+ 2,
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
+ 30000000,50000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- Job 38: Oracle
+(11,1,'SENIOR',1,
+ N'Principal Database Administrator (Oracle DBA)',
+ N'Quản trị, tối ưu hóa và đảm bảo an toàn cho hệ thống cơ sở dữ liệu lớn của khách hàng',
+ N'Chuyên sâu về Oracle DB, PL/SQL, Backup & Recovery, Performance Tuning',
+ N'Quận 3',
+ 2,
+ (SELECT TOP 1 unit_id FROM administrative_units WHERE province_id=2),
+ 35000000,60000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 39: Java Developer (Spring Boot) - Hanoi
+(2,1,'JUNIOR',3,
+ N'Java Developer (Spring Boot)',
+ N'Phát triển các ứng dụng backend sử dụng Java và Spring Boot.',
+ N'Kinh nghiệm 1 năm Java, Spring Boot, MySQL.',
+ N'Cầu Giấy, Hà Nội',
+ 1,
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HN_CAU_GIAY'),
+ 15000000,22000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 40: Senior Java Software Engineer - HCMC
+(2,1,'SENIOR',2,
+ N'Senior Java Software Engineer',
+ N'Thiết kế và phát triển các hệ thống backend chịu tải cao bằng Java.',
+ N'Trên 5 năm kinh nghiệm Java, Microservices, Kubernetes.',
+ N'Quận 1, TP. Hồ Chí Minh',
+ 2,
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HCM_TAN_DINH'),
+ 35000000,55000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 41: Java Web Developer - Hai Phong
+(2,1,'MID',2,
+ N'Java Web Developer',
+ N'Lập trình web backend sử dụng Java, Spring MVC, Hibernate.',
+ N'2 năm kinh nghiệm lập trình Java, quen thuộc với cơ sở dữ liệu SQL.',
+ N'Hồng Bàng, Hải Phòng',
+ (SELECT province_id FROM provinces WHERE province_code = 'HAI_PHONG'),
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HP_HONG_BANG'),
+ 18000000,28000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 42: Junior Java Backend Developer - Hanoi
+(2,1,'JUNIOR',4,
+ N'Junior Java Backend Developer',
+ N'Hỗ trợ phát triển các tính năng backend Java/Spring.',
+ N'Biết Java Core, SQL Server, HTML/CSS cơ bản.',
+ N'Nam Từ Liêm, Hà Nội',
+ 1,
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HN_TU_LIEM'),
+ 10000000,16000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 43: Java System Architect - HCMC
+(2,1,'SENIOR',1,
+ N'Java System Architect',
+ N'Thiết kế kiến trúc hệ thống Java lớn, tích hợp hệ thống.',
+ N'Có kinh nghiệm Solution Architect hoặc Tech Lead hệ thống Java.',
+ N'Thủ Đức, TP. Hồ Chí Minh',
+ 2,
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HCM_LINH_TRUNG'),
+ 50000000,80000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 44: Java Backend Intern - Hai Phong
+(2,1,'FRESHER',5,
+ N'Java Backend Intern',
+ N'Thực tập lập trình Java backend, học hỏi và làm việc thực tế.',
+ N'Sinh viên năm cuối ngành CNTT, yêu thích lập trình Java.',
+ N'Ngô Quyền, Hải Phòng',
+ (SELECT province_id FROM provinces WHERE province_code = 'HAI_PHONG'),
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HP_NGO_QUYEN'),
+ 4000000,6000000,
+ 'INTERNSHIP','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 45: Java Software Engineer (Fintech) - Hanoi
+(3,1,'MID',3,
+ N'Java Software Engineer (Fintech)',
+ N'Phát triển hệ thống thanh toán ngân hàng, ví điện tử bằng Java.',
+ N'Có kinh nghiệm làm việc với hệ thống Fintech sử dụng Java, Spring Boot.',
+ N'Hoàn Kiếm, Hà Nội',
+ 1,
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HN_HOAN_KIEM'),
+ 20000000,35000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 46: Java Fullstack Developer (Java & ReactJS) - HCMC
+(3,1,'MID',2,
+ N'Java Fullstack Developer (Java & ReactJS)',
+ N'Phát triển cả Front-end (ReactJS) và Back-end (Java/Spring Boot).',
+ N'Thành thạo lập trình Java backend và ReactJS frontend.',
+ N'Quận 3, TP. Hồ Chí Minh',
+ 2,
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HCM_TAN_DINH'),
+ 22000000,38000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 47: Senior Java Developer (Hải Phòng) - Hai Phong
+(3,1,'SENIOR',2,
+ N'Senior Java Developer (Hải Phòng)',
+ N'Dẫn dắt đội ngũ phát triển ứng dụng Java, review code.',
+ N'Trên 4 năm kinh nghiệm làm việc với Java, Spring Core.',
+ N'Hồng Bàng, Hải Phòng',
+ (SELECT province_id FROM provinces WHERE province_code = 'HAI_PHONG'),
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HP_HONG_BANG'),
+ 30000000,45000000,
+ 'FULL_TIME','APPROVED',
+ DATEADD(DAY,30,GETDATE()),
+ 1,GETDATE()),
+
+-- 48: Java Technical Lead - Hanoi
+(2,1,'SENIOR',1,
+ N'Java Technical Lead',
+ N'Quản lý kỹ thuật dự án Java lớn, hướng dẫn các thành viên.',
+ N'Có kinh nghiệm làm Tech Lead hoặc Senior Java trên 6 năm.',
+ N'Cầu Giấy, Hà Nội',
+ 1,
+ (SELECT unit_id FROM administrative_units WHERE unit_code='HN_CAU_GIAY'),
+ 40000000,65000000,
  'FULL_TIME','APPROVED',
  DATEADD(DAY,30,GETDATE()),
  1,GETDATE());

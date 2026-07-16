@@ -23,9 +23,9 @@ public class controller {
         return "pages/candidate/my-applications";
     }
 
-    @GetMapping("/test4")
-    public String test4(){
-        return "pages/candidate/profile";
+    @GetMapping("/test5")
+    public String test5(){
+        return "pages/candidate/upload-cv";
     }
 
 

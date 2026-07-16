@@ -17,6 +17,7 @@ import vn.edu.fpt.hsf302_group5.service.administrativeunit.AdministrativeUnitSer
 import vn.edu.fpt.hsf302_group5.service.province.ProvinceService;
 import vn.edu.fpt.hsf302_group5.service.user.UserService;
 import vn.edu.fpt.hsf302_group5.service.verificationtoken.VerificationTokenService;
+import vn.edu.fpt.hsf302_group5.service.cloudinary.CloudinaryService;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class RegisterController {
     private final VerificationTokenService verificationTokenService;
     private final ProvinceService provinceService;
     private final AdministrativeUnitService administrativeUnitService;
+    private final CloudinaryService cloudinaryService;
 
     @GetMapping("/register")
     public String registerPage(Model model) {
@@ -99,8 +101,6 @@ public class RegisterController {
         return "redirect:/login";
     }
 
-    // Phần đăng kí tài khoản cho nhà tuyển dụng
-
     @GetMapping("/register-recruiter")
     public String registerRecruiterPage(Model model) {
         model.addAttribute("recruiterRegisterRequestDTO", new RecruiterRegisterRequest());
@@ -124,6 +124,10 @@ public class RegisterController {
             return "pages/public/register-recruiter";
         }
         try {
+            if (recruiterRegisterRequestDTO.getLogoFile() != null && !recruiterRegisterRequestDTO.getLogoFile().isEmpty()) {
+                String logoUrl = cloudinaryService.uploadFile(recruiterRegisterRequestDTO.getLogoFile());
+                recruiterRegisterRequestDTO.setLogoUrl(logoUrl);
+            }
             userService.saveRecruiter(recruiterRegisterRequestDTO);
         } catch (Exception e) {
             model.addAttribute("genders", Gender.values());
