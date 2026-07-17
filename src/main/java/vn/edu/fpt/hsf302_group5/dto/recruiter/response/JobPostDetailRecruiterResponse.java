@@ -7,29 +7,29 @@ import lombok.NoArgsConstructor;
 import vn.edu.fpt.hsf302_group5.entity.enums.EmploymentType;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobLevel;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JobPostDetailResponse {
-    private Integer jobPostId;
+public class JobPostDetailRecruiterResponse {
+    // --- Đã đổi tên trùng khớp hoàn toàn với Entity JobPost ---
+    private Integer jobId;
     private Integer vacancies;
     private String title;
-    private BigDecimal minSalary;
-    private BigDecimal maxSalary;
+    private String salaryDisplay;
     private JobLevel jobLevel;
-    private String location;
-    private LocalDateTime deadline;
+    private String locationDetail;
+    private LocalDateTime expiredDate;
     private EmploymentType employmentType;
-    private String skills;
-    private String requiment;
+    private JobStatus status;
+    private String requirement;
     private String description;
     private String benefit;
-    private JobStatus jobStatus;
 
+    private List<String> skillsName;
     private CompanyJobPostDetailResponse company;
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.JobPostFormRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDashboardResponse;
+import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDetailRecruiterResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
@@ -207,21 +208,6 @@ public class JobPostServiceImpl implements JobPostService {
         });
     }
 
-//    @Override
-//    @Transactional
-//    public void updateStatusJobPost(Integer jobPostId, JobStatus jobStatus) {
-//        // tìm ra job có id đc truyền vào
-//        JobPost jobPost = jobPostRepository.findById(jobPostId)
-//                .orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
-//
-//        if(JobStatus.APPROVED == jobStatus) {
-//            jobPost.setStatus(JobStatus.APPROVED);
-//        }else if(JobStatus.CLOSED == jobStatus) {
-//            jobPost.setStatus(JobStatus.CLOSED);
-//        }
-//        jobPostRepository.save(jobPost);
-//    }
-
     @Override
     @Transactional
     public JobPost updateJob(JobPostFormRequest jobPostForm) {
@@ -253,7 +239,25 @@ public class JobPostServiceImpl implements JobPostService {
     @Override
     public JobPostFormRequest updateFormRequest(Integer id) {
         JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
-        JobPostFormRequest jobPostFormRequest = jobPostMapper.toEntityUpdateForm(jobPost);
+        JobPostFormRequest jobPostFormRequest = jobPostMapper.toDtoUpdateForm(jobPost);
         return jobPostFormRequest;
+    }
+
+    @Override
+    public JobPostDetailRecruiterResponse getJobPostDetail(Integer id) {
+        //
+        JobPost jobPost = jobPostRepository.findByJobId(id).orElseThrow(() -> new IllegalArgumentException("Job không tồn tại!"));
+        //
+        return jobPostMapper.toDtoJobPostDetail(jobPost);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatusJob(Integer jobId, String status) {
+        if(JobStatus.APPROVED.toString().equals(status)) {
+            jobPostRepository.updateStatusJob(jobId,JobStatus.CLOSED);
+        }else if (JobStatus.CLOSED.toString().equals(status)){
+            jobPostRepository.updateStatusJob(jobId,JobStatus.APPROVED);
+        }
     }
 }

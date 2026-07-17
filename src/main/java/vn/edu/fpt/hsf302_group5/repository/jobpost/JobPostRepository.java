@@ -2,9 +2,7 @@ package vn.edu.fpt.hsf302_group5.repository.jobpost;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailResponse;
@@ -16,6 +14,7 @@ import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSpecificationExecutor<JobPost>{
@@ -135,4 +134,13 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
             Pageable pageable
 
     );
+
+    @EntityGraph(attributePaths = {"recruiter","recruiter.company", "jobSkills", "jobSkills.skill","province"})
+    Optional<JobPost> findByJobId(Integer id);
+
+    @Query("""
+        UPDATE JobPost j SET j.status = :newStatus WHERE j.jobId = :jobId
+""")
+    @Modifying
+    void updateStatusJob(@Param("jobId") Integer jobId,@Param("newStatus") JobStatus newStatus);
 }

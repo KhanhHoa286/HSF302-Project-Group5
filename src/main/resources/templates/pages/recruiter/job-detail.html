@@ -26,46 +26,46 @@
     ></div>
 
     <main class="recruiter-content">
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="my-job-posts.html" class="text-decoration-none"
-                    >Tin tuyển dụng</a
-                    >
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    Xem trước tin tuyển dụng
-                </li>
-            </ol>
-        </nav>
+        <div class="mb-4">
+            <a th:href="@{/recruiter/list-job-posts}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Quay lại
+            </a>
+        </div>
 
         <div class="row">
             <!-- Nội dung chính JD -->
             <div class="col-lg-8 mb-4">
                 <div class="card card-custom p-4 mb-4">
-                    <h3 class="fw-bold text-primary mb-3">
-                        Senior Frontend Developer (ReactJS)
+                    <h3 class="fw-bold text-primary mb-3" th:text="${jobDetail.title}">
+
                     </h3>
 
                     <div class="row g-3 mb-4 text-muted border-bottom pb-4">
                         <div class="col-md-6">
-                            <i class="bi bi-cash-stack text-success me-2"></i> Lương: 1000
-                            - 2000 USD
+                            <i class="bi bi-cash-stack text-success me-2"></i>
+                            <span th:text="${jobDetail.salaryDisplay}"></span>
                         </div>
-                        <div class="col-md-6">
-                            <i class="bi bi-geo-alt text-danger me-2"></i> Hồ Chí Minh
+                        <div class="col-md-6" >
+                            <i class="bi bi-geo-alt text-danger me-2"></i>
+                            <span th:text="${jobDetail.locationDetail}"></span>
                         </div>
-                        <div class="col-md-6">
-                            <i class="bi bi-briefcase text-primary me-2"></i> Kinh nghiệm:
-                            3-5 năm
+                        <div class="col-md-6" >
+                            <i class="bi bi-briefcase text-primary me-2"></i>
+                            <span th:text="'Kinh nghiệm: ' + ${jobDetail.jobLevel}"></span>
                         </div>
-                        <div class="col-md-6">
-                            <i class="bi bi-clock-history text-warning me-2"></i> Loại
-                            hình: Full-time
+                        <div class="col-md-6"  >
+                            <i class="bi bi-clock-history text-warning me-2"></i>
+                            <span th:text="'Loại hình: ' + ${jobDetail.employmentType}"></span>
                         </div>
-                        <div class="col-md-12">
-                            <i class="bi bi-calendar-x text-secondary me-2"></i> Hạn nộp:
-                            30/11/2026
+                        <div class="col-md-6 text-break">
+                            <i class="bi bi-tools text-info me-2"></i>
+                            <span>Kĩ năng: 
+                                <span th:text="${#strings.arrayJoin(jobDetail.skillsName,', ')}"></span>
+                            </span>
+                        </div>
+                        <div class="col-md-6" >
+                            <i class="bi bi-calendar-x text-secondary me-2"></i>
+                            <span  th:text="'Hạn nộp: '+ ${#temporals.format(jobDetail.expiredDate,'dd-MM-yyyy')}"></span>
                         </div>
                     </div>
 
@@ -76,13 +76,7 @@
                             Mô tả công việc
                         </h5>
                         <ul class="text-muted">
-                            <li class="mb-2">Phát triển ứng dụng Web sử dụng ReactJS.</li>
-                            <li class="mb-2">
-                                Tối ưu hoá hiệu suất trang web cho các thiết bị di động.
-                            </li>
-                            <li class="mb-2">
-                                Phối hợp với UI/UX Designer và Backend team.
-                            </li>
+                            <li class="mb-2"  th:text="${jobDetail.description}"></li>
                         </ul>
                     </div>
 
@@ -93,8 +87,18 @@
                             Yêu cầu ứng viên
                         </h5>
                         <ul class="text-muted">
-                            <li class="mb-2">Có ít nhất 3 năm kinh nghiệm frontend.</li>
-                            <li class="mb-2">Sử dụng thành thạo Git.</li>
+                            <li class="mb-2"  th:text="${jobDetail.requirement}"></li>
+                        </ul>
+                    </div>
+                    <div class="mb-4">
+                        <h5
+                                class="fw-bold mb-3 border-start border-primary border-4 ps-2"
+                        >
+                            Quyển lợi
+                        </h5>
+                        <ul class="text-muted">
+                                <li class="mb-2" th:if="${not #strings.isEmpty(jobDetail.benefit)}" th:text="${jobDetail.benefit}"></li>
+                                <li class="mb-2"  th:if="${#strings.isEmpty(jobDetail.benefit)}" th:text="'Trống'"></li>
                         </ul>
                     </div>
                 </div>
@@ -107,13 +111,13 @@
                             class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom"
                     >
                         <img
-                                src="https://ui-avatars.com/api/?name=TechCorp&background=random&color=fff&size=60"
+                                th:src="${jobDetail.company.logoUrl}"
                                 alt="Logo"
                                 class="rounded border p-1"
                                 style="width: 60px"
                         />
                         <div>
-                            <h6 class="fw-bold mb-1">TechCorp Vietnam</h6>
+                            <h6 class="fw-bold mb-1" th:text="${jobDetail.company.companyName}"></h6>
                             <a
                                     href="company-profile.html"
                                     class="small text-decoration-none"
@@ -125,62 +129,37 @@
                     <h5 class="fw-bold mb-3">Thông tin bài đăng</h5>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-muted">Trạng thái:</span>
-                        <span class="badge badge-soft-success">Đang tuyển</span>
+                        <span class="badge " th:classappend="${jobDetail.status.name() == 'APPROVED' ? 'bg-success' : (jobDetail.status.name() == 'PENDING' ? 'bg-warning' : (jobDetail.status.name() == 'REJECTED' ? 'bg-danger' : 'bg-secondary'))}" th:text="${jobDetail.status.displayName}"></span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-muted">Số ứng viên:</span>
-                        <span class="fw-bold text-success">15</span>
+                        <span class="fw-bold text-success" th:text="${jobDetail.vacancies}"></span>
                     </div>
 
                     <hr class="my-4 text-muted" />
 
                     <a
-                            href="edit-job.html"
+                            th:href="@{/recruiter/update-job/{id}(id=${jobDetail.jobId})}"
                             class="btn btn-outline-primary-custom w-100 mb-2"
                     ><i class="bi bi-pencil me-2"></i>Chỉnh sửa tin này</a
                     >
+                    <form th:action="@{/recruiter/update-status-job}" method="POST"
+                          th:if="${jobDetail.status.name() == 'APPROVED' || jobDetail.status.name() == 'CLOSED'}">
+                        <input type="hidden" th:value="${jobDetail.jobId}" name="job_id">
+                        <input type="hidden" th:value="${jobDetail.status}" name="status">
                     <button
-                            class="btn btn-outline-danger w-100"
+                            th:class= "${jobDetail.status.name() == 'APPROVED'? 'btn btn-outline-danger w-100' : 'btn btn-outline-success w-100'}";
                             data-bs-toggle="modal"
                             data-bs-target="#closeJobModal"
+                            th:text="${jobDetail.status.name() == 'APPROVED' ? 'Đóng tin ngay' : 'Mở tin ngay'}"
                     >
-                        <i class="bi bi-stop-circle me-2"></i>Đóng tin ngay
+                        <i class="bi bi-stop-circle me-2"></i>
                     </button>
+                    </form>
                 </div>
             </div>
         </div>
     </main>
-</div>
-
-<!-- Modal Đóng Tin -->
-<div class="modal fade" id="closeJobModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold">Xác nhận đóng tin</h5>
-                <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                ></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn đóng tin tuyển dụng
-                <strong>Senior Frontend Developer</strong> không? Ứng viên sẽ không
-                thể nộp hồ sơ được nữa.
-            </div>
-            <div class="modal-footer border-top-0">
-                <button
-                        type="button"
-                        class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal"
-                >
-                    Hủy
-                </button>
-                <button type="button" class="btn btn-danger px-4">Đóng tin</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
