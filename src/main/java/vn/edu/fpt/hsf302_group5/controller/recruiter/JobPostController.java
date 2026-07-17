@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.hsf302_group5.dto.industry.IndustryResponse;
 import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.JobPostFormRequest;
+import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDetailRecruiterResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.SkillResponse;
 import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
@@ -128,8 +129,17 @@ public class JobPostController {
     }
 
     @GetMapping("/job-detail/{id}")
-    public String showJobDetail(Model model) {
-
+    public String showJobDetail(Model model,@PathVariable("id")Integer id) {
+        //
+        JobPostDetailRecruiterResponse response = jobPostService.getJobPostDetail(id);
+        model.addAttribute("jobDetail", response);
+        //
         return "pages/recruiter/job-detail";
+    }
+
+    @PostMapping("/update-status-job")
+    public String updateStatusJob(@RequestParam("job_id")Integer jobId, @RequestParam("status")String status) {
+        jobPostService.updateStatusJob(jobId,status);
+        return "redirect:/recruiter/job-detail/" + jobId;
     }
 }

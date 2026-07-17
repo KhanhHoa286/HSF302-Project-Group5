@@ -9,18 +9,18 @@ import vn.edu.fpt.hsf302_group5.entity.enums.JobLevel;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JobPostDetailResponse {
+public class JobPostDetailRecruiterResponse {
     // --- Đã đổi tên trùng khớp hoàn toàn với Entity JobPost ---
     private Integer jobId;
     private Integer vacancies;
     private String title;
-    private BigDecimal salaryMin;
-    private BigDecimal salaryMax;
+    private String salaryDisplay;
     private JobLevel jobLevel;
     private String locationDetail;
     private LocalDateTime expiredDate;
@@ -30,6 +30,6 @@ public class JobPostDetailResponse {
     private String description;
     private String benefit;
 
-    private String skills;
+    private List<String> skillsName;
     private CompanyJobPostDetailResponse company;
 }

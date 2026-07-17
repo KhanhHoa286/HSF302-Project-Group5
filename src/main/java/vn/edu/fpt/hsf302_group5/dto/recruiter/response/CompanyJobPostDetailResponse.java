@@ -13,4 +13,5 @@ public class CompanyJobPostDetailResponse {
     private Integer companyId;
     private String companyImage;
     private String companyName;
+    private String logoUrl;
 }

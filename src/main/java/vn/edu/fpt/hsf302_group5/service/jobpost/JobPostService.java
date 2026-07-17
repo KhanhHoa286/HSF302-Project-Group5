@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.JobPostFormRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDashboardResponse;
+import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDetailRecruiterResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
@@ -34,5 +35,7 @@ public interface JobPostService {
 
       JobPostFormRequest updateFormRequest(Integer id);
 
-      JobPostDetailResponse getJobPostDetail(Integer id);
+      JobPostDetailRecruiterResponse getJobPostDetail(Integer id);
+
+      void updateStatusJob(Integer jobId, String status);
 }

@@ -2,10 +2,7 @@ package vn.edu.fpt.hsf302_group5.repository.jobpost;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostDetailResponse;
@@ -138,6 +135,12 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
 
     );
 
-    @EntityGraph(attributePaths = {"recruiter","company", "jobSkills", "jobSkills.skill","province"})
-    Optional<JobPost> findByJobPostId(Integer id);
+    @EntityGraph(attributePaths = {"recruiter","recruiter.company", "jobSkills", "jobSkills.skill","province"})
+    Optional<JobPost> findByJobId(Integer id);
+
+    @Query("""
+        UPDATE JobPost j SET j.status = :newStatus WHERE j.jobId = :jobId
+""")
+    @Modifying
+    void updateStatusJob(@Param("jobId") Integer jobId,@Param("newStatus") JobStatus newStatus);
 }
