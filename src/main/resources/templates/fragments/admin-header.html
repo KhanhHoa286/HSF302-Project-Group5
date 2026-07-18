@@ -1,0 +1,40 @@
+<header th:fragment="admin-header" class="navbar navbar-expand-lg navbar-light bg-white sticky-top"
+        xmlns:th="http://www.thymeleaf.org">
+    <div class="container">
+        <a class="navbar-brand text-primary fw-bold fs-4" th:href="@{/admin/dashboard}">
+            <i class="bi bi-briefcase-fill me-2"></i>JobPortal
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <div class="me-auto"></div>
+
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img th:src="${adminUser != null && adminUser.avatarUrl != null && !adminUser.avatarUrl.isEmpty() ? adminUser.avatarUrl : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}"
+                         class="rounded-circle navbar-avatar"
+                         alt="Avatar">
+                    <span th:text="${adminUser != null ? adminUser.fullName : 'Admin'}" class="fw-semibold">Admin</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+                    <li>
+                        <a class="dropdown-item" th:href="@{/admin/profile}">
+                            <i class="bi bi-person me-2"></i>Thông tin cá nhân
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form th:action="@{/logout}" method="post" class="m-0">
+                            <button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
+                                <i class="bi bi-box-arrow-right me-2"></i>Đăng xuất
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

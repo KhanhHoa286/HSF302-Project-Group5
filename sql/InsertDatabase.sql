@@ -3081,12 +3081,12 @@ VALUES
 -- INDUSTRY
 -- =========================
 INSERT INTO industries
-(industry_name)
+(industry_name, status)
 VALUES
-    (N'Information Technology'),
-    (N'Artificial Intelligence'),
-    (N'Cyber Security'),
-    (N'Business Analyst');
+    (N'Information Technology', 'ACTIVE'),
+    (N'Artificial Intelligence', 'ACTIVE'),
+    (N'Cyber Security', 'ACTIVE'),
+    (N'Business Analyst', 'ACTIVE');
 
 -- =========================
 -- COMPANY INDUSTRY
