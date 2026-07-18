@@ -77,6 +77,97 @@ header.sticky-top {
     background: #ffffff;
 }
 
+.navbar-avatar {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+}
+
+.icon-3rem {
+    font-size: 3rem;
+}
+
+.icon-3-5rem {
+    font-size: 3.5rem;
+}
+
+.sticky-offset-90 {
+    top: 90px;
+}
+
+.rounded-12 {
+    border-radius: 12px;
+}
+
+.rounded-8 {
+    border-radius: 8px;
+}
+
+.btn-dashed {
+    border-style: dashed;
+}
+
+.hidden-template {
+    display: none;
+}
+
+.max-w-200 {
+    max-width: 200px;
+}
+
+.square-50 {
+    width: 50px;
+    height: 50px;
+}
+
+.company-logo-contain-sm {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.company-logo-contain-lg {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.company-logo-cover-sm {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.w-60 {
+    width: 60px;
+}
+
+.avatar-70 {
+    width: 70px;
+    height: 70px;
+}
+
+.border-2 {
+    border: 2px solid;
+}
+
+.min-h-300 {
+    min-height: 300px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.link-plain-dark {
+    color: #000000;
+    text-decoration: none;
+}
+
+.sidebar-title-icon {
+    font-size: 1.2rem;
+}
+
 /* 6. Phân trang (Pagination - Nút 1, 2, 3...) */
 .pagination .page-link {
     color: #212529;

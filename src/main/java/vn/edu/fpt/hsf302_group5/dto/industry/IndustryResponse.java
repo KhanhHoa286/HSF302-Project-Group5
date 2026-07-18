@@ -1,13 +1,9 @@
 package vn.edu.fpt.hsf302_group5.dto.industry;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vn.edu.fpt.hsf302_group5.entity.enums.IndustryStatus;
 
 @Getter
 @Setter
@@ -18,8 +14,11 @@ public class IndustryResponse {
 
     private String industryName;
 
-    public IndustryResponse(Integer industryId, String industryName) {
+    private IndustryStatus status;
+
+    public IndustryResponse(Integer industryId, String industryName, IndustryStatus status) {
         this.industryId = industryId;
         this.industryName = industryName;
+        this.status = status;
     }
 }

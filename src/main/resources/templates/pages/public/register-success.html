@@ -16,32 +16,32 @@
 
 <div th:replace="~{fragments/header :: header(activePage='register')}"></div>
 
-<section class="auth-wrapper d-flex align-items-center justify-content-center" style="background-color: #f4f6f8; min-height: 70vh; padding: 2rem 0;">
+<section class="auth-wrapper d-flex align-items-center justify-content-center register-success-wrapper">
     <div class="container d-flex justify-content-center">
         <div class="success-card">
             <div class="icon-circle">
                 <i class="bi bi-envelope-check-fill"></i>
             </div>
             
-            <h3 th:unless="${forgotPassword}" class="fw-bold mb-3" style="color: #212f3f;">Đăng ký tài khoản thành công!</h3>
-            <h3 th:if="${forgotPassword}" class="fw-bold mb-3" style="color: #212f3f;">Yêu cầu cấp lại mật khẩu thành công!</h3>
+            <h3 th:unless="${forgotPassword}" class="fw-bold mb-3 auth-title">Đăng ký tài khoản thành công!</h3>
+            <h3 th:if="${forgotPassword}" class="fw-bold mb-3 auth-title">Yêu cầu cấp lại mật khẩu thành công!</h3>
 
             <!-- Alert khi gửi lại email thành công -->
-            <div th:if="${resent}" class="alert alert-success d-flex align-items-center gap-2 py-2 px-3 mb-3 mx-auto" role="alert" style="border-radius: 8px; font-size: 0.9rem; max-width: 400px;">
+            <div th:if="${resent}" class="alert alert-success d-flex align-items-center gap-2 py-2 px-3 mb-3 mx-auto alert-compact mx-auto" role="alert" >
                 <i class="bi bi-check-circle-fill"></i>
                 <span>Đã gửi lại email xác thực thành công!</span>
             </div>
 
             <!-- Alert khi gửi lại thất bại (lỗi) -->
-            <div th:if="${error != null || param.error != null}" class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3 mx-auto" role="alert" style="border-radius: 8px; font-size: 0.9rem; max-width: 400px;">
+            <div th:if="${error != null || param.error != null}" class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-3 mx-auto alert-compact mx-auto" role="alert" >
                 <i class="bi bi-exclamation-triangle-fill"></i>
                 <span th:text="${error != null ? error : param.error}">Có lỗi xảy ra khi gửi lại email!</span>
             </div>
             
-            <p th:unless="${forgotPassword}" class="text-muted mb-4" style="font-size: 1.05rem; line-height: 1.6;">
+            <p th:unless="${forgotPassword}" class="text-muted mb-4 success-copy">
                 Chào mừng bạn đến với <strong class="text-green-topcv">JobPortal</strong>. Một email xác thực đã được gửi tới địa chỉ <strong th:text="${email}">email của bạn</strong>. Vui lòng kiểm tra hòm thư (bao gồm cả thư mục Spam/Quảng cáo) và click vào liên kết xác nhận để kích hoạt tài khoản.
             </p>
-            <p th:if="${forgotPassword}" class="text-muted mb-4" style="font-size: 1.05rem; line-height: 1.6;">
+            <p th:if="${forgotPassword}" class="text-muted mb-4 success-copy">
                 Chào mừng bạn đến với <strong class="text-green-topcv">JobPortal</strong>. Một email xác thực đã được gửi tới địa chỉ <strong th:text="${email}">email của bạn</strong>. Vui lòng kiểm tra hòm thư (bao gồm cả thư mục Spam/Quảng cáo) và click vào liên kết xác nhận để cài lại mật khẩu cho tài khoản.
             </p>
 

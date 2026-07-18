@@ -2,6 +2,7 @@ package vn.edu.fpt.hsf302_group5.controller.candidate;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.hsf302_group5.dto.industry.IndustryResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
 import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.service.industry.IndustryService;
 import vn.edu.fpt.hsf302_group5.service.jobpost.JobPostService;
@@ -49,7 +51,8 @@ public class ListJobController {
                           @RequestParam(value = "salary-operator", required = false) List<String> salaryOperators,
                           @RequestParam(value = "expire", required = false)List<LocalDate> expireDate,
                           @RequestParam(value = "expire-operator", required = false) List<String> expireOperator,@RequestParam(value = "sort", required = false)List<String> sort,
-                          @RequestParam(value = "sort-operator", required = false) List<String> sortOperator) {
+                          @RequestParam(value = "sort-operator", required = false) List<String> sortOperator,
+                          @AuthenticationPrincipal CustomUserDetailsResponse userDetails) {
 
         List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
         List<IndustryResponse> industryResponses = industryService.getAllIndustryResponse();
@@ -88,9 +91,19 @@ public class ListJobController {
         model.addAttribute("expireOperator", expireOperator);
         model.addAttribute("sort", sort);
         model.addAttribute("sortOperator", sortOperator);
+        model.addAttribute("isCandidate", hasAuthority(userDetails, "CANDIDATE"));
+        model.addAttribute("isRecruiter", hasAuthority(userDetails, "RECRUITER"));
+        model.addAttribute("isAdmin", hasAuthority(userDetails, "ADMIN"));
         model.addAttribute("filterLogicInOtherConditions", filterLogicInOtherConditions);
         model.addAttribute("filterLogicInSameConditions", filterLogicInSameConditions);
         return "pages/candidate/job-list";
+    }
+
+    private boolean hasAuthority(CustomUserDetailsResponse userDetails, String authority) {
+        return userDetails != null
+                && userDetails.getAuthorities() != null
+                && userDetails.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> authority.equals(grantedAuthority.getAuthority()));
     }
 
 }

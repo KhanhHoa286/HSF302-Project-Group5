@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface CandidateProfileService {
     CandidateProfileResponse getCandidateProfileByEmail(String email);
+    CandidateProfileResponse getCandidateProfileById(Integer id);
     void updatePersonalProfile(String email, CandidateProfileRequest request);
     void addEducation(String email, EducationRequest request);
     void deleteEducation(String email, Integer educationId);

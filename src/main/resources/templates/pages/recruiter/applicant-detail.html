@@ -33,7 +33,7 @@
           <div class="card card-custom p-4 mb-4">
             <h5 class="fw-bold border-bottom pb-2 mb-3">Thông tin ứng viên</h5>
             <div class="d-flex align-items-center gap-3 mb-4">
-              <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold fs-3 overflow-hidden" style="width: 70px; height: 70px;">
+              <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold fs-3 overflow-hidden avatar-70">
                 <!-- 1. Nếu có avatarUrl -> Hiển thị ảnh của ứng viên -->
                 <img th:if="${applicant.avatarUrl != null and applicant.avatarUrl != ''}" 
                      th:src="${applicant.avatarUrl}" 
@@ -138,7 +138,7 @@
           </div>
 
           <!-- Card xử lý trạng thái -->
-          <div class="card card-custom p-4 mb-4 border-primary shadow-sm" style="border: 2px solid;">
+          <div class="card card-custom p-4 mb-4 border-primary shadow-sm border-2">
             <h5 class="fw-bold text-center mb-3 text-primary">Cập nhật trạng thái</h5>
             <div class="d-flex flex-column gap-2">
               <form th:action="@{/recruiter/applicant/update-status}" method="post" class="d-grid">
@@ -196,14 +196,14 @@
           </div>
           
           <!-- Preview CV -->
-          <div class="card card-custom p-4 sticky-top" style="top: 90px;">
+          <div class="card card-custom p-4 sticky-top sticky-offset-90">
             <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
               <h5 class="fw-bold mb-0">Hồ sơ đính kèm</h5>
               <a th:if="${applicant.cvUrl != null}" th:href="${applicant.cvUrl}" class="btn btn-sm btn-outline-primary-custom" target="_blank" download>
                 <i class="bi bi-download me-1"></i> Tải CV
               </a>
             </div>
-            <div class="bg-light border rounded d-flex align-items-center justify-content-center p-4 mb-3" style="min-height: 300px;">
+            <div class="bg-light border rounded d-flex align-items-center justify-content-center p-4 mb-3 min-h-300">
               <div th:if="${applicant.cvUrl != null}" class="text-center w-100">
                 <i class="bi bi-file-earmark-pdf text-danger display-1 mb-2"></i>
                 <h6 class="fw-bold text-truncate px-2" th:text="${applicant.cvName}">CV_NguyenVanA.pdf</h6>
