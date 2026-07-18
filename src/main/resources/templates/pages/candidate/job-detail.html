@@ -42,8 +42,15 @@
                                 <h3 class="fw-bold mb-1 text-primary"
                                     th:text="${jobPostDetailDTO.jobtitle != null ? jobPostDetailDTO.jobtitle : ''}">
                                     Senior Frontend Developer (ReactJS)</h3>
-                                <p class="text-muted mb-0 fs-5" th:text="${jobPostDetailDTO.companyName}">TechCorp
-                                    Vietnam JSC</p>
+                                <p class="mb-0 fs-5">
+                                    <a th:if="${jobPostDetailDTO.companyId != null}" 
+                                       th:href="@{/company/profile/{id}(id=${jobPostDetailDTO.companyId})}" 
+                                       class="text-decoration-none text-primary fw-semibold" 
+                                       th:text="${jobPostDetailDTO.companyName}">TechCorp Vietnam JSC</a>
+                                    <span th:if="${jobPostDetailDTO.companyId == null}" 
+                                          class="text-muted" 
+                                          th:text="${jobPostDetailDTO.companyName}">TechCorp Vietnam JSC</span>
+                                </p>
                             </div>
                         </div>
 

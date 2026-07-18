@@ -78,7 +78,8 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
                  j.status, 
                  j.postedDate, 
                  j.expiredDate, 
-                 au.unitName
+                 au.unitName,
+                 c.companyId
              ) 
              FROM JobPost j 
              LEFT JOIN j.recruiter r 

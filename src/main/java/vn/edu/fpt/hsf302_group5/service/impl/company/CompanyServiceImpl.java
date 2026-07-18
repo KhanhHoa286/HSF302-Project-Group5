@@ -87,4 +87,12 @@ public class CompanyServiceImpl implements CompanyService {
         companyRepository.save(company);
         userRepository.save(user);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CompanyProfileResponse getCompanyProfileById(Integer companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy doanh nghiệp!"));
+        return companyMapper.toResponse(company);
+    }
 }
