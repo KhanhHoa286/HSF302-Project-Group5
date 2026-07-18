@@ -78,6 +78,18 @@
                             </select>
                         </div>
 
+                        <!-- 4. Doanh nghiệp -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Doanh nghiệp</label>
+                            <select class="form-select form-select-sm" name="company">
+                                <option value="-1">Tất cả doanh nghiệp</option>
+                                <option th:each="comp : ${companies}"
+                                        th:text="${comp.getCompanyName()}"
+                                        th:value="${comp.getCompanyId()}"
+                                        th:selected="${companyId != null and !companyId.isEmpty() and companyId[0] == comp.getCompanyId()}"></option>
+                            </select>
+                        </div>
+
                         <!-- 4. Lương tối thiểu -->
                         <div class="mb-3">
                             <label class="form-label text-muted small fw-bold">Mức lương tối thiểu</label>
@@ -92,6 +104,7 @@
                                 <option value="postedDate-asc" th:selected="${sort != null and !sort.isEmpty() and sort[0] == 'postedDate' and sortOperator[0] == 'asc'}">Cũ nhất</option>
                                 <option value="salaryMax-desc" th:selected="${sort != null and !sort.isEmpty() and sort[0] == 'salaryMax' and sortOperator[0] == 'desc'}">Lương cao nhất</option>
                                 <option value="salaryMin-asc" th:selected="${sort != null and !sort.isEmpty() and sort[0] == 'salaryMin' and sortOperator[0] == 'asc'}">Lương thấp nhất</option>
+                                <option value="applications-desc" th:selected="${sort != null and !sort.isEmpty() and sort[0] == 'applications' and sortOperator[0] == 'desc'}">Hot nhất (Ứng tuyển nhiều)</option>
                             </select>
                         </div>
 

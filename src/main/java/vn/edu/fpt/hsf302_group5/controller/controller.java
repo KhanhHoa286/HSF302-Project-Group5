@@ -1,12 +1,17 @@
 package vn.edu.fpt.hsf302_group5.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.ResponseBody;
+import vn.edu.fpt.hsf302_group5.dto.home.HomeDto;
+import vn.edu.fpt.hsf302_group5.service.home.HomeService;
 
 @Controller
+@RequiredArgsConstructor
 public class controller {
+
+    private final HomeService homeService;
 
     @GetMapping("/test")
     public String test(){
@@ -30,7 +35,9 @@ public class controller {
 
 
     @GetMapping("/")
-    public String test6(){
+    public String test6(Model model){
+        HomeDto homeDto = homeService.getHomeData();
+        model.addAttribute("homeData", homeDto);
         return "pages/public/home";
     }
 

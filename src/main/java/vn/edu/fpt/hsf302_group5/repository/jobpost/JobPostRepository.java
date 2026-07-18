@@ -41,6 +41,24 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
         j.recruiter.company.logoUrl
     )
     from JobPost j
+    left join j.applications a
+    where j.status = vn.edu.fpt.hsf302_group5.entity.enums.JobStatus.APPROVED
+    group by j.jobId, j.title, j.recruiter.company.companyName, j.province.provinceName, j.salaryMin, j.salaryMax, j.expiredDate, j.recruiter.company.logoUrl
+    order by COUNT(a.applicationId) desc
+    """)
+    Page<JobPostResponse> findTopFeaturedJobs(Pageable pageable);
+
+    @Query("""
+    select new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse(
+        j.jobId, j.title,
+        j.recruiter.company.companyName,
+        j.province.provinceName,
+        j.salaryMin,
+        j.salaryMax,
+        j.expiredDate,
+        j.recruiter.company.logoUrl
+    )
+    from JobPost j
     where (:searchKeyword is null
            or lower(j.title) like lower(concat('%', :searchKeyword, '%')))
       and (:industryId is null

@@ -8,6 +8,8 @@ import vn.edu.fpt.hsf302_group5.entity.Industry;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.JobPost_;
 import vn.edu.fpt.hsf302_group5.entity.Province;
+import vn.edu.fpt.hsf302_group5.entity.Company;
+import vn.edu.fpt.hsf302_group5.entity.Recruiter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -104,6 +106,14 @@ public class JobPostSpecification {
         return ((root, query, criteriaBuilder) -> {
             Join<JobPost, Province> province = root.join("province");
             return criteriaBuilder.equal(province.get("provinceId"), provinceId);
+        });
+    }
+
+    public static Specification<JobPost> hasCompany(Integer companyId) {
+        return ((root, query, criteriaBuilder) -> {
+            Join<JobPost, Recruiter> recruiter = root.join("recruiter");
+            Join<Recruiter, Company> company = recruiter.join("company");
+            return criteriaBuilder.equal(company.get("companyId"), companyId);
         });
     }
 

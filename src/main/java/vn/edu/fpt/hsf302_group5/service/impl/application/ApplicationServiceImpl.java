@@ -14,6 +14,7 @@ import vn.edu.fpt.hsf302_group5.service.application.ApplicationService;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.ApplicantDetailResponse;
 import vn.edu.fpt.hsf302_group5.mapper.ApplicationMapper;
 import org.springframework.transaction.annotation.Transactional;
+import vn.edu.fpt.hsf302_group5.service.email.EmailService;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
+    private final EmailService emailService;
 
     @Override
     public Page<ApplicantResponse> getApplicantsByFilter(Integer jobId, String searchKeyword, String status, int page) {
@@ -64,13 +66,34 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     @Transactional
     public void updateApplicationStatus(Integer applicationId, String status) {
-        Application application = applicationRepository.findById(applicationId)
+        Application application = applicationRepository.findByIdWithDetails(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy hồ sơ ứng tuyển với ID: " + applicationId));
 
         try {
             ApplicationStatus newStatus = ApplicationStatus.valueOf(status.toUpperCase().trim());
+            ApplicationStatus oldStatus = application.getStatus();
             application.setStatus(newStatus);
             applicationRepository.save(application);
+
+            if (newStatus == ApplicationStatus.INTERVIEWED && oldStatus != ApplicationStatus.INTERVIEWED) {
+                String toEmail = application.getCandidateEmail();
+                if (toEmail != null && !toEmail.isEmpty()) {
+                    String candidateName = application.getCandidateFullName();
+                    String jobTitle = application.getJobTitle();
+                    String companyName = "Công ty";
+                    if (application.getJobPost() != null && 
+                        application.getJobPost().getRecruiter() != null && 
+                        application.getJobPost().getRecruiter().getCompany() != null) {
+                        companyName = application.getJobPost().getRecruiter().getCompany().getCompanyName();
+                    }
+                    emailService.sendInterviewInvitationEmail(
+                            toEmail,
+                            candidateName != null ? candidateName : "Ứng viên",
+                            jobTitle != null ? jobTitle : "Vị trí tuyển dụng",
+                            companyName
+                    );
+                }
+            }
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Trạng thái không hợp lệ: " + status);
         }

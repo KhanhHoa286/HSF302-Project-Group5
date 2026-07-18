@@ -27,7 +27,7 @@ public interface JobPostService {
 
       Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page,int recruiterId);
 
-      Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> operators, List<LocalDate> expireDate, List<String> salaryOperators, List<String> sort, List<String> sortOperator);
+      Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<Integer> companyId, List<String> companyOperators, List<BigDecimal> salary, List<String> operators, List<LocalDate> expireDate, List<String> salaryOperators, List<String> sort, List<String> sortOperator);
 
 //      void updateStatusJobPost(Integer jobPostId,JobStatus jobStatus);
 
