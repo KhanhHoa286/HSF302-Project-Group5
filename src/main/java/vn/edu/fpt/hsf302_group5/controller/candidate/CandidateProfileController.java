@@ -43,7 +43,7 @@ public class CandidateProfileController {
     @GetMapping("/candidate/profile")
     @PreAuthorize("hasAuthority('CANDIDATE')")
     public String showProfile(Model model,
-                              @AuthenticationPrincipal UserDetails userDetails,
+                              @AuthenticationPrincipal CustomUserDetailsResponse userDetails,
                               @RequestParam(value = "successMessage", required = false) String successMessage,
                               @RequestParam(value = "errorMessage", required = false) String errorMessage) {
         if (successMessage != null) {

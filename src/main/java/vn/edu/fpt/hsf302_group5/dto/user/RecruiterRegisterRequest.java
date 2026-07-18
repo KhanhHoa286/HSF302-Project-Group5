@@ -2,7 +2,6 @@ package vn.edu.fpt.hsf302_group5.dto.user;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.fpt.hsf302_group5.entity.enums.Gender;
 
@@ -13,36 +12,36 @@ import vn.edu.fpt.hsf302_group5.entity.enums.Gender;
 @Builder
 public class RecruiterRegisterRequest {
 
-    @NotBlank(message = "Không được để trống!")
-    @Email(message = "Phải đúng định dạng của Email!")
+    @NotBlank(message = "{validation.email.notblank}")
+    @Email(message = "{validation.email.format}")
     private String email;
 
-    @NotBlank(message = "Mật khẩu không được để trống!")
-    @Size(min = 6, max = 255, message = "Mật khẩu phải từ 6 đến 255 ký tự!")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&*()!]).+$", message = "Mật khẩu phải bao gồm cả chữ thường, chữ hoa, chữ số và kí tự đặc biệt!")
+    @NotBlank(message = "{validation.password.notblank}")
+    @Size(min = 6, max = 255, message = "{validation.password.size}")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&*()!]).+$", message = "{validation.password.pattern}")
     private String password;
     private String confirmPassword;
 
-    @NotBlank(message = "Họ tên không được để trống!")
+    @NotBlank(message = "{validation.fullName.notblank}")
     private String fullName;
 
-    @NotNull(message = "Giới tính không được để trống!")
+    @NotNull(message = "{recruiter.gender.notnull}")
     private Gender gender;
 
-    @NotBlank(message = "Điện thoại không được để trống!")
-    @Pattern(regexp = "^(03|05|07|08|09)[0-9]{8}$", message = "Điện thoại phải đúng định dạng!")
+    @NotBlank(message = "{recruiter.phoneNumber.notblank}")
+    @Pattern(regexp = "^(03|05|07|08|09)[0-9]{8}$", message = "{recruiter.phoneNumber.pattern}")
     private String phoneNumber;
 
-    @NotNull(message = "Tên công ty không được để trống!")
+    @NotNull(message = "{recruiter.companyName.notnull}")
     private String companyName;
 
-    @NotNull(message = "Tên tỉnh không được để trống!")
+    @NotNull(message = "{recruiter.provinceId.notnull}")
     private Integer provinceId;
 
-    @NotNull(message = "Tên phường/xã không được để trống!")
+    @NotNull(message = "{recruiter.administratorUnitId.notnull}")
     private Integer administratorUnitId;
 
-    @NotBlank(message = "Địa chỉ cụ thể không được để trống!")
+    @NotBlank(message = "{recruiter.addressSpecific.notblank}")
     private String addressSpecific;
 
     private String website;
