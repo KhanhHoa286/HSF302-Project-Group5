@@ -25,7 +25,7 @@
         <div class="row g-4">
             <!-- Trường hợp không có việc làm nào đã lưu -->
             <div class="col-12 text-center py-5" th:if="${#lists.isEmpty(savedJobs)}">
-                <i class="bi bi-heartbreak text-muted" style="font-size: 3.5rem;"></i>
+                <i class="bi bi-heartbreak text-muted icon-3-5rem"></i>
                 <p class="text-muted mt-3 fs-5">Bạn chưa lưu việc làm nào.</p>
                 <a th:href="@{/candidate/jobs/list-job}" class="btn btn-primary-custom px-4 py-2 mt-2 text-decoration-none">Tìm việc ngay</a>
             </div>
@@ -35,7 +35,7 @@
                 <div class="card card-custom p-3 h-100 d-flex flex-column">
                     <div class="d-flex align-items-center gap-3 mb-3">
                         <img th:src="${saved.jobPost.recruiter.company.logoUrl != null ? saved.jobPost.recruiter.company.logoUrl : 'https://ui-avatars.com/api/?name=' + saved.jobPost.recruiter.company.companyName + '&background=random&color=fff&size=60'}" 
-                             alt="Company" class="rounded border p-1" style="width: 60px; height: 60px; object-fit: cover;">
+                             alt="Company" class="rounded border p-1 company-logo-cover-sm">
                         <div>
                             <h6 class="fw-bold mb-1 text-primary" th:text="${saved.jobPost.title}">UI/UX Designer</h6>
                             <p class="text-muted small mb-0" th:text="${saved.jobPost.recruiter.company.companyName}">Creative Tech Studio</p>

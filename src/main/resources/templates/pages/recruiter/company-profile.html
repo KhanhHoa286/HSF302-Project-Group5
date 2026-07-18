@@ -80,16 +80,16 @@
           <div class="col-lg-4">
             <div class="card card-custom p-4 mb-4">
               <h5 class="fw-bold border-bottom pb-2 mb-4">Logo công ty</h5>
-              <div class="logo-upload-area mb-3 text-center p-3 border border-dashed rounded" style="cursor: pointer;">
+              <div class="logo-upload-area mb-3 text-center p-3 border border-dashed rounded cursor-pointer">
                 <i class="bi bi-cloud-arrow-up display-4 text-muted mb-3 d-block"></i>
                 <span class="fw-500">Nhấp vào đây để chọn logo</span>
                 <p class="text-muted small mt-2 mb-0">Định dạng: JPG, PNG. Max: 2MB.</p>
-                <input type="file" id="logoFileInput" th:field="*{logoFile}" accept="image/png, image/jpeg" style="display: none;">
+                <input type="file" id="logoFileInput" th:field="*{logoFile}" accept="image/png, image/jpeg" class="d-none">
               </div>
               <span class="text-danger small d-block text-center mb-2" th:if="${#fields.hasErrors('logoFile')}" th:errors="*{logoFile}"></span>
               
               <div class="text-center">
-                <img id="logoPreview" th:src="${companyProfileForm.logoUrl != null && !companyProfileForm.logoUrl.isEmpty() ? companyProfileForm.logoUrl : 'https://ui-avatars.com/api/?name=Upload+Logo&background=e9ecef&color=adb5bd&size=150'}" class="img-thumbnail rounded" style="max-height: 150px; max-width: 100%; object-fit: contain;" alt="Preview">
+                <img id="logoPreview" th:src="${companyProfileForm.logoUrl != null && !companyProfileForm.logoUrl.isEmpty() ? companyProfileForm.logoUrl : 'https://ui-avatars.com/api/?name=Upload+Logo&background=e9ecef&color=adb5bd&size=150'}" class="img-thumbnail rounded logo-preview-img" alt="Preview">
               </div>
             </div>
             

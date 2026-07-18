@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +12,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDashboardResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.JobPostDashboardResponse;
-import vn.edu.fpt.hsf302_group5.entity.Company;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.CompanyStatus;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.service.user.AdminService;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,8 +25,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
     private final AdminService adminService;
+
     public AdminController(AdminService adminService){
         this.adminService = adminService;
+    }
+
+    @ModelAttribute("adminUser")
+    public CustomUserDetailsResponse adminUser(@AuthenticationPrincipal CustomUserDetailsResponse userDetails) {
+        return userDetails;
     }
 
     @GetMapping({"", "/", "/dashboard"})
@@ -113,5 +120,11 @@ public class AdminController {
         adminService.updateCompanyStatus(id, status);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật trạng thái doanh nghiệp thành công.");
         return "redirect:/admin/companies/detail/" + id;
+    }
+
+    @GetMapping("/profile")
+    public String viewAdminProfile(@AuthenticationPrincipal CustomUserDetailsResponse userDetails, Model model) {
+        model.addAttribute("admin", userDetails);
+        return "pages/admin/profile";
     }
 }

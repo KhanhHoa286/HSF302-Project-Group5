@@ -1,8 +1,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <nav class="candidate-sidebar" id="candidateSidebar" th:fragment="candidate-sidebar">
     <div class="sidebar-toggle-container text-end px-3 mb-2">
-        <button type="button" id="sidebarToggleBtn" class="btn btn-sm btn-link text-secondary p-0"
-            style="font-size: 1.2rem;">
+        <button type="button" id="sidebarToggleBtn" class="btn btn-sm btn-link text-secondary p-0 sidebar-title-icon">
             <i class="bi bi-chevron-left" id="sidebarToggleIcon"></i>
         </button>
     </div>
@@ -35,6 +34,12 @@
         <li>
             <a th:href="@{/candidate/my-applications}">
                 <i class="bi bi-send"></i> <span>Hồ sơ ứng tuyển</span>
+            </a>
+        </li>
+        <li>
+            <form th:action="@{/logout}" method="post" id="candidateLogoutForm" class="d-none"></form>
+            <a href="javascript:void(0)" onclick="document.getElementById('candidateLogoutForm').submit()" class="text-danger">
+                <i class="bi bi-box-arrow-right"></i> <span>Đăng xuất</span>
             </a>
         </li>
     </ul>

@@ -593,3 +593,67 @@
     border-radius: 0 8px 8px 0;
 }
 
+.auth-bg-light {
+    background-color: #f4f6f8;
+}
+
+.auth-bg-login {
+    background-color: #f5f7fb;
+}
+
+.auth-container-narrow {
+    max-width: 500px;
+}
+
+.auth-title {
+    color: #212f3f;
+}
+
+.topcv-checkbox {
+    margin-top: 4px;
+    accent-color: #00b14f;
+}
+
+.auth-note-small {
+    font-size: 0.825rem;
+    line-height: 1.4;
+}
+
+.divider-light {
+    border-color: #dee2e6;
+}
+
+.register-success-wrapper {
+    min-height: 70vh;
+    padding: 2rem 0;
+    background-color: #f4f6f8;
+}
+
+.alert-compact {
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.success-copy {
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.login-feature-icon {
+    width: 45px;
+    height: 45px;
+}
+
+.auth-small-text {
+    font-size: 0.9rem;
+}
+
+.auth-link-small {
+    color: #00b14f;
+    font-size: 0.9rem;
+}
+
+.policy-bg {
+    background-color: #f8f9fa;
+}
+

@@ -36,6 +36,8 @@ public class CandidateProfileController {
             return "redirect:/candidate/profile";
         } else if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("RECRUITER"))) {
             return "redirect:/recruiter/company-profile";
+        } else if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+            return "redirect:/admin/profile";
         }
         return "redirect:/";
     }
