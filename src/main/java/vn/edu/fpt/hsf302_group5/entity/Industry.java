@@ -2,6 +2,8 @@ package vn.edu.fpt.hsf302_group5.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import vn.edu.fpt.hsf302_group5.entity.enums.IndustryStatus;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +22,11 @@ public class Industry {
 
     @Column(name = "industry_name", nullable = false, unique = true, length = 100)
     private String industryName;
+
+    @Column(name = "status", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private IndustryStatus status = IndustryStatus.ACTIVE;
 
     // Relationships
     @OneToMany(mappedBy = "industry", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
