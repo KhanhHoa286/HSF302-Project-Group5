@@ -19,6 +19,8 @@ import vn.edu.fpt.hsf302_group5.repository.user.UserRepository;
 import vn.edu.fpt.hsf302_group5.service.application.ApplicationService;
 import vn.edu.fpt.hsf302_group5.service.cv.CVService;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @Controller
 @RequestMapping("/candidate")
 @RequiredArgsConstructor
@@ -53,6 +55,7 @@ public class MyApplicationsController {
     }
 
     @PostMapping("/apply")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_APPLY.name())")
     public String applyJob(
             @RequestParam("jobId") Integer jobId,
             @RequestParam("cvOption") String cvOption,

@@ -2929,7 +2929,8 @@ INSERT INTO permissions (permission_code, permission_name, description) VALUES
     ('APPLICATION_UPDATE', N'Cập nhật trạng thái ứng tuyển', N'Cho phép cập nhật trạng thái hồ sơ ứng tuyển'),
     ('COMPANY_VIEW', N'Xem thông tin công ty', N'Cho phép xem thông tin công ty'),
     ('VIEW_PROFILE_CANDIDATE', N'Xem hồ sơ ứng viên', N'Cho phép xem hồ sơ chi tiết của ứng viên'),
-    ('VIEW_PROFILE_COMPANY', N'Xem hồ sơ doanh nghiệp', N'Cho phép xem thông tin hồ sơ của doanh nghiệp');
+    ('VIEW_PROFILE_COMPANY', N'Xem hồ sơ doanh nghiệp', N'Cho phép xem thông tin hồ sơ của doanh nghiệp'),
+    ('JOB_APPLY', N'Ứng tuyển công việc', N'Cho phép ứng viên ứng tuyển vào công việc');
 
 -- =========================
 -- ROLE PERMISSION
@@ -2952,11 +2953,12 @@ VALUES
     ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'VIEW_PROFILE_CANDIDATE')),
     ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'VIEW_PROFILE_COMPANY'));
 
--- Candidate có quyền: COMPANY_VIEW, VIEW_PROFILE_COMPANY
+-- Candidate có quyền: COMPANY_VIEW, VIEW_PROFILE_COMPANY, JOB_APPLY
 INSERT INTO role_permissions (role_id, permission_id)
 VALUES
     ((SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), (SELECT permission_id FROM permissions WHERE permission_code = 'COMPANY_VIEW')),
-    ((SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), (SELECT permission_id FROM permissions WHERE permission_code = 'VIEW_PROFILE_COMPANY'));
+    ((SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), (SELECT permission_id FROM permissions WHERE permission_code = 'VIEW_PROFILE_COMPANY')),
+    ((SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), (SELECT permission_id FROM permissions WHERE permission_code = 'JOB_APPLY'));
 
 -- =========================
 -- USERS
