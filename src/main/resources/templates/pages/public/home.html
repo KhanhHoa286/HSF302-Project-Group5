@@ -27,16 +27,16 @@
 
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <form class="search-bar-hero d-flex flex-column flex-md-row gap-2">
+                <form th:action="@{/candidate/jobs/list-job}" method="get" class="search-bar-hero d-flex flex-column flex-md-row gap-2">
                     <div class="flex-grow-1 border-end-custom pe-md-2">
-                        <input type="text" class="form-control form-control-lg" placeholder="Từ khóa, kỹ năng, chức danh...">
+                        <input type="text" name="search-keyword" class="form-control form-control-lg" placeholder="Từ khóa, kỹ năng, chức danh...">
                     </div>
                     <div class="flex-grow-1 border-end-custom px-md-2">
-                        <select class="form-select form-select-lg">
+                        <select name="province" class="form-select form-select-lg">
                             <option value="">Tất cả địa điểm</option>
-                            <option value="HCM">Hồ Chí Minh</option>
-                            <option value="HN">Hà Nội</option>
-                            <option value="DN">Đà Nẵng</option>
+                            <option th:each="province : ${homeData.provinces}" 
+                                    th:value="${province.provinceId}" 
+                                    th:text="${province.provinceName}"></option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary-custom btn-lg px-4">Tìm việc</button>
@@ -53,43 +53,17 @@
             <h2 class="fw-bold">Danh mục ngành nghề</h2>
             <p class="text-muted">Lựa chọn công việc theo chuyên môn của bạn</p>
         </div>
-        <div class="row g-4">
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="category-card">
-                    <i class="bi bi-laptop category-icon"></i>
-                    <h6 class="fw-bold mb-0">CNTT</h6>
+        <div class="row g-4 justify-content-center">
+            <th:block th:each="industry : ${homeData.industries}">
+                <div class="col-lg-2 col-md-4 col-6">
+                    <a th:href="@{/candidate/jobs/list-job(industry=${industry.industryId})}" class="text-decoration-none text-dark">
+                        <div class="category-card text-center p-3 border rounded shadow-sm hover-shadow transition h-100 d-flex flex-column justify-content-center">
+                            <i class="bi bi-briefcase category-icon fs-2 text-primary mb-2"></i>
+                            <h6 class="fw-bold mb-0" th:text="${industry.industryName}">Tên Ngành</h6>
+                        </div>
+                    </a>
                 </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="category-card">
-                    <i class="bi bi-megaphone category-icon"></i>
-                    <h6 class="fw-bold mb-0">Marketing</h6>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="category-card">
-                    <i class="bi bi-calculator category-icon"></i>
-                    <h6 class="fw-bold mb-0">Kế toán</h6>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="category-card">
-                    <i class="bi bi-palette category-icon"></i>
-                    <h6 class="fw-bold mb-0">Thiết kế</h6>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="category-card">
-                    <i class="bi bi-graph-up-arrow category-icon"></i>
-                    <h6 class="fw-bold mb-0">Kinh doanh</h6>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-6">
-                <div class="category-card">
-                    <i class="bi bi-people category-icon"></i>
-                    <h6 class="fw-bold mb-0">Nhân sự</h6>
-                </div>
-            </div>
+            </th:block>
         </div>
     </div>
 </section>
@@ -102,69 +76,30 @@
                 <h2 class="fw-bold">Việc làm nổi bật</h2>
                 <p class="text-muted mb-0">Cơ hội tốt nhất hôm nay</p>
             </div>
-            <a href="../candidate/job-list.html" class="text-decoration-none fw-bold">Xem tất cả <i class="bi bi-arrow-right"></i></a>
+            <a th:href="@{/candidate/jobs/list-job(sort='applications', sort-operator='desc')}" class="text-decoration-none fw-bold">Xem tất cả <i class="bi bi-arrow-right"></i></a>
         </div>
 
-        <div class="row g-4">
-            <!-- Job Card 1 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card card-custom job-card h-100 p-4">
-                    <div class="d-flex align-items-start gap-3 mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=60/e9ecef/adb5bd?text=Logo" alt="Company" class="company-logo">
-                        <div>
-                            <h5 class="fw-bold mb-1">Senior Java Developer</h5>
-                            <p class="text-muted small mb-0">TechCorp Vietnam</p>
+        <div class="row g-4 justify-content-center">
+            <th:block th:each="job : ${homeData.featuredJobs}">
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-custom job-card h-100 p-4">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <img th:src="${job.companyLogoUrl != null ? job.companyLogoUrl : 'https://ui-avatars.com/api/?name=' + job.companyName + '&background=random&color=fff&size=60/e9ecef/adb5bd'}" th:alt="${job.companyName}" class="company-logo">
+                            <div>
+                                <h5 class="fw-bold mb-1" th:text="${job.jobTitle}">Job Title</h5>
+                                <p class="text-muted small mb-0" th:text="${job.companyName}">Company Name</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="badge badge-soft-success"><i class="bi bi-currency-dollar"></i> 1500 - 2500 USD</span>
-                            <span class="badge badge-soft-secondary"><i class="bi bi-geo-alt"></i> Hồ Chí Minh</span>
+                        <div class="mt-auto">
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge badge-soft-success"><i class="bi bi-currency-dollar"></i> <th:block th:text="${job.salaryMin + ' - ' + job.salaryMax + ' USD'}"></th:block></span>
+                                <span class="badge badge-soft-secondary"><i class="bi bi-geo-alt"></i> <th:block th:text="${job.companyProvinceAddress}"></th:block></span>
+                            </div>
+                            <a th:href="@{/candidate/job-detail(jobId=${job.jobId})}" class="btn btn-outline-primary-custom w-100 text-center text-decoration-none">Ứng tuyển ngay</a>
                         </div>
-                        <a href="../candidate/job-detail.html" class="btn btn-outline-primary-custom w-100 text-center text-decoration-none">Ứng tuyển ngay</a>
                     </div>
                 </div>
-            </div>
-
-            <!-- Job Card 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card card-custom job-card h-100 p-4">
-                    <div class="d-flex align-items-start gap-3 mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=60/e9ecef/adb5bd?text=Logo" alt="Company" class="company-logo">
-                        <div>
-                            <h5 class="fw-bold mb-1">Marketing Manager</h5>
-                            <p class="text-muted small mb-0">Global Retail JSC</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="badge badge-soft-success"><i class="bi bi-currency-dollar"></i> 1000 - 1500 USD</span>
-                            <span class="badge badge-soft-secondary"><i class="bi bi-geo-alt"></i> Hà Nội</span>
-                        </div>
-                        <a href="../candidate/job-detail.html" class="btn btn-outline-primary-custom w-100 text-center text-decoration-none">Ứng tuyển ngay</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Job Card 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card card-custom job-card h-100 p-4">
-                    <div class="d-flex align-items-start gap-3 mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=60/e9ecef/adb5bd?text=Logo" alt="Company" class="company-logo">
-                        <div>
-                            <h5 class="fw-bold mb-1">UI/UX Designer</h5>
-                            <p class="text-muted small mb-0">Creative Studio</p>
-                        </div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="badge badge-soft-success"><i class="bi bi-currency-dollar"></i> Lên đến 1200 USD</span>
-                            <span class="badge badge-soft-secondary"><i class="bi bi-geo-alt"></i> Đà Nẵng</span>
-                        </div>
-                        <a href="../candidate/job-detail.html" class="btn btn-outline-primary-custom w-100 text-center text-decoration-none">Ứng tuyển ngay</a>
-                    </div>
-                </div>
-            </div>
+            </th:block>
         </div>
     </div>
 </section>
@@ -174,11 +109,11 @@
     <div class="container text-center">
         <h5 class="fw-bold text-muted mb-4">Các doanh nghiệp hàng đầu đang tuyển dụng</h5>
         <div class="d-flex justify-content-center flex-wrap gap-5 align-items-center">
-            <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=120x40/fff/adb5bd?text=Company+1" alt="Company">
-            <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=120x40/fff/adb5bd?text=Company+2" alt="Company">
-            <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=120x40/fff/adb5bd?text=Company+3" alt="Company">
-            <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=120x40/fff/adb5bd?text=Company+4" alt="Company">
-            <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=120x40/fff/adb5bd?text=Company+5" alt="Company">
+            <th:block th:each="company : ${homeData.topEmployers}">
+                <a th:href="@{/company/profile/{id}(id=${company.companyId})}">
+                    <img th:src="${company.logoUrl != null ? company.logoUrl : 'https://ui-avatars.com/api/?name=' + company.companyName + '&background=random&color=fff&size=120x40'}" th:alt="${company.companyName}" th:title="${company.companyName}" style="max-height: 60px;">
+                </a>
+            </th:block>
         </div>
     </div>
 </section>

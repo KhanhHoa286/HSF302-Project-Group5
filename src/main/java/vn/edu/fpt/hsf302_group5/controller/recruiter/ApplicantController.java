@@ -27,7 +27,7 @@ public class ApplicantController {
     private final JobPostService jobPostService;
 
     @GetMapping("/applicant-list")
-    @PreAuthorize("hasAuthority('APPLICATION_VIEW')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).APPLICATION_VIEW.name())")
     public String getApplicantList(
             @RequestParam("jobId") Integer jobId,
             @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
@@ -58,7 +58,7 @@ public class ApplicantController {
     }
 
     @GetMapping("/applicant-detail")
-    @PreAuthorize("hasAuthority('APPLICATION_VIEW')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).APPLICATION_VIEW.name())")
     public String getApplicantDetail(@RequestParam("id") Integer applicationId, Model model, RedirectAttributes redirectAttributes) {
         try {
             ApplicantDetailResponse applicant = applicationService.getApplicantDetail(applicationId);
@@ -71,7 +71,7 @@ public class ApplicantController {
     }
 
     @PostMapping("/applicant/update-status")
-    @PreAuthorize("hasAuthority('APPLICATION_UPDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).APPLICATION_UPDATE.name())")
     public String updateApplicationStatus(
             @RequestParam("applicationId") Integer applicationId,
             @RequestParam("status") String status,

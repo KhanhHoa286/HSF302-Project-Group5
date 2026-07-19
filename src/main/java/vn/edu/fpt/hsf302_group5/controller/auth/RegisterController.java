@@ -118,6 +118,15 @@ public class RegisterController {
 
     @PostMapping("/register-recruiter")
     public String doRegisterRecruiter(@Valid @ModelAttribute("recruiterRegisterRequestDTO") RecruiterRegisterRequest recruiterRegisterRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+        if (recruiterRegisterRequestDTO.getLogoFile() != null && !recruiterRegisterRequestDTO.getLogoFile().isEmpty()) {
+            if (recruiterRegisterRequestDTO.getLogoFile().getSize() > 10 * 1024 * 1024) {
+                bindingResult.rejectValue("logoFile", "error.logoFile.size");
+            }
+            String contentType = recruiterRegisterRequestDTO.getLogoFile().getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                bindingResult.rejectValue("logoFile", "error.logoFile.type");
+            }
+        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
             model.addAttribute("provinceResponses", provinceService.getListProvinceResponse());

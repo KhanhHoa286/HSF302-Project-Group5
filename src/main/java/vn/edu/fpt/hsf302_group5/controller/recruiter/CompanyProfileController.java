@@ -21,12 +21,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @Controller
 @RequestMapping("/recruiter")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('RECRUITER')")
 public class CompanyProfileController {
 
     private final CompanyService companyService;
 
     @GetMapping("/company-profile")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).COMPANY_VIEW.name())")
     public String showCompanyProfile(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         if (userDetails == null) {
             return "redirect:/login";
@@ -55,7 +55,7 @@ public class CompanyProfileController {
     }
 
     @PostMapping("/company-profile")
-    @PreAuthorize("hasAuthority('COMPANY_UPDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).COMPANY_UPDATE.name())")
     public String updateCompanyProfile(
             @Valid @ModelAttribute("companyProfileForm") CompanyProfileRequest form,
             BindingResult bindingResult,

@@ -8,7 +8,6 @@ import vn.edu.fpt.hsf302_group5.dto.user.RecruiterRegisterRequest;
 import vn.edu.fpt.hsf302_group5.dto.user.UserRequest;
 import vn.edu.fpt.hsf302_group5.entity.CandidateProfile;
 import vn.edu.fpt.hsf302_group5.entity.Company;
-import vn.edu.fpt.hsf302_group5.entity.CandidateProfile;
 import vn.edu.fpt.hsf302_group5.entity.Recruiter;
 import vn.edu.fpt.hsf302_group5.entity.User;
 import vn.edu.fpt.hsf302_group5.entity.VerificationToken;
@@ -31,7 +30,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;

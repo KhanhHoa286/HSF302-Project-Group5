@@ -151,7 +151,8 @@ CREATE TABLE recruiters
 CREATE TABLE industries
 (
     industry_id   INT IDENTITY(1,1) PRIMARY KEY,
-    industry_name NVARCHAR(100) NOT NULL UNIQUE
+    industry_name NVARCHAR(100) NOT NULL UNIQUE,
+    status        VARCHAR(20)   NOT NULL DEFAULT 'ACTIVE'
 );
 
 -- =========================

@@ -1,40 +1,40 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<nav class="candidate-sidebar" id="candidateSidebar" th:fragment="candidate-sidebar">
+<nav class="candidate-sidebar" id="candidateSidebar" th:fragment="candidate-sidebar(activePage)">
     <div class="sidebar-toggle-container text-end px-3 mb-2">
-        <button type="button" id="sidebarToggleBtn" class="btn btn-sm btn-link text-secondary p-0"
-            style="font-size: 1.2rem;">
+        <button type="button" id="sidebarToggleBtn" class="btn btn-sm btn-link text-secondary p-0 sidebar-title-icon">
             <i class="bi bi-chevron-left" id="sidebarToggleIcon"></i>
         </button>
     </div>
     <ul class="sidebar-menu">
         <li>
-            <a href="profile.html">
-                <i class="bi bi-grid"></i> <span>Trang tổng quan</span>
-            </a>
-        </li>
-        <li>
-            <a th:href="@{/candidate/jobs/list-job}">
+            <a th:href="@{/candidate/jobs/list-job}" th:classappend="${activePage != null && activePage == 'jobs' ? 'active' : ''}">
                 <i class="bi bi-search"></i> <span>Việc làm</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/candidate/profile}">
+            <a th:href="@{/candidate/profile}" th:classappend="${activePage != null && activePage == 'profile' ? 'active' : ''}">
                 <i class="bi bi-person"></i> <span>Hồ sơ cá nhân</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/candidate/upload-cv}">
+            <a th:href="@{/candidate/upload-cv}" th:classappend="${activePage != null && activePage == 'cv' ? 'active' : ''}">
                 <i class="bi bi-file-earmark-text"></i> <span>Quản lý CV</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/candidate/saved-jobs}">
+            <a th:href="@{/candidate/saved-jobs}" th:classappend="${activePage != null && activePage == 'saved-jobs' ? 'active' : ''}">
                 <i class="bi bi-heart"></i> <span>Việc làm đã lưu</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/candidate/my-applications}">
+            <a th:href="@{/candidate/my-applications}" th:classappend="${activePage != null && activePage == 'applications' ? 'active' : ''}">
                 <i class="bi bi-send"></i> <span>Hồ sơ ứng tuyển</span>
+            </a>
+        </li>
+        <li>
+            <form th:action="@{/logout}" method="post" id="candidateLogoutForm" class="d-none"></form>
+            <a href="javascript:void(0)" onclick="document.getElementById('candidateLogoutForm').submit()" class="text-danger">
+                <i class="bi bi-box-arrow-right"></i> <span>Đăng xuất</span>
             </a>
         </li>
     </ul>

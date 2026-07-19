@@ -85,7 +85,7 @@ public class JobPostController {
 
 
     @GetMapping("/create-job")
-    @PreAuthorize("hasAuthority('JOB_CREATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_CREATE.name())")
     public String createJob(Model model) {
         //
         model.addAttribute("jobPostForm", new JobPostFormRequest());
@@ -94,7 +94,7 @@ public class JobPostController {
     }
 
     @GetMapping("/update-job/{id}")
-    @PreAuthorize("hasAuthority('JOB_UPDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_UPDATE.name())")
     public String updateJob(Model model,@PathVariable(name = "id") Integer id) {
         JobPostFormRequest jobPostFormRequest = jobPostService.updateFormRequest(id);
         model.addAttribute("jobPostForm", jobPostService.updateFormRequest(id));
@@ -103,7 +103,7 @@ public class JobPostController {
 
 
     @PostMapping("/save-job")
-    @PreAuthorize("hasAnyAuthority('JOB_CREATE', 'JOB_UPDATE')")
+    @PreAuthorize("hasAnyAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_CREATE.name(), T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_UPDATE.name())")
     public String createJob(@Valid @ModelAttribute(name="jobPostForm")JobPostFormRequest jobPostForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal CustomUserDetailsResponse user){
         //
         if(bindingResult.hasErrors()) {

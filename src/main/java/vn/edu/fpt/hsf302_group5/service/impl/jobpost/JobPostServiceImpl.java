@@ -14,6 +14,7 @@ import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDashboardResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDetailRecruiterResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.JobSkill;
 import vn.edu.fpt.hsf302_group5.entity.Skill;
@@ -92,6 +93,9 @@ public class JobPostServiceImpl implements JobPostService {
     @Override
     public JobPostDetailResponse getJobPostDetaiDTOByJobPostId(Integer jobPostId) {
         JobPostDetailResponse jobPostDetailResponse = jobPostRepository.getJobPostDetaiDTOByJobPostId(jobPostId);
+        if (jobPostDetailResponse != null) {
+            jobPostDetailResponse.setRequiredSkills(jobPostRepository.findSkillNamesByJobPostId(jobPostId));
+        }
         return jobPostDetailResponse;
     }
 
@@ -114,29 +118,47 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> salaryOperators, List<LocalDate> expireDate, List<String> operators, List<String> sort, List<String> sortOperator) {
+    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<Integer> companyId, List<String> companyOperators, List<BigDecimal> salary, List<String> salaryOperators, List<LocalDate> expireDate, List<String> operators, List<String> sort, List<String> sortOperator, CustomUserDetailsResponse userDetails) {
 
         if (searchKeyword == null) {
             searchKeyword = new ArrayList<>();
+        } else {
+            searchKeyword.removeIf(k -> k == null || k.trim().isEmpty());
         }
         if (provinceId == null) {
             provinceId = new ArrayList<>();
+        } else {
+            provinceId.removeIf(java.util.Objects::isNull);
         }
         if (industryId == null) {
             industryId = new ArrayList<>();
+        } else {
+            industryId.removeIf(java.util.Objects::isNull);
+        }
+        if (companyId == null) {
+            companyId = new ArrayList<>();
+        } else {
+            companyId.removeIf(java.util.Objects::isNull);
         }
         if (salary == null) {
             salary = new ArrayList<>();
+        } else {
+            salary.removeIf(java.util.Objects::isNull);
         }
         if (expireDate == null) {
             expireDate = new ArrayList<>();
+        } else {
+            expireDate.removeIf(java.util.Objects::isNull);
         }
 
         List<Sort.Order> orders = new ArrayList<>();
         if (sort != null) {
             for (int i = 0; i < sort.size(); i++) {
                 String field = sort.get(i);
-                String direction = sortOperator.get(i);
+                if ("applications".equals(field)) {
+                    field = "applicationCount";
+                }
+                String direction = (sortOperator != null && i < sortOperator.size()) ? sortOperator.get(i) : "desc";
                 Sort.Direction dir = "asc".equalsIgnoreCase(direction) ? Sort.Direction.ASC : Sort.Direction.DESC;
                 orders.add(new Sort.Order(dir, field));
             }
@@ -145,11 +167,12 @@ public class JobPostServiceImpl implements JobPostService {
                 ? PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE)
                 : PageRequest.of(page, AppConstants.NUMBER_JOB_PER_PAGE, Sort.by(orders));
 
-        Specification<JobPost> spec = Specification.unrestricted(); // không có điều kiện nào, trả về Specification. tương đương  Specification.where(null) với bản cũ
+        Specification<JobPost> spec = Specification.unrestricted(); 
 
         Specification<JobPost> spectitle = Specification.unrestricted();
         for (int i = 0; i < searchKeyword.size(); i++) {
-            Specification<JobPost> title = JobPostSpecification.buildTitleSpec(searchKeywordOperators.get(i), searchKeyword.get(i));
+            String op = (searchKeywordOperators != null && i < searchKeywordOperators.size()) ? searchKeywordOperators.get(i) : "contains";
+            Specification<JobPost> title = JobPostSpecification.buildTitleSpec(op, searchKeyword.get(i));
             if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
                 spectitle = spectitle.and(title);
             } else {
@@ -159,7 +182,8 @@ public class JobPostServiceImpl implements JobPostService {
 
         Specification<JobPost> specExpire = Specification.unrestricted();
         for (int i = 0; i < expireDate.size(); i++) {
-            Specification<JobPost> expireSpec = JobPostSpecification.buildExpireSpec(expireDate.get(i), operators.get(i));
+            String op = (operators != null && i < operators.size()) ? operators.get(i) : "=";
+            Specification<JobPost> expireSpec = JobPostSpecification.buildExpireSpec(expireDate.get(i), op);
             if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
                 specExpire = specExpire.and(expireSpec);
             } else {
@@ -185,9 +209,19 @@ public class JobPostServiceImpl implements JobPostService {
             }
         }
 
+        Specification<JobPost> specCompany = Specification.unrestricted();
+        for (int i = 0; i < companyId.size(); i++) {
+            if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
+                specCompany = specCompany.and(JobPostSpecification.hasCompany(companyId.get(i)));
+            } else {
+                specCompany = specCompany.or(JobPostSpecification.hasCompany(companyId.get(i)));
+            }
+        }
+
         Specification<JobPost> specSalary = Specification.unrestricted();
         for (int i = 0; i < salary.size(); i++) {
-            Specification<JobPost> salarySpec = JobPostSpecification.buildSalarySpec(salaryOperators.get(i), salary.get(i));
+            String op = (salaryOperators != null && i < salaryOperators.size()) ? salaryOperators.get(i) : ">=";
+            Specification<JobPost> salarySpec = JobPostSpecification.buildSalarySpec(op, salary.get(i));
             if (filterLogicInSameConditions.equalsIgnoreCase("AND")) {
                 specSalary = specSalary.and(salarySpec);
             } else {
@@ -196,10 +230,16 @@ public class JobPostServiceImpl implements JobPostService {
         }
 
         if (filterLogicInOtherConditions.equalsIgnoreCase("AND")) {
-            spec = spec.and(spectitle).and(specProvince).and(specIndustry).and(specSalary).and(specExpire);
+            spec = spec.and(spectitle).and(specProvince).and(specIndustry).and(specCompany).and(specSalary).and(specExpire);
         } else {
-            spec = spec.or(spectitle).or(specProvince).or(specIndustry).or(specSalary).or(specExpire);
+            spec = spec.or(spectitle).or(specProvince).or(specIndustry).or(specCompany).or(specSalary).or(specExpire);
         }
+
+        // Lọc mặc định: Chỉ hiển thị công việc đang tuyển (APPROVED) và chưa hết hạn nộp
+        spec = spec.and(JobPostSpecification.isApproved())
+                   .and(JobPostSpecification.isNotExpired());
+
+        spec = spec.and(JobPostSpecification.filterJobNotApply(userDetails));
 
         Page<JobPost> jobPosts = jobPostRepository.findAll(spec, pageable);
 

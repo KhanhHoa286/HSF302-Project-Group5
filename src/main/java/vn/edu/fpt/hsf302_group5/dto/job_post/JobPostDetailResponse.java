@@ -37,8 +37,11 @@ public class JobPostDetailResponse {
     private LocalDateTime postedDate;
     private LocalDateTime expiredDate;
     private String administrativeUnitName;
+    private Integer companyId;
+    private Integer vacancies;
+    private java.util.List<String> requiredSkills;
 
-    public JobPostDetailResponse(Integer id, JobLevel jobLevel, ExperienceLevel experienceLevel, String companyUrl, String jobtitle, String description, String requirement, String benefit, String locationDetail, String companyName, String companyProvinceAddress, BigDecimal salaryMin, BigDecimal salaryMax, EmploymentType employmentType, JobStatus status, LocalDateTime postedDate, LocalDateTime expiredDate, String administrativeUnitName) {
+    public JobPostDetailResponse(Integer id, JobLevel jobLevel, ExperienceLevel experienceLevel, String companyUrl, String jobtitle, String description, String requirement, String benefit, String locationDetail, String companyName, String companyProvinceAddress, BigDecimal salaryMin, BigDecimal salaryMax, EmploymentType employmentType, JobStatus status, LocalDateTime postedDate, LocalDateTime expiredDate, String administrativeUnitName, Integer companyId, Integer vacancies) {
         this.id = id;
         this.jobLevel = jobLevel;
         this.experienceLevel = experienceLevel;
@@ -57,6 +60,8 @@ public class JobPostDetailResponse {
         this.postedDate = postedDate;
         this.expiredDate = expiredDate;
         this.administrativeUnitName = administrativeUnitName;
+        this.companyId = companyId;
+        this.vacancies = vacancies;
     }
     public String getSalaryDisplay() {
         if (salaryMin == null && salaryMax == null) {

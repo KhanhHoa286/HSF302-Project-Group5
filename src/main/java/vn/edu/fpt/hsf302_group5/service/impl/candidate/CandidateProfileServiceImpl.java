@@ -64,6 +64,14 @@ public class CandidateProfileServiceImpl implements CandidateProfileService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public CandidateProfileResponse getCandidateProfileById(Integer id) {
+        CandidateProfile profile = candidateProfileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hồ sơ ứng viên"));
+        return candidateMapper.toResponse(profile);
+    }
+
+    @Override
     @Transactional
     public void updatePersonalProfile(String email, CandidateProfileRequest request) {
         User user = userRepository.findByEmail(email)

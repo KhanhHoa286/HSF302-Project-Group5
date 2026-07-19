@@ -16,13 +16,13 @@
 <!-- Header Placeholder -->
 <div th:replace="~{fragments/header :: header(activePage='register-recruiter')}"></div>
 
-<section class="auth-wrapper" style="background-color: #f4f6f8;">
+<section class="auth-wrapper auth-bg-light">
     <div class="recruiter-register-container">
         <div class="mb-4">
             <a class="text-primary fw-bold fs-4 text-decoration-none" href="/" th:href="@{/}">
                 <i class="bi bi-briefcase-fill me-2"></i>JobPortal
             </a>
-            <h2 class="fw-bold mt-3 mb-1" style="color: #212f3f;">Đăng ký tài khoản Nhà tuyển dụng</h2>
+            <h2 class="fw-bold mt-3 mb-1 auth-title">Đăng ký tài khoản Nhà tuyển dụng</h2>
             <p class="text-muted">Cùng tạo dựng lợi thế cho doanh nghiệp bằng trải nghiệm công nghệ tuyển dụng ứng dụng sâu AI & Hiring Funnel.</p>
         </div>
 
@@ -47,12 +47,12 @@
             </div>
             <!-- Tài khoản Section -->
             <div class="mb-4">
-                <h4 class="fw-bold fs-5 mb-2" style="color: #212f3f;">Tài khoản</h4>
+                <h4 class="fw-bold fs-5 mb-2 auth-title">Tài khoản</h4>
                 <p class="text-muted small">Để cung cấp dịch vụ cho bạn, chúng tôi cần xử lý một số dữ liệu cá nhân theo quy định tại <a th:href="@{/privacy-policy}" class="text-green-topcv fw-bold">Chính sách quyền riêng tư</a> và <a th:href="@{/privacy-policy}" class="text-green-topcv fw-bold">Điều khoản dịch vụ</a>. Vui lòng lựa chọn các mục đích mà bạn đồng ý dưới đây:</p>
 
                 <!-- Checkbox 1 -->
                 <div class="form-check d-flex align-items-start gap-2 mb-2">
-                    <input class="form-check-input" name="agreeTerms" type="checkbox" id="termsCheckNTD" required style="margin-top: 4px; accent-color: #00b14f;">
+                    <input class="form-check-input topcv-checkbox" name="agreeTerms" type="checkbox" id="termsCheckNTD" required >
                     <label class="topcv-checkbox-label" for="termsCheckNTD">
                         Tôi đã đọc và đồng ý với Điều khoản dịch vụ và Chính sách Quyền riêng tư của JobPortal.
                     </label>
@@ -60,19 +60,7 @@
                 <div class="consent-sub-info red-info small">
                     * Chúng tôi không thể cung cấp dịch vụ nếu không nhận được sự đồng ý ở mục này.
                 </div>
-
-                <!-- Checkbox 2 -->
-                <div class="form-check d-flex align-items-start gap-2 mb-2">
-                    <input class="form-check-input" type="checkbox" id="marketingCheckNTD" style="margin-top: 4px; accent-color: #00b14f;">
-                    <label class="topcv-checkbox-label" for="marketingCheckNTD">
-                        Tôi đồng ý nhận thông tin tư vấn của JobPortal để được hỗ trợ đăng tin nhanh, cách tối ưu hiệu quả tin đăng, các thông báo quan trọng về tin đăng, CV ứng tuyển và các giải pháp/chương trình tuyển dụng phù hợp.
-                    </label>
-                </div>
-                <div class="consent-sub-info green-info small">
-                    <strong>Khuyên dùng:</strong> Nếu không có sự đồng ý, chuyên viên sẽ không thể liên hệ để hỗ trợ Quý khách xác thực tài khoản nhanh chóng & đăng tin kịp thời.
-                </div>
             </div>
-
             <!-- Email, Password Section -->
             <div class="row">
                 <div class="col-md-12 mb-3">
@@ -82,9 +70,6 @@
                         <input type="email" th:field="*{email}" class="form-control" placeholder="Email" required>
                     </div>
                     <span class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-                    <div class="text-danger small" style="font-size: 0.825rem; line-height: 1.4;">
-                        Trường hợp bạn đăng ký tài khoản bằng email không phải email tên miền công ty, một số dịch vụ trên tài khoản có thể bị giới hạn mua hoặc sử dụng.
-                    </div>
                 </div>
 
                 <div class="col-md-6 mb-3">
@@ -108,10 +93,10 @@
                 </div>
             </div>
 
-            <hr class="my-4" style="border-color: #dee2e6;">
+            <hr class="my-4 divider-light">
 
             <!-- Thông tin nhà tuyển dụng Section -->
-            <h4 class="fw-bold fs-5 mb-3" style="color: #212f3f;">Thông tin nhà tuyển dụng</h4>
+            <h4 class="fw-bold fs-5 mb-3 auth-title">Thông tin nhà tuyển dụng</h4>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -207,7 +192,7 @@
             </div>
 
             <div class="mt-4 pt-2">
-                <button type="submit" class="btn btn-topcv-green-submit mb-3 py-3" style="border-radius: 8px;">
+                <button type="submit" class="btn btn-topcv-green-submit mb-3 py-3 rounded-8">
                     Hoàn tất đăng ký <i class="bi bi-arrow-right ms-2"></i>
                 </button>
             </div>

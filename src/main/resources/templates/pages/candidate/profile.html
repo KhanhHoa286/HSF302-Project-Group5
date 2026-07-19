@@ -6,18 +6,29 @@
     <title>Hồ sơ cá nhân - JobPortal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/assets/css/common.css">
-    <link rel="stylesheet" href="/assets/css/candidate.css">
-    <link rel="stylesheet" href="/assets/css/profile.css">
+    <link rel="stylesheet" th:href="@{/assets/css/common.css}">
+    <link th:if="${isReadOnly == null or !isReadOnly}" rel="stylesheet" th:href="@{/assets/css/candidate.css}">
+    <link th:if="${isReadOnly != null and isReadOnly and #authorization.expression('hasAuthority(''RECRUITER'')')}" rel="stylesheet" th:href="@{/assets/css/recruiter.css}">
+    <link th:if="${isReadOnly != null and isReadOnly and #authorization.expression('hasAuthority(''ADMIN'')')}" rel="stylesheet" th:href="@{/assets/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/profile.css}">
 </head>
 <body>
 
 <div th:replace="~{fragments/header.html :: header}"></div>
 
-<div class="candidate-layout">
-    <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
 
-    <main class="candidate-content container py-4">
+<div th:class="${isReadOnly != null and isReadOnly} ? 'recruiter-layout' : 'candidate-layout'">
+    <th:block th:if="${isReadOnly == null or !isReadOnly}">
+        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar(activePage='profile')}"></div>
+    </th:block>
+    <th:block th:if="${isReadOnly != null and isReadOnly and #authorization.expression('hasAuthority(''RECRUITER'')')}">
+        <div th:replace="~{fragments/recruiter-sidebar.html :: recruiter-sidebar}"></div>
+    </th:block>
+    <th:block th:if="${isReadOnly != null and isReadOnly and #authorization.expression('hasAuthority(''ADMIN'')')}">
+        <div th:replace="~{fragments/admin-sidebar.html :: admin-sidebar(activePage='profile')}"></div>
+    </th:block>
+
+    <main th:class="${isReadOnly != null and isReadOnly} ? 'recruiter-content container py-4' : 'candidate-content container py-4'">
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
             <span th:text="${successMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -36,7 +47,7 @@
                 <div class="card profile-section p-4">
                     <div class="profile-section-title">
                         <span>Thông tin cá nhân</span>
-                        <button class="btn btn-sm btn-outline-primary-custom" data-bs-toggle="modal" data-bs-target="#editPersonalModal">
+                        <button th:if="${isReadOnly == null or !isReadOnly}" class="btn btn-sm btn-outline-primary-custom" data-bs-toggle="modal" data-bs-target="#editPersonalModal">
                             <i class="bi bi-pencil me-1"></i> Chỉnh sửa
                         </button>
                     </div>
@@ -76,7 +87,7 @@
                 <div class="card profile-section p-4">
                     <div class="profile-section-title">
                         <span>Học vấn</span>
-                        <button class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addEducationModal">
+                        <button th:if="${isReadOnly == null or !isReadOnly}" class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addEducationModal">
                             <i class="bi bi-plus-lg me-1"></i> Thêm học vấn
                         </button>
                     </div>
@@ -86,7 +97,7 @@
                     </div>
                     <div th:each="edu : ${profile.educations}" class="d-flex mb-3 pb-3 border-bottom justify-content-between align-items-start">
                         <div class="d-flex">
-                            <div class="bg-light p-3 rounded me-3 text-center" style="width: 50px; height: 50px;">
+                            <div class="bg-light p-3 rounded me-3 text-center square-50">
                                 <i class="bi bi-mortarboard text-primary fs-4"></i>
                             </div>
                             <div>
@@ -95,8 +106,8 @@
                                 <span class="badge bg-light text-secondary" th:text="${#temporals.format(edu.startDate, 'MM/yyyy') + ' - ' + (edu.endDate != null ? #temporals.format(edu.endDate, 'MM/yyyy') : 'Hiện tại')}"></span>
                             </div>
                         </div>
-                        <div>
-                            <form th:id="${'delete-edu-form-' + edu.educationId}" th:action="@{/candidate/profile/delete-education}" method="post" style="display:none;">
+                        <div th:if="${isReadOnly == null or !isReadOnly}">
+                            <form th:id="${'delete-edu-form-' + edu.educationId}" th:action="@{/candidate/profile/delete-education}" method="post" class="d-none">
                                 <input type="hidden" name="educationId" th:value="${edu.educationId}">
                             </form>
                             <button type="button" class="btn btn-sm btn-outline-danger border-0" th:onclick="'confirmDeleteEdu(' + ${edu.educationId} + ')'">
@@ -109,7 +120,7 @@
                 <div class="card profile-section p-4">
                     <div class="profile-section-title">
                         <span>Kinh nghiệm làm việc</span>
-                        <button class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addExperienceModal">
+                        <button th:if="${isReadOnly == null or !isReadOnly}" class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addExperienceModal">
                             <i class="bi bi-plus-lg me-1"></i> Thêm kinh nghiệm
                         </button>
                     </div>
@@ -119,7 +130,7 @@
                     </div>
                     <ul class="timeline" th:if="${!#lists.isEmpty(profile.experiences)}">
                         <li th:each="exp : ${profile.experiences}">
-                            <div class="timeline-badge"><i class="bi bi-briefcase-fill" style="font-size: 10px; display: block; margin-top: 5px;"></i></div>
+                            <div class="timeline-badge"><i class="bi bi-briefcase-fill timeline-badge-icon"></i></div>
                             <div class="timeline-panel">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
@@ -128,8 +139,8 @@
                                         <p class="small text-muted" th:text="${exp.description}"></p>
                                         <span class="badge bg-light text-secondary" th:text="${#temporals.format(exp.startDate, 'MM/yyyy') + ' - ' + (exp.endDate != null ? #temporals.format(exp.endDate, 'MM/yyyy') : 'Hiện tại')}"></span>
                                     </div>
-                                    <div>
-                                        <form th:id="${'delete-exp-form-' + exp.experienceId}" th:action="@{/candidate/profile/delete-experience}" method="post" style="display:none;">
+                                    <div th:if="${isReadOnly == null or !isReadOnly}">
+                                        <form th:id="${'delete-exp-form-' + exp.experienceId}" th:action="@{/candidate/profile/delete-experience}" method="post" class="d-none">
                                             <input type="hidden" name="experienceId" th:value="${exp.experienceId}">
                                         </form>
                                         <button type="button" class="btn btn-sm btn-outline-danger border-0" th:onclick="'confirmDeleteExp(' + ${exp.experienceId} + ')'">
@@ -144,10 +155,10 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="card profile-section p-4 sticky-top" style="top: 90px;">
+                <div class="card profile-section p-4 sticky-top sticky-offset-90">
                     <div class="profile-section-title">
                         <span>Kỹ năng</span>
-                        <button class="btn btn-sm btn-outline-primary-custom" data-bs-toggle="modal" data-bs-target="#editSkillsModal">
+                        <button th:if="${isReadOnly == null or !isReadOnly}" class="btn btn-sm btn-outline-primary-custom" data-bs-toggle="modal" data-bs-target="#editSkillsModal">
                             <i class="bi bi-pencil me-1"></i> Thay đổi
                         </button>
                     </div>

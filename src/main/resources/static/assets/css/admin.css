@@ -144,3 +144,9 @@
     height: 48px;
     object-fit: cover;
 }
+
+.admin-profile-avatar {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+}

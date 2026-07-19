@@ -2,6 +2,7 @@ package vn.edu.fpt.hsf302_group5.controller.candidate;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.fpt.hsf302_group5.dto.industry.IndustryResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
 import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
+import vn.edu.fpt.hsf302_group5.entity.Company;
+import vn.edu.fpt.hsf302_group5.repository.company.CompanyRepository;
 import vn.edu.fpt.hsf302_group5.service.industry.IndustryService;
 import vn.edu.fpt.hsf302_group5.service.jobpost.JobPostService;
 import vn.edu.fpt.hsf302_group5.service.province.ProvinceService;
@@ -33,6 +37,7 @@ public class ListJobController {
     private final ProvinceService provinceService;
     private final IndustryService industryService;
     private final JobPostService jobPostService;
+    private final CompanyRepository companyRepository;
 
     @GetMapping("/jobs/list-job")
     public String listJob(Model model,
@@ -45,18 +50,22 @@ public class ListJobController {
                           @RequestParam(value = "province-operator", required = false) List<String> provinceOperators,
                           @RequestParam(value = "industry", required = false) List<Integer> industryId,
                           @RequestParam(value = "industry-operator", required = false) List<String> industryOperators,
+                          @RequestParam(value = "company", required = false) List<Integer> companyId,
+                          @RequestParam(value = "company-operator", required = false) List<String> companyOperators,
                           @RequestParam(value = "salary", required = false) List<BigDecimal> salary,
                           @RequestParam(value = "salary-operator", required = false) List<String> salaryOperators,
                           @RequestParam(value = "expire", required = false)List<LocalDate> expireDate,
                           @RequestParam(value = "expire-operator", required = false) List<String> expireOperator,@RequestParam(value = "sort", required = false)List<String> sort,
-                          @RequestParam(value = "sort-operator", required = false) List<String> sortOperator) {
+                          @RequestParam(value = "sort-operator", required = false) List<String> sortOperator,
+                          @AuthenticationPrincipal CustomUserDetailsResponse userDetails) {
 
         List<ProvinceResponse> provinceResponses = provinceService.getListProvinceResponse();
         List<IndustryResponse> industryResponses = industryService.getAllIndustryResponse();
+        List<Company> companies = companyRepository.findAll();
 
         // Page<JobPostResponse> jobPage = jobPostService.getJobPostsByFilter(null, null, null, null, page);
 
-        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, salary, salaryOperators, expireDate, expireOperator, sort, sortOperator);
+        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, companyId, companyOperators, salary, salaryOperators, expireDate, expireOperator, sort, sortOperator, userDetails);
 
 
         int startPage = (jobPageBySpecification.getNumber() / AppConstants.NUMBER_PAGE_PER_BLOCK) * AppConstants.NUMBER_PAGE_PER_BLOCK;
@@ -74,6 +83,8 @@ public class ListJobController {
         model.addAttribute("jobPage", jobPageBySpecification);
         model.addAttribute("provinceResponses", provinceResponses);
         model.addAttribute("industryResponses", industryResponses);
+        model.addAttribute("companies", companies);
+        model.addAttribute("userDetails", userDetails);
 
         model.addAttribute("fields", fields);
         model.addAttribute("searchKeyword", searchKeyword);
@@ -82,15 +93,27 @@ public class ListJobController {
         model.addAttribute("provinceOperators", provinceOperators);
         model.addAttribute("industryId", industryId);
         model.addAttribute("industryOperators", industryOperators);
+        model.addAttribute("companyId", companyId);
+        model.addAttribute("companyOperators", companyOperators);
         model.addAttribute("salary", salary);
         model.addAttribute("salaryOperators", salaryOperators);
         model.addAttribute("expireDate", expireDate);
         model.addAttribute("expireOperator", expireOperator);
         model.addAttribute("sort", sort);
         model.addAttribute("sortOperator", sortOperator);
+        model.addAttribute("isCandidate", hasAuthority(userDetails, "CANDIDATE"));
+        model.addAttribute("isRecruiter", hasAuthority(userDetails, "RECRUITER"));
+        model.addAttribute("isAdmin", hasAuthority(userDetails, "ADMIN"));
         model.addAttribute("filterLogicInOtherConditions", filterLogicInOtherConditions);
         model.addAttribute("filterLogicInSameConditions", filterLogicInSameConditions);
         return "pages/candidate/job-list";
+    }
+
+    private boolean hasAuthority(CustomUserDetailsResponse userDetails, String authority) {
+        return userDetails != null
+                && userDetails.getAuthorities() != null
+                && userDetails.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> authority.equals(grantedAuthority.getAuthority()));
     }
 
 }

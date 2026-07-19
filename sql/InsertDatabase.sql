@@ -2926,7 +2926,11 @@ INSERT INTO permissions (permission_code, permission_name, description) VALUES
     ('JOB_CREATE', N'Tạo tin tuyển dụng mới', N'Cho phép tạo mới tin tuyển dụng'),
     ('JOB_UPDATE', N'Cập nhật tin tuyển dụng', N'Cho phép chỉnh sửa tin tuyển dụng'),
     ('APPLICATION_VIEW', N'Xem hồ sơ ứng tuyển', N'Cho phép xem chi tiết hồ sơ đã ứng tuyển'),
-    ('APPLICATION_UPDATE', N'Cập nhật trạng thái ứng tuyển', N'Cho phép cập nhật trạng thái hồ sơ ứng tuyển');
+    ('APPLICATION_UPDATE', N'Cập nhật trạng thái ứng tuyển', N'Cho phép cập nhật trạng thái hồ sơ ứng tuyển'),
+    ('COMPANY_VIEW', N'Xem thông tin công ty', N'Cho phép xem thông tin công ty'),
+    ('VIEW_PROFILE_CANDIDATE', N'Xem hồ sơ ứng viên', N'Cho phép xem hồ sơ chi tiết của ứng viên'),
+    ('VIEW_PROFILE_COMPANY', N'Xem hồ sơ doanh nghiệp', N'Cho phép xem thông tin hồ sơ của doanh nghiệp'),
+    ('JOB_APPLY', N'Ứng tuyển công việc', N'Cho phép ứng viên ứng tuyển vào công việc');
 
 -- =========================
 -- ROLE PERMISSION
@@ -2936,7 +2940,7 @@ INSERT INTO role_permissions (role_id, permission_id)
 SELECT (SELECT role_id FROM roles WHERE role_name = 'ADMIN'), permission_id
 FROM permissions;
 
--- Recruiter có quyền: COMPANY_UPDATE, JOB_DELETE, JOB_CREATE, JOB_UPDATE, APPLICATION_VIEW, APPLICATION_UPDATE
+-- Recruiter có quyền: COMPANY_UPDATE, JOB_DELETE, JOB_CREATE, JOB_UPDATE, APPLICATION_VIEW, APPLICATION_UPDATE, COMPANY_VIEW, VIEW_PROFILE_CANDIDATE, VIEW_PROFILE_COMPANY
 INSERT INTO role_permissions (role_id, permission_id)
 VALUES
     ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'COMPANY_UPDATE')),
@@ -2944,7 +2948,17 @@ VALUES
     ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'JOB_CREATE')),
     ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'JOB_UPDATE')),
     ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'APPLICATION_VIEW')),
-    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'APPLICATION_UPDATE'));
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'APPLICATION_UPDATE')),
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'COMPANY_VIEW')),
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'VIEW_PROFILE_CANDIDATE')),
+    ((SELECT role_id FROM roles WHERE role_name = 'RECRUITER'), (SELECT permission_id FROM permissions WHERE permission_code = 'VIEW_PROFILE_COMPANY'));
+
+-- Candidate có quyền: COMPANY_VIEW, VIEW_PROFILE_COMPANY, JOB_APPLY
+INSERT INTO role_permissions (role_id, permission_id)
+VALUES
+    ((SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), (SELECT permission_id FROM permissions WHERE permission_code = 'COMPANY_VIEW')),
+    ((SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), (SELECT permission_id FROM permissions WHERE permission_code = 'VIEW_PROFILE_COMPANY')),
+    ((SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), (SELECT permission_id FROM permissions WHERE permission_code = 'JOB_APPLY'));
 
 -- =========================
 -- USERS
@@ -2974,8 +2988,8 @@ VALUES
         N'FPT Software',
         'https://res.cloudinary.com/dvfet0mdt/image/upload/v1781837539/07800f29-e4bb-4af9-af2a-71b70918a155.png',
         'https://fptsoftware.com',
-        N'Công ty phần mềm hàng đầu Việt Nam',
-        N'Khu công nghệ cao Hòa Lạc',
+        N'FPT Software là công ty thành viên của Tập đoàn FPT, hoạt động trong lĩnh vực cung cấp các dịch vụ gia công phần mềm hàng đầu châu Á và toàn cầu. Với hơn 20 năm phát triển, FPT Software đã và đang là đối tác tin cậy của hàng trăm tập đoàn lớn trên thế giới trong các ngành công nghệ ô tô, tài chính ngân hàng, năng lượng, hàng không và logistics. Chúng tôi tiên phong trong cuộc cách mạng số thế giới bằng việc nghiên cứu và ứng dụng các công nghệ tiên tiến nhất như Cloud, Big Data, IoT, Blockchain và Trí tuệ nhân tạo (AI).',
+        N'Tòa nhà F-Town, Khu công nghệ cao Hòa Lạc, Thạch Thất',
         1,
         (
             SELECT unit_id
@@ -2987,8 +3001,8 @@ VALUES
         N'Viettel Solutions',
         'https://res.cloudinary.com/dvfet0mdt/image/upload/v1781837627/228af167-ac10-4f01-a997-79a7b2463797.png',
         'https://viettel.com.vn',
-        N'Công ty công nghệ thuộc tập đoàn Viettel',
-        N'Khu đô thị Mễ Trì',
+        N'Tổng công ty Giải pháp Doanh nghiệp Viettel (Viettel Solutions) là thành viên thuộc Tập đoàn Công nghiệp - Viễn thông Quân đội (Viettel). Viettel Solutions là đơn vị tiên phong dẫn dắt quá trình chuyển đổi số quốc gia tại Việt Nam. Chúng tôi chuyên nghiên cứu, phát triển và cung cấp các giải pháp công nghệ thông tin và viễn thông (ICT) toàn diện cho chính phủ, bộ ban ngành, chính quyền địa phương và các doanh nghiệp lớn nhỏ trong và ngoài nước, hướng tới mục tiêu xây dựng một xã hội số thông minh và bền vững.',
+        N'Số 1 Trần Hữu Dực, Khu đô thị Mễ Trì, Nam Từ Liêm',
         1,
         (
             SELECT unit_id
@@ -3000,8 +3014,8 @@ VALUES
         N'Traphaco',
         'https://theme.hstatic.net/1000129896/1001236985/14/logo.png?v=116',
         'https://traphaco.com.vn',
-        N'Công ty cổ phần Traphaco',
-        N'75 Yên Ninh, Ba Đình',
+        N'Traphaco là một trong những doanh nghiệp dược phẩm hàng đầu tại Việt Nam, tiên phong trong cuộc cách mạng "Con đường sức khỏe xanh". Với sứ mệnh mang lại sức khỏe và hạnh phúc cho mọi nhà, Traphaco sở hữu các vùng trồng dược liệu đạt chuẩn GACP-WHO cùng hệ thống nhà máy sản xuất thuốc đông dược và tân dược hiện đại đạt tiêu chuẩn GMP-WHO. Chúng tôi tự hào giữ vững vị thế số 1 về đông dược tại Việt Nam, sở hữu các thương hiệu nổi tiếng toàn quốc như Boganic, Hoạt huyết dưỡng não và các dòng sản phẩm chăm sóc sức khỏe chất lượng cao.',
+        N'Số 75 Yên Ninh, Phường Trúc Bạch, Quận Ba Đình',
         1,
         (
             SELECT unit_id
@@ -3013,8 +3027,8 @@ VALUES
         N'Microsoft',
         'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1280px-Microsoft_logo.svg.png?_=20210729021049',
         'https://microsoft.com',
-        N'Tập đoàn công nghệ đa quốc gia Microsoft',
-        N'Tòa nhà Keangnam, Cầu Giấy',
+        N'Microsoft Corporation là tập đoàn công nghệ đa quốc gia hàng đầu thế giới của Hoa Kỳ có trụ sở chính tại Redmond, Washington. Sứ mệnh của Microsoft là trao quyền cho mọi cá nhân và mọi tổ chức trên hành tinh đạt được nhiều thành tựu hơn nữa. Tại Việt Nam, Microsoft tập trung cung cấp hạ tầng điện toán đám mây an toàn, các giải pháp cộng tác hiện đại và các hệ sinh thái AI tiên phong để đồng hành cùng các tổ chức trong hành trình chuyển đổi số và tối ưu hóa hiệu quả vận hành.',
+        N'Tầng 16, Tòa nhà Landmark 72, Khu đô thị mới Cầu Giấy, Mễ Trì, Nam Từ Liêm',
         1,
         (
             SELECT TOP 1 unit_id
@@ -3026,8 +3040,8 @@ VALUES
         N'Google',
         'https://yt3.googleusercontent.com/tb4KvfywCzldPMVsaRnGRV3hZIgKYWg4V3J5ulhcbK6EZSMHjm39QqmyOYaT11Y6ec2JBPnl5w=s160-c-k-c0x00ffffff-no-rj',
         'https://google.com',
-        N'Tập đoàn công nghệ đa quốc gia Google',
-        N'Phố Duy Tân, Cầu Giấy',
+        N'Google LLC là tập đoàn công nghệ đa quốc gia của Mỹ, chuyên về các dịch vụ và sản phẩm liên quan đến Internet bao gồm công nghệ quảng cáo trực tuyến, công cụ tìm kiếm, điện toán đám mây, phần mềm và phần cứng. Sứ mệnh của Google là tổ chức thông tin của thế giới và làm cho nó trở nên hữu ích và có thể truy cập được trên toàn cầu. Các công cụ và nền tảng như Google Search, YouTube, Android, Google Cloud và các giải pháp AI Gemini tiên tiến đã trở thành một phần thiết yếu trong cuộc sống hàng ngày.',
+        N'Tòa nhà CMC, Số 11 Phố Duy Tân, Dịch Vọng Hậu, Cầu Giấy',
         1,
         (
             SELECT TOP 1 unit_id
@@ -3039,8 +3053,8 @@ VALUES
         N'Apple',
         'https://substackcdn.com/image/fetch/$s_!G1lk!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8ed3d547-94ff-48e1-9f20-8c14a7030a02_2000x2000.jpeg',
         'https://apple.com',
-        N'Tập đoàn công nghệ đa quốc gia Apple',
-        N'Quận 1',
+        N'Apple Inc. là tập đoàn công nghệ đa quốc gia hàng đầu thế giới có trụ sở tại Cupertino, California. Apple nổi tiếng toàn cầu với việc thiết kế, phát triển và bán các thiết bị điện tử tiêu dùng, phần mềm máy tính và các dịch vụ trực tuyến. Các sản phẩm phần cứng mang tính biểu tượng của hãng bao gồm điện thoại thông minh iPhone, máy tính bảng iPad, máy tính cá nhân Mac, đồng hồ thông minh Apple Watch và các hệ điều hành tối ưu. Apple luôn đi đầu trong việc sáng tạo trải nghiệm người dùng hoàn hảo và cao cấp nhất.',
+        N'Tầng 32, Tòa nhà Times Square, Số 22-36 Nguyễn Huệ, Bến Nghé, Quận 1',
         2,
         (
             SELECT TOP 1 unit_id
@@ -3052,8 +3066,8 @@ VALUES
         N'Oracle',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8utW214eQvjYzsUULfvtyPQbUm3191GVMgKeKRC6lDg&s=10',
         'https://oracle.com',
-        N'Tập đoàn công nghệ đa quốc gia Oracle',
-        N'Quận 3',
+        N'Oracle Corporation là tập đoàn công nghệ máy tính đa quốc gia của Mỹ có trụ sở tại Austin, Texas. Oracle nổi tiếng với việc cung cấp hệ quản trị cơ sở dữ liệu hàng đầu thế giới, các công cụ kỹ thuật hệ thống đám mây và các sản phẩm phần mềm doanh nghiệp đặc biệt là các thương hiệu quản lý cơ sở dữ liệu của riêng mình. Oracle Cloud Infrastructure (OCI) cung cấp hạ tầng đám mây thế hệ mới mang lại hiệu năng vượt trội, bảo mật toàn diện và độ tin cậy tối đa cho các cơ sở dữ liệu và ứng dụng doanh nghiệp quan trọng.',
+        N'Tòa nhà Deutsches Haus, Số 33 Lê Duẩn, Bến Nghé, Quận 1',
         2,
         (
             SELECT TOP 1 unit_id
@@ -3081,12 +3095,12 @@ VALUES
 -- INDUSTRY
 -- =========================
 INSERT INTO industries
-(industry_name)
+(industry_name, status)
 VALUES
-    (N'Information Technology'),
-    (N'Artificial Intelligence'),
-    (N'Cyber Security'),
-    (N'Business Analyst');
+    (N'Information Technology', 'ACTIVE'),
+    (N'Artificial Intelligence', 'ACTIVE'),
+    (N'Cyber Security', 'ACTIVE'),
+    (N'Business Analyst', 'ACTIVE');
 
 -- =========================
 -- COMPANY INDUSTRY
@@ -3251,6 +3265,7 @@ INSERT INTO job_posts
     title,
     description,
     requirement,
+    benefit,
     location_detail,
     province_id,
     administrative_unit_id,
@@ -3269,8 +3284,20 @@ VALUES
         'JUNIOR',
         3,
         N'Java Backend Developer',
-        N'Phát triển hệ thống Spring Boot',
-        N'Java, Spring Boot, SQL',
+        N'Chúng tôi đang tìm kiếm lập trình viên Java Backend tài năng để phát triển hệ thống dịch vụ lõi của công ty. Công việc chính bao gồm:
+- Thiết kế và phát triển các RESTful API hiệu năng cao bằng Spring Boot.
+- Tham gia tối ưu hóa hiệu suất cơ sở dữ liệu SQL Server, xử lý các truy vấn phức tạp và lưu trữ dữ liệu lớn.
+- Hợp tác chặt chẽ với đội ngũ Front-end để tích hợp các tính năng của hệ thống.
+- Nghiên cứu và áp dụng các mẫu thiết kế (design patterns) và kiến trúc microservices hiện đại.
+- Viết tài liệu kỹ thuật và Unit Test để đảm bảo chất lượng mã nguồn.',
+        N'- Có ít nhất 1-2 năm kinh nghiệm làm việc thực tế với ngôn ngữ Java và framework Spring Boot.
+- Hiểu biết sâu sắc về OOP, Design Patterns và cấu trúc dữ liệu giải thuật.
+- Sử dụng thành thạo cơ sở dữ liệu SQL Server hoặc MySQL, có khả năng viết và tối ưu hóa câu lệnh SQL.
+- Có kinh nghiệm làm việc với các hệ thống quản lý mã nguồn Git, Maven hoặc Gradle.',
+        N'- Mức lương cạnh tranh từ 12,000,000 đ đến 18,000,000 đ tùy theo năng lực thực tế.
+- Hưởng đầy đủ các chế độ BHXH, BHYT, BHTN theo quy định của Luật lao động Việt Nam.
+- Được đào tạo bài bản và định hướng lộ trình phát triển nghề nghiệp rõ ràng.
+- Môi trường làm việc trẻ trung, năng động, văn phòng hiện đại.',
         N'Phố Duy Tân',
         1,
         (
@@ -3292,8 +3319,18 @@ VALUES
         'SENIOR',
         2,
         N'Cyber Security Engineer',
-        N'Giám sát an toàn thông tin',
-        N'Network, Security',
+        N'Tham gia đội ngũ an toàn thông tin chuyên nghiệp của chúng tôi với nhiệm vụ:
+- Giám sát an toàn hệ thống thông tin, phát hiện và cảnh báo sớm các cuộc tấn công mạng, phần mềm độc hại.
+- Thực hiện đánh giá lỗ hổng bảo mật và kiểm thử xâm nhập (pentest) định kỳ cho các ứng dụng và hạ tầng mạng.
+- Thiết lập và cấu hình các chính sách tường lửa, hệ thống phát hiện/phòng chống xâm nhập (IDS/IPS) và SIEM.
+- Tham gia ứng cứu sự cố và điều tra số (digital forensics) khi xảy ra các sự cố an ninh mạng.',
+        N'- Tốt nghiệp đại học chuyên ngành An toàn thông tin, CNTT hoặc Điện tử viễn thông.
+- Có chứng chỉ bảo mật quốc tế là một lợi thế (CEH, CISSP, CompTIA Security+, OSCP).
+- Hiểu biết sâu sắc về các giao thức mạng, hệ điều hành Linux/Windows và các lỗ hổng bảo mật OWASP Top 10.',
+        N'- Lương thưởng hấp dẫn cạnh tranh theo năng lực từ 15,000,000 đ đến 25,000,000 đ.
+- Thưởng quý, thưởng năm theo hiệu quả công việc cá nhân và kết quả kinh doanh tập đoàn.
+- Gói bảo hiểm sức khỏe cao cấp Viettel Care dành riêng cho nhân viên và người thân.
+- Được tham gia các khóa đào tạo chuyên sâu về bảo mật và hỗ trợ lệ phí thi các chứng chỉ quốc tế.',
         N'Khu đô thị Mễ Trì',
         1,
         (
@@ -3315,8 +3352,17 @@ VALUES
         'MID',
         2,
         N'AI Engineer',
-        N'Xây dựng mô hình Machine Learning',
-        N'Python, AI, Deep Learning',
+        N'Nghiên cứu và phát triển các giải pháp Trí tuệ nhân tạo (AI):
+- Xây dựng, huấn luyện và tối ưu hóa các mô hình Machine Learning, Deep Learning để giải quyết các bài toán về xử lý ngôn ngữ tự nhiên (NLP) hoặc thị giác máy tính (Computer Vision).
+- Triển khai các mô hình AI lên môi trường production dưới dạng API phục vụ các sản phẩm thực tế.
+- Xử lý dữ liệu lớn, xây dựng luồng dữ liệu (data pipeline) tự động thu thập và tiền xử lý dữ liệu huấn luyện.',
+        N'- Có kinh nghiệm lập trình Python tốt và sử dụng thành thạo các thư viện như TensorFlow, PyTorch, Scikit-learn.
+- Hiểu biết vững chắc về các thuật toán Machine Learning cơ bản và kiến trúc mạng nơ-ron phổ biến (CNN, RNN, Transformer).
+- Có tư duy nghiên cứu, giải quyết vấn đề tốt, đọc hiểu tài liệu nghiên cứu khoa học tiếng Anh thành thạo.',
+        N'- Mức lương hấp dẫn từ 18,000,000 đ đến 30,000,000 đ tùy theo năng lực thực tế.
+- Làm việc trong môi trường công nghệ cao sáng tạo, nhiều cơ hội nghiên cứu và phát triển bản thân.
+- Hỗ trợ chi phí tham gia các hội thảo khoa học quốc tế.
+- Hưởng đầy đủ các chế độ phúc lợi, nghỉ mát hàng năm và khám sức khỏe định kỳ.',
         N'Khu Công nghệ cao',
         2,
         (

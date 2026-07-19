@@ -3,8 +3,8 @@ package vn.edu.fpt.hsf302_group5.service.user;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDashboardResponse;
+import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.JobPostDashboardResponse;
-import vn.edu.fpt.hsf302_group5.entity.Company;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.CompanyStatus;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
@@ -34,6 +34,6 @@ public interface AdminService {
 
     Page<CompanyDashboardResponse> getAllCompanies(String keyword, CompanyStatus status, Pageable pageable);
     long countCompaniesByStatus(CompanyStatus status);
-    vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse getCompanyById(Integer companyId);
+    CompanyDetailResponse getCompanyById(Integer companyId);
     void updateCompanyStatus(Integer companyId, CompanyStatus status);
 }

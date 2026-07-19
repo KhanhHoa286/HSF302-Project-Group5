@@ -46,4 +46,15 @@ public class JobPostResponse {
 
         return "Thỏa thuận";
     }
+
+    public String getSalaryDisplayVND() {
+        if (salaryMin == null && salaryMax == null) {
+            return "Thỏa thuận";
+        }
+        if (salaryMin != null && salaryMax != null) {
+            java.text.DecimalFormat formatter = new java.text.DecimalFormat("#,###");
+            return formatter.format(salaryMin) + " đ - " + formatter.format(salaryMax) + " đ";
+        }
+        return "Thỏa thuận";
+    }
 }
