@@ -65,7 +65,7 @@ public class ListJobController {
 
         // Page<JobPostResponse> jobPage = jobPostService.getJobPostsByFilter(null, null, null, null, page);
 
-        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, companyId, companyOperators, salary, salaryOperators, expireDate, expireOperator, sort, sortOperator);
+        Page<JobPostResponse> jobPageBySpecification = jobPostService.getJobPostsSpecification(page, filterLogicInOtherConditions, filterLogicInSameConditions, searchKeyword, searchKeywordOperators, provinceId, provinceOperators, industryId, industryOperators, companyId, companyOperators, salary, salaryOperators, expireDate, expireOperator, sort, sortOperator, userDetails);
 
 
         int startPage = (jobPageBySpecification.getNumber() / AppConstants.NUMBER_PAGE_PER_BLOCK) * AppConstants.NUMBER_PAGE_PER_BLOCK;
