@@ -26,7 +26,7 @@
             <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar(activePage='jobs')}"></div>
         </th:block>
         <th:block sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).RECRUITER.name())">
-            <div th:replace="~{fragments/recruiter-sidebar.html :: recruiter-sidebar}"></div>
+            <div th:replace="~{fragments/recruiter-sidebar.html :: recruiter-sidebar(activePage='jobs')}"></div>
         </th:block>
         <th:block sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).ADMIN.name())">
             <div th:replace="~{fragments/admin-sidebar.html :: admin-sidebar(activePage='jobs')}"></div>
