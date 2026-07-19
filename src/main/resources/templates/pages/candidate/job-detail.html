@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <link rel="stylesheet" th:href="@{/assets/css/common.css}">
-    <link rel="stylesheet" th:href="@{/assets/css/candidate.css}">
+    <link sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).RECRUITER.name())" rel="stylesheet" th:href="@{/assets/css/recruiter.css}">
+    <link sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).ADMIN.name())" rel="stylesheet" th:href="@{/assets/css/admin.css}">
+    <link sec:authorize="!hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).RECRUITER.name()) and !hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).ADMIN.name())" rel="stylesheet" th:href="@{/assets/css/candidate.css}">
 </head>
 
 <body>
@@ -18,11 +20,31 @@
     <!-- Header Placeholder -->
     <div th:replace="~{fragments/header.html :: header}"></div>
 
-    <div class="candidate-layout">
+    <div th:class="${#authorization.expression('hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).ADMIN.name())')} ? 'admin-layout' : (${#authorization.expression('hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).RECRUITER.name())')} ? 'recruiter-layout' : 'candidate-layout')">
         <!-- Sidebar Placeholder -->
-        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
+        <th:block sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).CANDIDATE.name())">
+            <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar(activePage='jobs')}"></div>
+        </th:block>
+        <th:block sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).RECRUITER.name())">
+            <div th:replace="~{fragments/recruiter-sidebar.html :: recruiter-sidebar(activePage='jobs')}"></div>
+        </th:block>
+        <th:block sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).ADMIN.name())">
+            <div th:replace="~{fragments/admin-sidebar.html :: admin-sidebar(activePage='jobs')}"></div>
+        </th:block>
 
-        <main class="candidate-content">
+        <main th:class="${#authorization.expression('hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).ADMIN.name())')} ? 'admin-content' : (${#authorization.expression('hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).RECRUITER.name())')} ? 'recruiter-content' : 'candidate-content')">
+            <!-- Alert Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
             <!-- Breadcrumb -->
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
@@ -43,12 +65,12 @@
                                     th:text="${jobPostDetailDTO.jobtitle != null ? jobPostDetailDTO.jobtitle : ''}">
                                     Senior Frontend Developer (ReactJS)</h3>
                                 <p class="mb-0 fs-5">
-                                    <a th:if="${jobPostDetailDTO.companyId != null}" 
-                                       th:href="@{/company/profile/{id}(id=${jobPostDetailDTO.companyId})}" 
-                                       class="text-decoration-none text-primary fw-semibold" 
+                                    <a th:if="${jobPostDetailDTO.companyId != null}"
+                                       th:href="@{/company/profile/{id}(id=${jobPostDetailDTO.companyId})}"
+                                       class="text-decoration-none text-primary fw-semibold"
                                        th:text="${jobPostDetailDTO.companyName}">TechCorp Vietnam JSC</a>
-                                    <span th:if="${jobPostDetailDTO.companyId == null}" 
-                                          class="text-muted" 
+                                    <span th:if="${jobPostDetailDTO.companyId == null}"
+                                          class="text-muted"
                                           th:text="${jobPostDetailDTO.companyName}">TechCorp Vietnam JSC</span>
                                 </p>
                             </div>
@@ -71,6 +93,22 @@
                                 <i class="bi bi-person-workspace text-info me-2"></i><strong>Hình thức:</strong><span
                                     th:text="${jobPostDetailDTO.employmentType != null ? jobPostDetailDTO.employmentType : ''}"></span>
                             </div>
+                            <div class="col-md-6">
+                                <i class="bi bi-award text-danger me-2"></i><strong>Cấp bậc:</strong> <span
+                                    th:text="${jobPostDetailDTO.jobLevel != null ? jobPostDetailDTO.jobLevel : ''}"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <i class="bi bi-people text-primary me-2"></i><strong>Số lượng tuyển:</strong> <span
+                                    th:text="${jobPostDetailDTO.vacancies != null ? jobPostDetailDTO.vacancies + ' người' : 'Không giới hạn'}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Kỹ năng yêu cầu -->
+                        <div class="mb-4" th:if="${jobPostDetailDTO.requiredSkills != null && !jobPostDetailDTO.requiredSkills.isEmpty()}">
+                            <i class="bi bi-tags text-dark me-2"></i><strong>Kỹ năng yêu cầu:</strong>
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                <span th:each="skill : ${jobPostDetailDTO.requiredSkills}" class="badge bg-light text-primary border px-3 py-2" th:text="${skill}">Java</span>
+                            </div>
                         </div>
 
                         <hr class="mb-4">
@@ -78,21 +116,21 @@
                         <div class="mb-4">
                             <h5 class="fw-bold mb-3">Mô tả công việc</h5>
 
-                            <div class="text-pre-line" th:utext="${jobPostDetailDTO.description}">
+                            <div style="white-space: pre-line;" th:utext="${jobPostDetailDTO.description}">
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <h5 class="fw-bold mb-3">Yêu cầu ứng viên</h5>
 
-                            <div class="text-pre-line" th:utext="${jobPostDetailDTO.requirement}">
+                            <div style="white-space: pre-line;" th:utext="${jobPostDetailDTO.requirement}">
                             </div>
                         </div>
 
                         <div class="mb-0">
                             <h5 class="fw-bold mb-3">Quyền lợi</h5>
 
-                            <div class="text-pre-line"
+                            <div style="white-space: pre-line;"
                                 th:text="${jobPostDetailDTO.benefit != null ? jobPostDetailDTO.benefit : ''}">
                             </div>
                         </div>
@@ -101,12 +139,25 @@
 
                 <!-- Cột phải: Thao tác -->
                 <div class="col-lg-4">
-                    <div class="card card-custom p-4 sticky-top sticky-offset-90">
-                        <button class="btn btn-primary-custom btn-lg w-100 mb-3 fw-bold shadow-sm">
-                            <i class="bi bi-send-fill me-2"></i> Ứng tuyển ngay
+                    <div class="card card-custom p-4 sticky-top" style="top: 90px;">
+                        <!-- Đã ứng tuyển -->
+                        <button sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_APPLY.name())" th:if="${hasApplied}" class="btn btn-secondary btn-lg w-100 mb-3 fw-bold shadow-sm" disabled>
+                            <i class="bi bi-check-circle-fill me-2"></i> Đã ứng tuyển
                         </button>
+
+                        <!-- Chưa ứng tuyển -->
+                        <div th:if="${!hasApplied}">
+                            <!-- Chưa đăng nhập -->
+                            <a th:href="@{/login}" th:if="${#authorization.expression('!isAuthenticated()')}" class="btn btn-primary-custom btn-lg w-100 mb-3 fw-bold shadow-sm">
+                                <i class="bi bi-box-arrow-in-right me-2"></i> Đăng nhập để ứng tuyển
+                            </a>
+                            <!-- Đã đăng nhập -->
+                            <button sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_APPLY.name())" class="btn btn-primary-custom btn-lg w-100 mb-3 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#applyModal">
+                                <i class="bi bi-send-fill me-2"></i> Ứng tuyển ngay
+                            </button>
+                        </div>
                         <!-- Nút Lưu việc làm (nếu chưa lưu) -->
-                        <form th:if="${!isSaved}" th:action="@{/candidate/saved-jobs/save}" method="post">
+                        <form sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_APPLY.name())" th:if="${!isSaved}" th:action="@{/candidate/saved-jobs/save}" method="post">
                             <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}" />
                             <button type="submit" class="btn btn-outline-primary-custom btn-lg w-100 mb-4 fw-bold">
                                 <i class="bi bi-heart me-2"></i> Lưu việc làm
@@ -114,7 +165,7 @@
                         </form>
 
                         <!-- Nút Đã lưu việc làm (nếu đã lưu) -->
-                        <form th:if="${isSaved}" th:action="@{/candidate/saved-jobs/unsave}" method="post">
+                        <form sec:authorize="hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).JOB_APPLY.name())" th:if="${isSaved}" th:action="@{/candidate/saved-jobs/unsave}" method="post">
                             <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}" />
                             <input type="hidden" name="redirectUrl"
                                 th:value="'/candidate/jobs/job-detail/' + ${jobPostDetailDTO.id}" />
@@ -142,10 +193,101 @@
         </main>
     </div>
 
+
+
+    <!-- Modal Ứng Tuyển -->
+    <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true" th:if="${#authorization.expression('isAuthenticated()')}">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/candidate/apply}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold" id="applyModalLabel">Ứng tuyển vị trí: <span class="text-primary" th:text="${jobPostDetailDTO.jobtitle}"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Chọn phương thức nộp CV</label>
+                            <div class="d-flex gap-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="cvOption" id="cvOptionSaved" value="saved" checked onclick="toggleCVOption('saved')">
+                                    <label class="form-check-label" for="cvOptionSaved">
+                                        Sử dụng CV đã lưu trên hệ thống
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="cvOption" id="cvOptionUpload" value="upload" onclick="toggleCVOption('upload')">
+                                    <label class="form-check-label" for="cvOptionUpload">
+                                        Tải lên CV mới
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Option 1: Choose saved CV -->
+                        <div class="mb-4" id="savedCVSection">
+                            <label for="cvId" class="form-label fw-bold">Chọn CV của bạn</label>
+                            <select class="form-select" id="cvId" name="cvId">
+                                <option value="" disabled selected>-- Chọn CV đã lưu --</option>
+                                <option th:each="cv : ${cvList}" th:value="${cv.cvId}" th:text="${cv.cvName} + ' (Tải lên ngày: ' + ${#temporals.format(cv.uploadedAt, 'dd/MM/yyyy')} + ')'"></option>
+                            </select>
+                            <div th:if="${cvList == null || cvList.isEmpty()}" class="mt-2 text-danger small">
+                                Bạn chưa có CV nào được lưu. Hãy chọn "Tải lên CV mới" hoặc <a th:href="@{/candidate/upload-cv}" class="text-decoration-none fw-bold" target="_blank">Quản lý CV</a> để tải lên.
+                            </div>
+                        </div>
+
+                        <!-- Option 2: Upload new CV -->
+                        <div class="mb-4 d-none" id="uploadCVSection">
+                            <label for="cvFile" class="form-label fw-bold">Tải lên file CV mới (PDF/DOCX, Tối đa 5MB)</label>
+                            <input type="file" class="form-control" id="cvFile" name="cvFile" accept=".pdf,.docx">
+                        </div>
+
+                        <!-- Cover Letter -->
+                        <div class="mb-3">
+                            <label for="coverLetter" class="form-label fw-bold">Thư giới thiệu (Cover Letter) <span class="text-muted fw-normal">(Không bắt buộc)</span></label>
+                            <textarea class="form-control" id="coverLetter" name="coverLetter" rows="5" placeholder="Giới thiệu ngắn gọn kinh nghiệm và lý do bạn phù hợp với công việc này..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary-custom px-4 fw-bold">Nộp hồ sơ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Placeholder -->
     <div th:replace="~{fragments/footer.html :: footer}"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+        function toggleCVOption(option) {
+            const savedSection = document.getElementById('savedCVSection');
+            const uploadSection = document.getElementById('uploadCVSection');
+            const cvSelect = document.getElementById('cvId');
+            const cvFile = document.getElementById('cvFile');
+
+            if (option === 'saved') {
+                if (savedSection) savedSection.classList.remove('d-none');
+                if (uploadSection) uploadSection.classList.add('d-none');
+                if (cvSelect) cvSelect.required = true;
+                if (cvFile) cvFile.required = false;
+            } else {
+                if (savedSection) savedSection.classList.add('d-none');
+                if (uploadSection) uploadSection.classList.remove('d-none');
+                if (cvSelect) cvSelect.required = false;
+                if (cvFile) cvFile.required = true;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const cvSavedRadio = document.getElementById('cvOptionSaved');
+            if (cvSavedRadio) {
+                toggleCVOption(cvSavedRadio.checked ? 'saved' : 'upload');
+            }
+        });
+    </script>
 
 </body>
 

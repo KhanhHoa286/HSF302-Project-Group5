@@ -14,6 +14,7 @@ import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDashboardResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDetailRecruiterResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.JobSkill;
 import vn.edu.fpt.hsf302_group5.entity.Skill;
@@ -42,8 +43,8 @@ public class JobPostServiceImpl implements JobPostService {
     private final JobSkillRepository jobSkillRepository;
 
     @Override
-    public StatisticResponse getStatistic() {
-        return jobPostRepository.getStatistic();
+    public StatisticResponse getStatistic(Integer recruiterId) {
+        return jobPostRepository.getStatistic(recruiterId);
     }
 
     @Override
@@ -92,6 +93,9 @@ public class JobPostServiceImpl implements JobPostService {
     @Override
     public JobPostDetailResponse getJobPostDetaiDTOByJobPostId(Integer jobPostId) {
         JobPostDetailResponse jobPostDetailResponse = jobPostRepository.getJobPostDetaiDTOByJobPostId(jobPostId);
+        if (jobPostDetailResponse != null) {
+            jobPostDetailResponse.setRequiredSkills(jobPostRepository.findSkillNamesByJobPostId(jobPostId));
+        }
         return jobPostDetailResponse;
     }
 
@@ -114,7 +118,7 @@ public class JobPostServiceImpl implements JobPostService {
     }
 
     @Override
-    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<Integer> companyId, List<String> companyOperators, List<BigDecimal> salary, List<String> salaryOperators, List<LocalDate> expireDate, List<String> operators, List<String> sort, List<String> sortOperator) {
+    public Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<Integer> companyId, List<String> companyOperators, List<BigDecimal> salary, List<String> salaryOperators, List<LocalDate> expireDate, List<String> operators, List<String> sort, List<String> sortOperator, CustomUserDetailsResponse userDetails) {
 
         if (searchKeyword == null) {
             searchKeyword = new ArrayList<>();
@@ -230,6 +234,12 @@ public class JobPostServiceImpl implements JobPostService {
         } else {
             spec = spec.or(spectitle).or(specProvince).or(specIndustry).or(specCompany).or(specSalary).or(specExpire);
         }
+
+        // Lọc mặc định: Chỉ hiển thị công việc đang tuyển (APPROVED) và chưa hết hạn nộp
+        spec = spec.and(JobPostSpecification.isApproved())
+                   .and(JobPostSpecification.isNotExpired());
+
+        spec = spec.and(JobPostSpecification.filterJobNotApply(userDetails));
 
         Page<JobPost> jobPosts = jobPostRepository.findAll(spec, pageable);
 

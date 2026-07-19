@@ -20,7 +20,7 @@
 
 <div th:class="${#authorization.expression('hasAuthority(''ADMIN'')')} ? 'admin-layout' : (${#authorization.expression('hasAuthority(''RECRUITER'')')} ? 'recruiter-layout' : 'candidate-layout')">
     <th:block th:if="${#authorization.expression('hasAuthority(''CANDIDATE'')')}">
-        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
+        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar(activePage='jobs')}"></div>
     </th:block>
     <th:block th:if="${#authorization.expression('hasAuthority(''RECRUITER'')')}">
         <div th:replace="~{fragments/recruiter-sidebar.html :: recruiter-sidebar}"></div>

@@ -54,7 +54,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home/**", "/login", "/register", "/register-success", "/resend-verification", "/privacy-policy", "/register-recruiter", "/verify", "/forgot-password", "/reset-password", "/css/**", "/js/**", "/images/**", "/assets/**", "/api/load-administrator/**", "/do-login", "/verify-reset-password").permitAll() // Cho phép truy cập tài nguyên tĩnh và các trang không cần xác thực
+                        .requestMatchers("/", "/home/**", "/login", "/register", "/register-success", "/resend-verification", "/privacy-policy", "/register-recruiter", "/verify", "/forgot-password", "/reset-password", "/css/**", "/js/**", "/images/**", "/assets/**", "/api/load-administrator/**", "/do-login", "/verify-reset-password").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -91,7 +91,7 @@ public class SecurityConfig {
                 )
                 .oauth2Login((oauth) -> oauth
                         .loginPage("/login")
-                        .redirectionEndpoint((redirection) -> redirection.baseUri("/login/oauth2/code/*")) // * có thể là gg hoặc github...
+                        .redirectionEndpoint((redirection) -> redirection.baseUri("/login/oauth2/code/*")) // * có thể là gg hoặc github
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         ) //Sau khi lấy được thông tin user từ Google đưa nó cho customOAuth2UserService xử lý
@@ -117,6 +117,8 @@ public class SecurityConfig {
                     httpSecurityRememberMeConfigurer.key(rememberMeKey);
                     httpSecurityRememberMeConfigurer.rememberMeParameter("remember-me");
                     httpSecurityRememberMeConfigurer.tokenValiditySeconds(60 * 60 * 24 * 30);
+                    httpSecurityRememberMeConfigurer.userDetailsService(customUserDetailsService);
+                    //Service tải thông tin User
                 })
                 .logout(logout -> {
                             logout.logoutUrl("/logout"); // POST

@@ -78,7 +78,7 @@ public class JobPostController {
         model.addAttribute("jobPostDashboardList",jobPostService.getJobPostDashboard(textSearch,jobStatus,page,user.getId()));
         model.addAttribute("textSearch",textSearch);
         model.addAttribute("jobStatus",jobStatus);
-        model.addAttribute("statistic", jobPostService.getStatistic());
+        model.addAttribute("statistic", jobPostService.getStatistic(user.getId()));
         //
         return "pages/recruiter/my-job-posts";
     }

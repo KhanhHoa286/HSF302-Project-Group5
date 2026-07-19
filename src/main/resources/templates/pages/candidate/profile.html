@@ -19,7 +19,7 @@
 
 <div th:class="${isReadOnly != null and isReadOnly} ? 'recruiter-layout' : 'candidate-layout'">
     <th:block th:if="${isReadOnly == null or !isReadOnly}">
-        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
+        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar(activePage='profile')}"></div>
     </th:block>
     <th:block th:if="${isReadOnly != null and isReadOnly and #authorization.expression('hasAuthority(''RECRUITER'')')}">
         <div th:replace="~{fragments/recruiter-sidebar.html :: recruiter-sidebar}"></div>

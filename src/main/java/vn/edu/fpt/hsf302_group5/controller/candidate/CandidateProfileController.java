@@ -79,7 +79,7 @@ public class CandidateProfileController {
     }
 
     @PostMapping("/candidate/profile/update-personal")
-    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).CANDIDATE.name())")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).User.name())")
     public String updatePersonalProfile(@ModelAttribute("personalForm") CandidateProfileRequest form,
                                         @AuthenticationPrincipal UserDetails userDetails,
                                         RedirectAttributes redirectAttributes) {

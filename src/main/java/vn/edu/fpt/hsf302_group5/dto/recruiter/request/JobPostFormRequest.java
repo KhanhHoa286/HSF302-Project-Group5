@@ -53,10 +53,8 @@ public class JobPostFormRequest {
     @NotNull(message = "Vui lòng chọn quận/huyện!")
     private Integer administrativeUnitId;
 
-    @Min(value=0, message = "Vui lòng nhập mức lương > 0!")
     private BigDecimal salaryMin;
 
-    @Min(value=0, message = "Vui lòng nhập mức lương > 0!")
     private BigDecimal salaryMax;
 
     @NotNull(message = "Vui lòng chọn loại hình làm việc!")

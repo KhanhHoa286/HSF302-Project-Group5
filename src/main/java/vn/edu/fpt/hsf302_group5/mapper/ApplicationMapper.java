@@ -6,6 +6,7 @@ import vn.edu.fpt.hsf302_group5.dto.recruiter.response.ApplicantResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.ApplicantDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.EducationDto;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.ExperienceDto;
+import vn.edu.fpt.hsf302_group5.dto.recruiter.response.ApplicationStatusHistoryDto;
 import vn.edu.fpt.hsf302_group5.entity.Application;
 import vn.edu.fpt.hsf302_group5.entity.Education;
 import vn.edu.fpt.hsf302_group5.entity.Experience;
@@ -35,9 +36,13 @@ public interface ApplicationMapper {
     @Mapping(target = "cvName", expression = "java(application.getCvName())")
     @Mapping(target = "cvUrl", expression = "java(application.getCvUrl())")
     @Mapping(target = "gender", expression = "java(application.getCandidateGender())")
+    @Mapping(target = "statusHistories", expression = "java(application.getStatusHistories() != null ? application.getStatusHistories().stream().map(this::toStatusHistoryDto).sorted(java.util.Comparator.comparing(vn.edu.fpt.hsf302_group5.dto.recruiter.response.ApplicationStatusHistoryDto::getChangedAt)).toList() : java.util.List.of())")
     ApplicantDetailResponse toApplicantDetailResponse(Application application);
 
     EducationDto toEducationDto(Education education);
 
     ExperienceDto toExperienceDto(Experience experience);
+
+    @Mapping(target = "changerName", expression = "java(history.getUser() != null ? history.getUser().getFullName() : null)")
+    ApplicationStatusHistoryDto toStatusHistoryDto(vn.edu.fpt.hsf302_group5.entity.ApplicationStatusHistory history);
 }

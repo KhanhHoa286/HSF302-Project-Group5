@@ -34,4 +34,25 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
         WHERE a.applicationId = :applicationId
     """)
     java.util.Optional<Application> findByIdWithDetails(@Param("applicationId") Integer applicationId);
+
+    boolean existsByCandidateIdAndJobId(Integer candidateId, Integer jobId);
+
+    @Query(value = """
+        SELECT a FROM Application a
+        JOIN FETCH a.jobPost j
+        JOIN FETCH j.recruiter r
+        JOIN FETCH r.company c
+        LEFT JOIN FETCH a.cv cv
+        WHERE a.candidateId = :candidateId
+          AND (:status IS NULL OR a.status = :status)
+    """, countQuery = """
+        SELECT COUNT(a) FROM Application a
+        WHERE a.candidateId = :candidateId
+          AND (:status IS NULL OR a.status = :status)
+    """)
+    Page<Application> findApplicationsByCandidateId(
+        @Param("candidateId") Integer candidateId,
+        @Param("status") ApplicationStatus status,
+        Pageable pageable
+    );
 }
