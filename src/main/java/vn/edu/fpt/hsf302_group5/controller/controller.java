@@ -13,16 +13,6 @@ public class controller {
         return "pages/candidate/application-detail";
     }
 
-    @GetMapping("/test1")
-    public String test1(){
-        return "pages/candidate/job-detail";
-    }
-
-    @GetMapping("/test3")
-    public String test3(){
-        return "pages/candidate/my-applications";
-    }
-
     @GetMapping("/test4")
     public String test4(){
         return "pages/candidate/profile";

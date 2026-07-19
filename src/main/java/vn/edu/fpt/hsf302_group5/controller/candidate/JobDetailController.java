@@ -22,6 +22,8 @@ public class JobDetailController {
     private final JobPostService jobPostService;
     private final SavedJobService savedJobService;
     private final UserRepository userRepository;
+    private final vn.edu.fpt.hsf302_group5.service.cv.CVService cvService;
+    private final vn.edu.fpt.hsf302_group5.service.application.ApplicationService applicationService;
 
     @GetMapping("/jobs/job-detail/{id}")
     public String jobDetail(@PathVariable Integer id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -29,13 +31,20 @@ public class JobDetailController {
         model.addAttribute("jobPostDetailDTO", jobPostDetailDTO);
 
         boolean isSaved = false;
+        boolean hasApplied = false;
+        java.util.List<vn.edu.fpt.hsf302_group5.entity.CV> cvList = java.util.List.of();
+
         if (userDetails != null) {
             User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
             if (user != null) {
                 isSaved = savedJobService.isJobSaved(user.getUserId(), id);
+                hasApplied = applicationService.hasApplied(user.getUserId(), id);
+                cvList = cvService.getCVsByCandidateId(user.getUserId());
             }
         }
         model.addAttribute("isSaved", isSaved);
+        model.addAttribute("hasApplied", hasApplied);
+        model.addAttribute("cvList", cvList);
         return "pages/candidate/job-detail";
     }
 }

@@ -23,6 +23,18 @@
         <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
 
         <main class="candidate-content">
+            <!-- Alert Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
             <!-- Breadcrumb -->
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
@@ -96,9 +108,22 @@
                 <!-- Cột phải: Thao tác -->
                 <div class="col-lg-4">
                     <div class="card card-custom p-4 sticky-top" style="top: 90px;">
-                        <button class="btn btn-primary-custom btn-lg w-100 mb-3 fw-bold shadow-sm">
-                            <i class="bi bi-send-fill me-2"></i> Ứng tuyển ngay
+                        <!-- Đã ứng tuyển -->
+                        <button th:if="${hasApplied}" class="btn btn-secondary btn-lg w-100 mb-3 fw-bold shadow-sm" disabled>
+                            <i class="bi bi-check-circle-fill me-2"></i> Đã ứng tuyển
                         </button>
+                        
+                        <!-- Chưa ứng tuyển -->
+                        <div th:if="${!hasApplied}">
+                            <!-- Chưa đăng nhập -->
+                            <a th:href="@{/login}" th:if="${#authorization.expression('!isAuthenticated()')}" class="btn btn-primary-custom btn-lg w-100 mb-3 fw-bold shadow-sm">
+                                <i class="bi bi-box-arrow-in-right me-2"></i> Đăng nhập để ứng tuyển
+                            </a>
+                            <!-- Đã đăng nhập -->
+                            <button th:if="${#authorization.expression('isAuthenticated()')}" class="btn btn-primary-custom btn-lg w-100 mb-3 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#applyModal">
+                                <i class="bi bi-send-fill me-2"></i> Ứng tuyển ngay
+                            </button>
+                        </div>
                         <!-- Nút Lưu việc làm (nếu chưa lưu) -->
                         <form th:if="${!isSaved}" th:action="@{/candidate/saved-jobs/save}" method="post">
                             <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}" />
@@ -136,10 +161,99 @@
         </main>
     </div>
 
+    <!-- Modal Ứng Tuyển -->
+    <div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="applyModalLabel" aria-hidden="true" th:if="${#authorization.expression('isAuthenticated()')}">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/candidate/apply}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="jobId" th:value="${jobPostDetailDTO.id}">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold" id="applyModalLabel">Ứng tuyển vị trí: <span class="text-primary" th:text="${jobPostDetailDTO.jobtitle}"></span></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Chọn phương thức nộp CV</label>
+                            <div class="d-flex gap-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="cvOption" id="cvOptionSaved" value="saved" checked onclick="toggleCVOption('saved')">
+                                    <label class="form-check-label" for="cvOptionSaved">
+                                        Sử dụng CV đã lưu trên hệ thống
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="cvOption" id="cvOptionUpload" value="upload" onclick="toggleCVOption('upload')">
+                                    <label class="form-check-label" for="cvOptionUpload">
+                                        Tải lên CV mới
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Option 1: Choose saved CV -->
+                        <div class="mb-4" id="savedCVSection">
+                            <label for="cvId" class="form-label fw-bold">Chọn CV của bạn</label>
+                            <select class="form-select" id="cvId" name="cvId">
+                                <option value="" disabled selected>-- Chọn CV đã lưu --</option>
+                                <option th:each="cv : ${cvList}" th:value="${cv.cvId}" th:text="${cv.cvName} + ' (Tải lên ngày: ' + ${#temporals.format(cv.uploadedAt, 'dd/MM/yyyy')} + ')'"></option>
+                            </select>
+                            <div th:if="${cvList == null || cvList.isEmpty()}" class="mt-2 text-danger small">
+                                Bạn chưa có CV nào được lưu. Hãy chọn "Tải lên CV mới" hoặc <a th:href="@{/candidate/upload-cv}" class="text-decoration-none fw-bold" target="_blank">Quản lý CV</a> để tải lên.
+                            </div>
+                        </div>
+
+                        <!-- Option 2: Upload new CV -->
+                        <div class="mb-4 d-none" id="uploadCVSection">
+                            <label for="cvFile" class="form-label fw-bold">Tải lên file CV mới (PDF/DOCX, Tối đa 5MB)</label>
+                            <input type="file" class="form-control" id="cvFile" name="cvFile" accept=".pdf,.docx">
+                        </div>
+
+                        <!-- Cover Letter -->
+                        <div class="mb-3">
+                            <label for="coverLetter" class="form-label fw-bold">Thư giới thiệu (Cover Letter) <span class="text-muted fw-normal">(Không bắt buộc)</span></label>
+                            <textarea class="form-control" id="coverLetter" name="coverLetter" rows="5" placeholder="Giới thiệu ngắn gọn kinh nghiệm và lý do bạn phù hợp với công việc này..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary-custom px-4 fw-bold">Nộp hồ sơ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Placeholder -->
     <div th:replace="~{fragments/footer.html :: footer}"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+        function toggleCVOption(option) {
+            const savedSection = document.getElementById('savedCVSection');
+            const uploadSection = document.getElementById('uploadCVSection');
+            const cvSelect = document.getElementById('cvId');
+            const cvFile = document.getElementById('cvFile');
+            
+            if (option === 'saved') {
+                if (savedSection) savedSection.classList.remove('d-none');
+                if (uploadSection) uploadSection.classList.add('d-none');
+                if (cvSelect) cvSelect.required = true;
+                if (cvFile) cvFile.required = false;
+            } else {
+                if (savedSection) savedSection.classList.add('d-none');
+                if (uploadSection) uploadSection.classList.remove('d-none');
+                if (cvSelect) cvSelect.required = false;
+                if (cvFile) cvFile.required = true;
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const cvSavedRadio = document.getElementById('cvOptionSaved');
+            if (cvSavedRadio) {
+                toggleCVOption(cvSavedRadio.checked ? 'saved' : 'upload');
+            }
+        });
+    </script>
 
 </body>
 
