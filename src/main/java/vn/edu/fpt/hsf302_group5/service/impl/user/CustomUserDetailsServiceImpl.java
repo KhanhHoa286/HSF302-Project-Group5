@@ -26,8 +26,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
     private final UserRepository userRepository;
 
-    //Spring Security gọi hàm này để lấy thông tin người dùng từ database khi thực hiện đăng nhập.
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng với email " + username)); //ném về UsernameNotFoundException để có thể quay lại trang login báo rằng không có user có email này

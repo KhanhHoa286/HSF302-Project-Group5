@@ -19,7 +19,7 @@
     <div th:replace="~{fragments/header.html :: header}"></div>
     <div class="candidate-layout">
         <!-- Sidebar Placeholder -->
-        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
+        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar(activePage='cv')}"></div>
 
         <main class="candidate-content">
             <h3 class="fw-bold mb-4">Quản lý CV</h3>

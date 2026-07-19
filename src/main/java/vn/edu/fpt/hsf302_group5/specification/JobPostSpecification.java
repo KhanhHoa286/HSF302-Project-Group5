@@ -241,4 +241,14 @@ public class JobPostSpecification {
                 return Specification.unrestricted();
         }
     }
+    public static Specification<JobPost> isApproved() {
+        return (root, query, cb) -> cb.equal(root.get("status"), vn.edu.fpt.hsf302_group5.entity.enums.JobStatus.APPROVED);
+    }
+
+    public static Specification<JobPost> isNotExpired() {
+        return (root, query, cb) -> cb.or(
+                cb.isNull(root.get("expiredDate")),
+                cb.greaterThanOrEqualTo(root.get("expiredDate"), java.time.LocalDateTime.now())
+        );
+    }
 }

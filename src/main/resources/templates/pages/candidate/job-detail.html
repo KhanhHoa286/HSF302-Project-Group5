@@ -20,7 +20,7 @@
 
     <div class="candidate-layout">
         <!-- Sidebar Placeholder -->
-        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
+        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar(activePage='jobs')}"></div>
 
         <main class="candidate-content">
             <!-- Alert Messages -->
@@ -82,6 +82,22 @@
                             <div class="col-md-6">
                                 <i class="bi bi-person-workspace text-info me-2"></i><strong>Hình thức:</strong><span
                                     th:text="${jobPostDetailDTO.employmentType != null ? jobPostDetailDTO.employmentType : ''}"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <i class="bi bi-award text-danger me-2"></i><strong>Cấp bậc:</strong> <span
+                                    th:text="${jobPostDetailDTO.jobLevel != null ? jobPostDetailDTO.jobLevel : ''}"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <i class="bi bi-people text-primary me-2"></i><strong>Số lượng tuyển:</strong> <span
+                                    th:text="${jobPostDetailDTO.vacancies != null ? jobPostDetailDTO.vacancies + ' người' : 'Không giới hạn'}"></span>
+                            </div>
+                        </div>
+
+                        <!-- Kỹ năng yêu cầu -->
+                        <div class="mb-4" th:if="${jobPostDetailDTO.requiredSkills != null && !jobPostDetailDTO.requiredSkills.isEmpty()}">
+                            <i class="bi bi-tags text-dark me-2"></i><strong>Kỹ năng yêu cầu:</strong>
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                <span th:each="skill : ${jobPostDetailDTO.requiredSkills}" class="badge bg-light text-primary border px-3 py-2" th:text="${skill}">Java</span>
                             </div>
                         </div>
 

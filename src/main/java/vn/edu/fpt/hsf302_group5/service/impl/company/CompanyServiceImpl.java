@@ -3,6 +3,7 @@ package vn.edu.fpt.hsf302_group5.service.impl.company;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.CompanyProfileRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.CompanyProfileResponse;
 import vn.edu.fpt.hsf302_group5.entity.Company;
@@ -94,5 +95,13 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy doanh nghiệp!"));
         return companyMapper.toResponse(company);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CompanyDetailResponse getCompanyDetailById(Integer companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy doanh nghiệp!"));
+        return companyMapper.toDetailResponse(company);
     }
 }

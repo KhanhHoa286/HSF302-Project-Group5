@@ -92,6 +92,9 @@ public class JobPostServiceImpl implements JobPostService {
     @Override
     public JobPostDetailResponse getJobPostDetaiDTOByJobPostId(Integer jobPostId) {
         JobPostDetailResponse jobPostDetailResponse = jobPostRepository.getJobPostDetaiDTOByJobPostId(jobPostId);
+        if (jobPostDetailResponse != null) {
+            jobPostDetailResponse.setRequiredSkills(jobPostRepository.findSkillNamesByJobPostId(jobPostId));
+        }
         return jobPostDetailResponse;
     }
 
@@ -230,6 +233,10 @@ public class JobPostServiceImpl implements JobPostService {
         } else {
             spec = spec.or(spectitle).or(specProvince).or(specIndustry).or(specCompany).or(specSalary).or(specExpire);
         }
+
+        // Lọc mặc định: Chỉ hiển thị công việc đang tuyển (APPROVED) và chưa hết hạn nộp
+        spec = spec.and(JobPostSpecification.isApproved())
+                   .and(JobPostSpecification.isNotExpired());
 
         Page<JobPost> jobPosts = jobPostRepository.findAll(spec, pageable);
 

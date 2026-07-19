@@ -97,7 +97,8 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
                  j.postedDate, 
                  j.expiredDate, 
                  au.unitName,
-                 c.companyId
+                 c.companyId,
+                 j.vacancies
              ) 
              FROM JobPost j 
              LEFT JOIN j.recruiter r 
@@ -107,6 +108,9 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
              WHERE j.jobId = :jobPostId
             """)
     JobPostDetailResponse getJobPostDetaiDTOByJobPostId(@Param("jobPostId") Integer jobPostId);
+
+    @Query("SELECT js.skill.skillName FROM JobSkill js WHERE js.jobPost.jobId = :jobPostId")
+    List<String> findSkillNamesByJobPostId(@Param("jobPostId") Integer jobPostId);
     List<JobPost> findTop5ByStatusOrderByPostedDateDesc(
         JobStatus status
     );
@@ -162,4 +166,21 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
 """)
     @Modifying
     void updateStatusJob(@Param("jobId") Integer jobId,@Param("newStatus") JobStatus newStatus);
+
+    @Query("""
+        SELECT new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse(
+            j.jobId, j.title,
+            j.recruiter.company.companyName,
+            j.province.provinceName,
+            j.salaryMin,
+            j.salaryMax,
+            j.expiredDate,
+            j.recruiter.company.logoUrl
+        )
+        FROM JobPost j
+        WHERE j.recruiter.company.companyId = :companyId
+          AND j.status = vn.edu.fpt.hsf302_group5.entity.enums.JobStatus.APPROVED
+        ORDER BY j.postedDate DESC
+    """)
+    List<JobPostResponse> findActiveJobsByCompanyId(@Param("companyId") Integer companyId);
 }
