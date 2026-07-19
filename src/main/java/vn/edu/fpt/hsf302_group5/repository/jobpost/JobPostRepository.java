@@ -26,9 +26,9 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
             COUNT(CASE WHEN j.status IN (vn.edu.fpt.hsf302_group5.entity.enums.JobStatus.CLOSED, 
             vn.edu.fpt.hsf302_group5.entity.enums.JobStatus.REJECTED) THEN 1 END)
             ) 
-            FROM JobPost j 
+            FROM JobPost j WHERE j.recruiterId = :recruiterId
 """)
-    StatisticResponse getStatistic();
+    StatisticResponse getStatistic(@Param("recruiterId")Integer recruiterId);
 
     @Query("""
     select new vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse(

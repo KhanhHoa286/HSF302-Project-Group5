@@ -42,8 +42,8 @@ public class JobPostServiceImpl implements JobPostService {
     private final JobSkillRepository jobSkillRepository;
 
     @Override
-    public StatisticResponse getStatistic() {
-        return jobPostRepository.getStatistic();
+    public StatisticResponse getStatistic(Integer recruiterId) {
+        return jobPostRepository.getStatistic(recruiterId);
     }
 
     @Override

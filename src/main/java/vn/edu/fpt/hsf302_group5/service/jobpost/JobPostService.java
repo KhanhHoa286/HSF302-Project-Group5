@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface JobPostService {
-      StatisticResponse getStatistic();
+      StatisticResponse getStatistic(Integer recruiterId);
 
       Page<JobPostResponse> getJobPostsByFilter(String searchKeyword, Integer industryId, Integer provinceId, BigDecimal minSalary, int page);
 
