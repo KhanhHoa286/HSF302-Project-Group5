@@ -26,8 +26,7 @@
             <!-- Breadcrumb -->
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="my-applications.html" class="text-decoration-none">Hồ sơ ứng
-                            tuyển</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/candidate/my-applications}" class="text-decoration-none">Hồ sơ ứng tuyển</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Chi tiết hồ sơ</li>
                 </ol>
             </nav>
@@ -38,87 +37,140 @@
                     <div class="card card-custom p-4 mb-4">
                         <h5 class="fw-bold border-bottom pb-2 mb-3">Thông tin công việc</h5>
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <img src="https://ui-avatars.com/api/?name=Company&background=random&color=fff&size=60/e9ecef/adb5bd?text=Logo"
-                                alt="Company" class="rounded border p-1 company-logo-contain-sm">
+                            <img th:src="${companyLogo != null && !companyLogo.isEmpty() ? companyLogo : 'https://ui-avatars.com/api/?name=' + companyName}"
+                                alt="Company" class="rounded border p-1"
+                                style="width: 60px; height: 60px; object-fit: contain;">
                             <div>
-                                <h5 class="fw-bold mb-1 text-primary">Senior Frontend Developer</h5>
-                                <p class="text-muted mb-0">TechCorp Vietnam JSC</p>
+                                <h5 class="fw-bold mb-1 text-primary" th:text="${applicant.jobTitle}">Senior Frontend Developer</h5>
+                                <p class="text-muted mb-0" th:text="${companyName}">TechCorp Vietnam JSC</p>
                             </div>
                         </div>
-                        <a href="job-detail.html" class="btn btn-outline-primary-custom btn-sm">Xem lại tin tuyển
-                            dụng</a>
+                        <a th:href="@{/candidate/jobs/job-detail/{id}(id=${applicant.jobId})}" class="btn btn-outline-primary-custom btn-sm">Xem lại tin tuyển dụng</a>
                     </div>
 
                     <div class="card card-custom p-4">
                         <h5 class="fw-bold border-bottom pb-2 mb-3">Hồ sơ đã nộp</h5>
                         <div class="d-flex align-items-center p-3 border rounded bg-light">
-                            <i class="bi bi-file-earmark-pdf text-danger fs-3 me-3"></i>
+                            <i th:class="${#strings.endsWith(#strings.toLowerCase(applicant.cvName != null ? applicant.cvName : ''), '.docx') || #strings.endsWith(#strings.toLowerCase(applicant.cvUrl != null ? applicant.cvUrl : ''), '.docx') ? 'bi bi-file-earmark-word text-primary fs-3 me-3' : 'bi bi-file-earmark-pdf text-danger fs-3 me-3'}"></i>
                             <div class="flex-grow-1">
-                                <h6 class="fw-bold mb-0">CV_NguyenVanA_Frontend.pdf</h6>
-                                <small class="text-muted">Đã nộp ngày: 12/11/2026</small>
+                                <h6 class="fw-bold mb-0" th:text="${applicant.cvName}">CV_NguyenVanA_Frontend.pdf</h6>
+                                <small class="text-muted" th:text="'Đã nộp ngày: ' + ${#temporals.format(applicant.appliedDate, 'dd/MM/yyyy HH:mm')}">Đã nộp ngày: 12/11/2026</small>
                             </div>
-                            <button class="btn btn-sm btn-outline-primary-custom"><i
-                                    class="bi bi-download"></i></button>
+                            <a th:href="${applicant.cvUrl}" target="_blank" class="btn btn-sm btn-outline-primary-custom" title="Tải xuống / Xem CV">
+                                <i class="bi bi-download"></i>
+                            </a>
                         </div>
 
                         <div class="mt-4">
                             <h6 class="fw-bold">Thư giới thiệu (Cover Letter)</h6>
-                            <div class="p-3 border rounded bg-light text-muted small">
-                                Kính gửi nhà tuyển dụng TechCorp,<br><br>
-                                Tôi viết thư này để bày tỏ sự quan tâm đặc biệt đến vị trí Senior Frontend Developer...
+                            <div class="p-3 border rounded bg-light text-muted small" style="white-space: pre-line;"
+                                th:text="${applicant.coverLetter != null && !applicant.coverLetter.trim().isEmpty() ? applicant.coverLetter : 'Không có thư giới thiệu.'}">
+                                Kính gửi nhà tuyển dụng...
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Timeline Tuyển dụng -->
-                <div class="col-lg-5">
-                    <div class="card card-custom p-4 sticky-top sticky-offset-90">
+                <div class="col-lg-5" th:with="
+                    appliedEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'APPLIED']) ? null : applicant.statusHistories.?[newStatus.name() == 'APPLIED'][0]},
+                    reviewEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'REVIEW']) ? null : applicant.statusHistories.?[newStatus.name() == 'REVIEW'][0]},
+                    shortlistEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'SHORTLIST']) ? null : applicant.statusHistories.?[newStatus.name() == 'SHORTLIST'][0]},
+                    interviewEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'INTERVIEW']) ? null : applicant.statusHistories.?[newStatus.name() == 'INTERVIEW'][0]},
+                    acceptedEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'ACCEPTED']) ? null : applicant.statusHistories.?[newStatus.name() == 'ACCEPTED'][0]},
+                    rejectedEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'REJECTED']) ? null : applicant.statusHistories.?[newStatus.name() == 'REJECTED'][0]}
+                ">
+                    <div class="card card-custom p-4 sticky-top" style="top: 90px;">
                         <h5 class="fw-bold border-bottom pb-2 mb-4">Tiến trình tuyển dụng</h5>
 
                         <ul class="timeline">
+                            <!-- Đã ứng tuyển (APPLIED) -->
                             <li>
                                 <div class="timeline-badge success"><i class="bi bi-check-lg"></i></div>
                                 <div class="timeline-panel">
                                     <div class="timeline-heading">
-                                        <h6 class="timeline-title mb-1 text-success">Đã ứng tuyển</h6>
-                                        <small class="text-muted">12/11/2026 - 10:30 AM</small>
+                                        <h6 class="timeline-title mb-1 text-success fw-bold">Đã ứng tuyển</h6>
+                                        <small class="text-muted" th:text="${#temporals.format(appliedEvent != null ? appliedEvent.changedAt : applicant.appliedDate, 'dd/MM/yyyy - hh:mm a')}">12/11/2026 - 10:30 AM</small>
                                     </div>
                                 </div>
                             </li>
+
+                            <!-- Đang xem xét (REVIEW) -->
                             <li>
-                                <div class="timeline-badge primary"><i class="bi bi-eye"></i></div>
+                                <div th:class="${reviewEvent != null ? 'timeline-badge primary' : 'timeline-badge'}"><i class="bi bi-eye"></i></div>
+                                <div class="timeline-panel" th:classappend="${reviewEvent == null ? 'text-muted' : ''}">
+                                    <div class="timeline-heading">
+                                        <h6 class="timeline-title mb-1" th:classappend="${reviewEvent != null ? 'text-primary fw-bold' : ''}">Đang xem xét</h6>
+                                        <small class="text-muted" th:if="${reviewEvent != null}" th:text="${#temporals.format(reviewEvent.changedAt, 'dd/MM/yyyy - hh:mm a')}">14/11/2026 - 02:15 PM</small>
+                                    </div>
+                                    <div class="timeline-body mt-2" th:if="${reviewEvent != null}">
+                                        <p class="small text-muted mb-0">Hồ sơ của bạn đang được nhà tuyển dụng xem xét và đánh giá.</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Được shortlist (SHORTLIST) -->
+                            <li>
+                                <div th:class="${shortlistEvent != null ? 'timeline-badge success' : 'timeline-badge'}"><i class="bi bi-star"></i></div>
+                                <div class="timeline-panel" th:classappend="${shortlistEvent == null ? 'text-muted' : ''}">
+                                    <div class="timeline-heading">
+                                        <h6 class="timeline-title mb-1" th:classappend="${shortlistEvent != null ? 'text-success fw-bold' : ''}">Được shortlist</h6>
+                                        <small class="text-muted" th:if="${shortlistEvent != null}" th:text="${#temporals.format(shortlistEvent.changedAt, 'dd/MM/yyyy - hh:mm a')}"></small>
+                                    </div>
+                                    <div class="timeline-body mt-2" th:if="${shortlistEvent != null}">
+                                        <p class="small text-muted mb-0">Hồ sơ của bạn đã được đưa vào danh sách rút gọn cho vị trí này.</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Phỏng vấn (INTERVIEW) -->
+                            <li>
+                                <div th:class="${interviewEvent != null ? 'timeline-badge warning' : 'timeline-badge'}"><i class="bi bi-camera-video"></i></div>
+                                <div class="timeline-panel" th:classappend="${interviewEvent == null ? 'text-muted' : ''}">
+                                    <div class="timeline-heading">
+                                        <h6 class="timeline-title mb-1" th:classappend="${interviewEvent != null ? 'text-warning fw-bold' : ''}">Phỏng vấn</h6>
+                                        <small class="text-muted" th:if="${interviewEvent != null}" th:text="${#temporals.format(interviewEvent.changedAt, 'dd/MM/yyyy - hh:mm a')}"></small>
+                                    </div>
+                                    <div class="timeline-body mt-2" th:if="${interviewEvent != null}">
+                                        <p class="small text-muted mb-0">Lịch phỏng vấn đang được lên lịch hoặc đã diễn ra. Vui lòng theo dõi thông tin từ nhà tuyển dụng.</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Trúng tuyển (ACCEPTED) -->
+                            <li th:if="${applicant.status?.name() == 'ACCEPTED' || acceptedEvent != null}">
+                                <div class="timeline-badge success"><i class="bi bi-award"></i></div>
                                 <div class="timeline-panel">
                                     <div class="timeline-heading">
-                                        <h6 class="timeline-title mb-1 text-primary">Đang xem xét</h6>
-                                        <small class="text-muted">14/11/2026 - 02:15 PM</small>
+                                        <h6 class="timeline-title mb-1 text-success fw-bold">Trúng tuyển</h6>
+                                        <small class="text-muted" th:text="${#temporals.format(acceptedEvent != null ? acceptedEvent.changedAt : applicant.appliedDate, 'dd/MM/yyyy - hh:mm a')}"></small>
                                     </div>
                                     <div class="timeline-body mt-2">
-                                        <p class="small text-muted mb-0">Hồ sơ của bạn đang được NTD đánh giá.</p>
+                                        <p class="small text-success mb-0">Chúc mừng! Bạn đã trúng tuyển vào vị trí này. Nhà tuyển dụng sẽ gửi thư mời nhận việc chính thức sớm.</p>
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <div class="timeline-badge"><i class="bi bi-star"></i></div>
-                                <div class="timeline-panel text-muted">
+
+                            <!-- Từ chối (REJECTED) -->
+                            <li th:if="${applicant.status?.name() == 'REJECTED' || rejectedEvent != null}">
+                                <div class="timeline-badge danger"><i class="bi bi-x-circle"></i></div>
+                                <div class="timeline-panel">
                                     <div class="timeline-heading">
-                                        <h6 class="timeline-title mb-1">Được shortlist</h6>
+                                        <h6 class="timeline-title mb-1 text-danger fw-bold">Từ chối</h6>
+                                        <small class="text-muted" th:text="${#temporals.format(rejectedEvent != null ? rejectedEvent.changedAt : applicant.appliedDate, 'dd/MM/yyyy - hh:mm a')}"></small>
+                                    </div>
+                                    <div class="timeline-body mt-2">
+                                        <p class="small text-danger mb-0">Hồ sơ chưa phù hợp ở thời điểm hiện tại. Chúc bạn may mắn ở các cơ hội sau!</p>
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <div class="timeline-badge"><i class="bi bi-camera-video"></i></div>
-                                <div class="timeline-panel text-muted">
-                                    <div class="timeline-heading">
-                                        <h6 class="timeline-title mb-1">Phỏng vấn</h6>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
+
+                            <!-- Kết quả (Chưa có) -->
+                            <li th:if="${applicant.status?.name() != 'ACCEPTED' && applicant.status?.name() != 'REJECTED'}">
                                 <div class="timeline-badge"><i class="bi bi-award"></i></div>
                                 <div class="timeline-panel text-muted">
                                     <div class="timeline-heading">
-                                        <h6 class="timeline-title mb-1">Trúng tuyển</h6>
+                                        <h6 class="timeline-title mb-1">Kết quả tuyển dụng</h6>
                                     </div>
                                 </div>
                             </li>

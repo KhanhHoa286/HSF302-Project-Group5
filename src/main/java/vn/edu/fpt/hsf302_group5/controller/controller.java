@@ -2,9 +2,7 @@ package vn.edu.fpt.hsf302_group5.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import vn.edu.fpt.hsf302_group5.dto.home.HomeDto;
 import vn.edu.fpt.hsf302_group5.service.home.HomeService;
 
 @Controller
@@ -18,14 +16,9 @@ public class controller {
         return "pages/candidate/application-detail";
     }
 
-    @GetMapping("/test1")
-    public String test1(){
-        return "pages/candidate/job-detail";
-    }
-
-    @GetMapping("/test3")
-    public String test3(){
-        return "pages/candidate/my-applications";
+    @GetMapping("/test4")
+    public String test4(){
+        return "pages/candidate/profile";
     }
 
     @GetMapping("/test5")
@@ -35,9 +28,7 @@ public class controller {
 
 
     @GetMapping("/")
-    public String test6(Model model){
-        HomeDto homeDto = homeService.getHomeData();
-        model.addAttribute("homeData", homeDto);
+    public String test6(){
         return "pages/public/home";
     }
 
