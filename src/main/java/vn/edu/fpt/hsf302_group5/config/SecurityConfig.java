@@ -117,6 +117,8 @@ public class SecurityConfig {
                     httpSecurityRememberMeConfigurer.key(rememberMeKey);
                     httpSecurityRememberMeConfigurer.rememberMeParameter("remember-me");
                     httpSecurityRememberMeConfigurer.tokenValiditySeconds(60 * 60 * 24 * 30);
+                    httpSecurityRememberMeConfigurer.userDetailsService(customUserDetailsService);
+                    //Service tải thông tin User
                 })
                 .logout(logout -> {
                             logout.logoutUrl("/logout"); // POST
