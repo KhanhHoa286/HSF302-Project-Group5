@@ -45,6 +45,16 @@ public class CVServiceImpl implements CVService {
             userRepository.save(user);
         }
 
+        // Validate file type
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || !originalFilename.toLowerCase().endsWith(".pdf")) {
+            throw new IllegalArgumentException("Chỉ hỗ trợ tải lên file PDF!");
+        }
+        // Validate size (max 5MB)
+        if (file.getSize() > 5 * 1024 * 1024) {
+            throw new IllegalArgumentException("Dung lượng file vượt quá giới hạn 5MB!");
+        }
+
         String fileUrl = cloudinaryService.uploadFile(file);
         
         CV cv = CV.builder()

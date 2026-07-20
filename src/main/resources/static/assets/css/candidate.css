@@ -254,6 +254,10 @@
     background-color: #dc3545;
 }
 
+.timeline .timeline-badge.warning {
+    background-color: #ffc107;
+}
+
 /* Chấm màu đỏ */
 
 /* Thẻ thông tin bên cạnh mốc thời gian */

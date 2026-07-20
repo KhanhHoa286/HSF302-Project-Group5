@@ -9,6 +9,7 @@ import vn.edu.fpt.hsf302_group5.dto.recruiter.response.CompanyProfileResponse;
 import vn.edu.fpt.hsf302_group5.entity.Company;
 import vn.edu.fpt.hsf302_group5.entity.User;
 import vn.edu.fpt.hsf302_group5.mapper.CompanyMapper;
+import vn.edu.fpt.hsf302_group5.mapper.AdminMapper;
 import vn.edu.fpt.hsf302_group5.repository.company.CompanyRepository;
 import vn.edu.fpt.hsf302_group5.repository.user.UserRepository;
 import vn.edu.fpt.hsf302_group5.service.cloudinary.CloudinaryService;
@@ -23,6 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
     private final CompanyMapper companyMapper;
+    private final AdminMapper adminMapper;
     private final CloudinaryService cloudinaryService;
 
     @Override
@@ -102,6 +104,6 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyDetailResponse getCompanyDetailById(Integer companyId) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy doanh nghiệp!"));
-        return companyMapper.toDetailResponse(company);
+        return adminMapper.toCompanyDetailResponse(company);
     }
 }

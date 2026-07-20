@@ -80,6 +80,17 @@ public class MyApplicationsController {
                     redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng chọn file CV để tải lên!");
                     return "redirect:/candidate/jobs/job-detail/" + jobId;
                 }
+                // Validate file type
+                String originalFilename = cvFile.getOriginalFilename();
+                if (originalFilename == null || !originalFilename.toLowerCase().endsWith(".pdf")) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Chỉ hỗ trợ tải lên file PDF!");
+                    return "redirect:/candidate/jobs/job-detail/" + jobId;
+                }
+                // Validate size (max 5MB)
+                if (cvFile.getSize() > 5 * 1024 * 1024) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Dung lượng file vượt quá giới hạn 5MB!");
+                    return "redirect:/candidate/jobs/job-detail/" + jobId;
+                }
                 // Upload new CV
                 CV cv = cvService.uploadCV(user.getUserId(), cvFile, "CV_Applied_" + System.currentTimeMillis());
                 finalCvId = cv.getCvId();

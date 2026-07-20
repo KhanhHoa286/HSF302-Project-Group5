@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.hsf302_group5.dto.industry.IndustryRequest;
 import vn.edu.fpt.hsf302_group5.dto.industry.IndustryResponse;
+import vn.edu.fpt.hsf302_group5.dto.industry.IndustryStatusRequest;
 import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.enums.IndustryStatus;
 import vn.edu.fpt.hsf302_group5.service.industry.IndustryService;
@@ -101,11 +102,11 @@ public class AdminIndustryController {
     @PostMapping("/status/{id}")
     public String updateIndustryStatus(
             @PathVariable("id") Integer id,
-            @RequestParam("status") IndustryStatus status,
+            @ModelAttribute IndustryStatusRequest request,
             RedirectAttributes redirectAttributes
     ) {
         try {
-            industryService.updateIndustryStatus(id, status);
+            industryService.updateIndustryStatus(id, request.getStatus());
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật trạng thái ngành nghề thành công.");
         } catch (IllegalArgumentException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
