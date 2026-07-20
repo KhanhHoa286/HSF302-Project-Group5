@@ -46,9 +46,8 @@
                             <select class="form-select" name="status" onchange="document.getElementById('filterForm').submit()">
                                 <option value="ALL" th:selected="${status == 'ALL'}">Tất cả trạng thái</option>
                                 <option value="APPLIED" th:selected="${status == 'APPLIED'}">Đã ứng tuyển</option>
-                                <option value="REVIEW" th:selected="${status == 'REVIEW'}">Đang xem xét</option>
-                                <option value="SHORTLIST" th:selected="${status == 'SHORTLIST'}">Được shortlist</option>
-                                <option value="INTERVIEW" th:selected="${status == 'INTERVIEW'}">Phỏng vấn</option>
+                                <option value="UNDER_REVIEW" th:selected="${status == 'UNDER_REVIEW'}">Đang xem xét</option>
+                                <option value="INTERVIEWED" th:selected="${status == 'INTERVIEWED'}">Phỏng vấn</option>
                                 <option value="ACCEPTED" th:selected="${status == 'ACCEPTED'}">Trúng tuyển</option>
                                 <option value="REJECTED" th:selected="${status == 'REJECTED'}">Từ chối</option>
                             </select>
@@ -79,9 +78,8 @@
                                 <td>
                                     <!-- Display badges dynamically based on status enum -->
                                     <span th:if="${app.status?.name() == 'APPLIED'}" class="badge badge-soft-secondary">Đã ứng tuyển</span>
-                                    <span th:if="${app.status?.name() == 'REVIEW'}" class="badge badge-soft-warning">Đang xem xét</span>
-                                    <span th:if="${app.status?.name() == 'SHORTLIST'}" class="badge badge-soft-info">Được shortlist</span>
-                                    <span th:if="${app.status?.name() == 'INTERVIEW'}" class="badge badge-soft-primary">Phỏng vấn</span>
+                                    <span th:if="${app.status?.name() == 'UNDER_REVIEW'}" class="badge badge-soft-warning">Đang xem xét</span>
+                                    <span th:if="${app.status?.name() == 'INTERVIEWED'}" class="badge badge-soft-primary">Phỏng vấn</span>
                                     <span th:if="${app.status?.name() == 'ACCEPTED'}" class="badge badge-soft-success">Trúng tuyển</span>
                                     <span th:if="${app.status?.name() == 'REJECTED'}" class="badge badge-soft-danger">Từ chối</span>
                                 </td>

@@ -74,11 +74,12 @@
                 <!-- Timeline Tuyển dụng -->
                 <div class="col-lg-5" th:with="
                     appliedEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'APPLIED']) ? null : applicant.statusHistories.?[newStatus.name() == 'APPLIED'][0]},
-                    reviewEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'REVIEW']) ? null : applicant.statusHistories.?[newStatus.name() == 'REVIEW'][0]},
-                    shortlistEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'SHORTLIST']) ? null : applicant.statusHistories.?[newStatus.name() == 'SHORTLIST'][0]},
-                    interviewEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'INTERVIEW']) ? null : applicant.statusHistories.?[newStatus.name() == 'INTERVIEW'][0]},
+                    reviewEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'UNDER_REVIEW']) ? null : applicant.statusHistories.?[newStatus.name() == 'UNDER_REVIEW'][0]},
+                    interviewEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'INTERVIEWED']) ? null : applicant.statusHistories.?[newStatus.name() == 'INTERVIEWED'][0]},
                     acceptedEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'ACCEPTED']) ? null : applicant.statusHistories.?[newStatus.name() == 'ACCEPTED'][0]},
-                    rejectedEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'REJECTED']) ? null : applicant.statusHistories.?[newStatus.name() == 'REJECTED'][0]}
+                    rejectedEvent=${#lists.isEmpty(applicant.statusHistories.?[newStatus.name() == 'REJECTED']) ? null : applicant.statusHistories.?[newStatus.name() == 'REJECTED'][0]},
+                    isReviewActive=${reviewEvent != null || applicant.status?.name() == 'UNDER_REVIEW' || applicant.status?.name() == 'INTERVIEWED' || applicant.status?.name() == 'ACCEPTED' || applicant.status?.name() == 'REJECTED'},
+                    isInterviewActive=${interviewEvent != null || applicant.status?.name() == 'INTERVIEWED' || applicant.status?.name() == 'ACCEPTED' || applicant.status?.name() == 'REJECTED'}
                 ">
                     <div class="card card-custom p-4 sticky-top" style="top: 90px;">
                         <h5 class="fw-bold border-bottom pb-2 mb-4">Tiến trình tuyển dụng</h5>
@@ -97,41 +98,27 @@
 
                             <!-- Đang xem xét (REVIEW) -->
                             <li>
-                                <div th:class="${reviewEvent != null ? 'timeline-badge primary' : 'timeline-badge'}"><i class="bi bi-eye"></i></div>
-                                <div class="timeline-panel" th:classappend="${reviewEvent == null ? 'text-muted' : ''}">
+                                <div th:class="${isReviewActive ? 'timeline-badge primary' : 'timeline-badge'}"><i class="bi bi-eye"></i></div>
+                                <div class="timeline-panel" th:classappend="${!isReviewActive ? 'text-muted' : ''}">
                                     <div class="timeline-heading">
-                                        <h6 class="timeline-title mb-1" th:classappend="${reviewEvent != null ? 'text-primary fw-bold' : ''}">Đang xem xét</h6>
+                                        <h6 class="timeline-title mb-1" th:classappend="${isReviewActive ? 'text-primary fw-bold' : ''}">Đang xem xét</h6>
                                         <small class="text-muted" th:if="${reviewEvent != null}" th:text="${#temporals.format(reviewEvent.changedAt, 'dd/MM/yyyy - hh:mm a')}">14/11/2026 - 02:15 PM</small>
                                     </div>
-                                    <div class="timeline-body mt-2" th:if="${reviewEvent != null}">
+                                    <div class="timeline-body mt-2" th:if="${isReviewActive}">
                                         <p class="small text-muted mb-0">Hồ sơ của bạn đang được nhà tuyển dụng xem xét và đánh giá.</p>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <!-- Được shortlist (SHORTLIST) -->
-                            <li>
-                                <div th:class="${shortlistEvent != null ? 'timeline-badge success' : 'timeline-badge'}"><i class="bi bi-star"></i></div>
-                                <div class="timeline-panel" th:classappend="${shortlistEvent == null ? 'text-muted' : ''}">
-                                    <div class="timeline-heading">
-                                        <h6 class="timeline-title mb-1" th:classappend="${shortlistEvent != null ? 'text-success fw-bold' : ''}">Được shortlist</h6>
-                                        <small class="text-muted" th:if="${shortlistEvent != null}" th:text="${#temporals.format(shortlistEvent.changedAt, 'dd/MM/yyyy - hh:mm a')}"></small>
-                                    </div>
-                                    <div class="timeline-body mt-2" th:if="${shortlistEvent != null}">
-                                        <p class="small text-muted mb-0">Hồ sơ của bạn đã được đưa vào danh sách rút gọn cho vị trí này.</p>
                                     </div>
                                 </div>
                             </li>
 
                             <!-- Phỏng vấn (INTERVIEW) -->
                             <li>
-                                <div th:class="${interviewEvent != null ? 'timeline-badge warning' : 'timeline-badge'}"><i class="bi bi-camera-video"></i></div>
-                                <div class="timeline-panel" th:classappend="${interviewEvent == null ? 'text-muted' : ''}">
+                                <div th:class="${isInterviewActive ? 'timeline-badge warning' : 'timeline-badge'}"><i class="bi bi-camera-video"></i></div>
+                                <div class="timeline-panel" th:classappend="${!isInterviewActive ? 'text-muted' : ''}">
                                     <div class="timeline-heading">
-                                        <h6 class="timeline-title mb-1" th:classappend="${interviewEvent != null ? 'text-warning fw-bold' : ''}">Phỏng vấn</h6>
+                                        <h6 class="timeline-title mb-1" th:classappend="${isInterviewActive ? 'text-warning fw-bold' : ''}">Phỏng vấn</h6>
                                         <small class="text-muted" th:if="${interviewEvent != null}" th:text="${#temporals.format(interviewEvent.changedAt, 'dd/MM/yyyy - hh:mm a')}"></small>
                                     </div>
-                                    <div class="timeline-body mt-2" th:if="${interviewEvent != null}">
+                                    <div class="timeline-body mt-2" th:if="${isInterviewActive}">
                                         <p class="small text-muted mb-0">Lịch phỏng vấn đang được lên lịch hoặc đã diễn ra. Vui lòng theo dõi thông tin từ nhà tuyển dụng.</p>
                                     </div>
                                 </div>
