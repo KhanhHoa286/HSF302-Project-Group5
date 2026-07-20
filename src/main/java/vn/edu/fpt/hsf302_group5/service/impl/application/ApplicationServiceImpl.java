@@ -106,7 +106,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
             applicationRepository.save(application);
 
-            if (newStatus == ApplicationStatus.INTERVIEWED && oldStatus != ApplicationStatus.INTERVIEWED) {
+            if (newStatus == ApplicationStatus.INTERVIEWED || newStatus == ApplicationStatus.ACCEPTED || newStatus == ApplicationStatus.REJECTED) {
                 String toEmail = application.getCandidateEmail();
                 if (toEmail != null && !toEmail.isEmpty()) {
                     String candidateName = application.getCandidateFullName();
@@ -117,12 +117,17 @@ public class ApplicationServiceImpl implements ApplicationService {
                         application.getJobPost().getRecruiter().getCompany() != null) {
                         companyName = application.getJobPost().getRecruiter().getCompany().getCompanyName();
                     }
-                    emailService.sendInterviewInvitationEmail(
-                            toEmail,
-                            candidateName != null ? candidateName : "Ứng viên",
-                            jobTitle != null ? jobTitle : "Vị trí tuyển dụng",
-                            companyName
-                    );
+                    
+                    String cName = candidateName != null ? candidateName : "Ứng viên";
+                    String jTitle = jobTitle != null ? jobTitle : "Vị trí tuyển dụng";
+                    
+                    if (newStatus == ApplicationStatus.INTERVIEWED) {
+                        emailService.sendInterviewInvitationEmail(toEmail, cName, jTitle, companyName);
+                    } else if (newStatus == ApplicationStatus.ACCEPTED) {
+                        emailService.sendAcceptanceEmail(toEmail, cName, jTitle, companyName);
+                    } else if (newStatus == ApplicationStatus.REJECTED) {
+                        emailService.sendRejectionEmail(toEmail, cName, jTitle, companyName);
+                    }
                 }
             }
         } catch (IllegalArgumentException e) {
