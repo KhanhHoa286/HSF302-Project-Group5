@@ -72,6 +72,11 @@ public class MyApplicationsController {
         User user = userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng!"));
 
+        if (user.getPhone() == null || user.getPhone().trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng cập nhật số điện thoại trong thông tin cá nhân trước khi ứng tuyển!");
+            return "redirect:/candidate/profile";
+        }
+
         try {
             Integer finalCvId = cvId;
 
