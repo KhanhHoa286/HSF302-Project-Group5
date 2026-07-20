@@ -92,10 +92,10 @@
                         </div>
                         <div class="mt-auto">
                             <div class="d-flex flex-wrap gap-2 mb-3">
-                                <span class="badge badge-soft-success"><i class="bi bi-currency-dollar"></i> <th:block th:text="${job.salaryMin + ' - ' + job.salaryMax + ' USD'}"></th:block></span>
+                                <span class="badge badge-soft-success"><i class="bi bi-cash"></i> <th:block th:text="${job.salaryMin != null && job.salaryMax != null ? #numbers.formatDecimal(job.salaryMin, 0, 'COMMA', 0, 'POINT') + ' - ' + #numbers.formatDecimal(job.salaryMax, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : 'Thỏa thuận'}"></th:block></span>
                                 <span class="badge badge-soft-secondary"><i class="bi bi-geo-alt"></i> <th:block th:text="${job.companyProvinceAddress}"></th:block></span>
                             </div>
-                            <a th:href="@{/candidate/job-detail(jobId=${job.jobId})}" class="btn btn-outline-primary-custom w-100 text-center text-decoration-none">Ứng tuyển ngay</a>
+                            <a th:href="@{/candidate/jobs/job-detail/{id}(id=${job.jobId})}" class="btn btn-outline-primary-custom w-100 text-center text-decoration-none">Ứng tuyển ngay</a>
                         </div>
                     </div>
                 </div>

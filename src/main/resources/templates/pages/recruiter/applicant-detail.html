@@ -144,23 +144,17 @@
               <form th:action="@{/recruiter/applicant/update-status}" method="post" class="d-grid">
                 <input type="hidden" name="applicationId" th:value="${applicant.applicationId}" />
                 <input type="hidden" name="status" value="UNDER_REVIEW" />
-                <button type="submit" class="btn btn-outline-warning fw-bold text-dark mb-2" th:disabled="${applicant.status.name() == 'UNDER_REVIEW'}">
+                <button type="submit" class="btn btn-outline-warning fw-bold text-dark mb-2" 
+                        th:disabled="${applicant.status.name() == 'UNDER_REVIEW' or applicant.status.name() == 'INTERVIEWED' or applicant.status.name() == 'ACCEPTED' or applicant.status.name() == 'REJECTED'}">
                   <i class="bi bi-eye me-2"></i>Xem xét hồ sơ
                 </button>
               </form>
               
               <form th:action="@{/recruiter/applicant/update-status}" method="post" class="d-grid">
                 <input type="hidden" name="applicationId" th:value="${applicant.applicationId}" />
-                <input type="hidden" name="status" value="SHORTLISTED" />
-                <button type="submit" class="btn btn-outline-success fw-bold mb-2" th:disabled="${applicant.status.name() == 'SHORTLISTED'}">
-                  <i class="bi bi-star me-2"></i>Shortlist
-                </button>
-              </form>
-              
-              <form th:action="@{/recruiter/applicant/update-status}" method="post" class="d-grid">
-                <input type="hidden" name="applicationId" th:value="${applicant.applicationId}" />
                 <input type="hidden" name="status" value="INTERVIEWED" />
-                <button type="submit" class="btn btn-primary-custom fw-bold mb-2" th:disabled="${applicant.status.name() == 'INTERVIEWED'}">
+                <button type="submit" class="btn btn-primary-custom fw-bold mb-2" 
+                        th:disabled="${applicant.status.name() == 'INTERVIEWED' or applicant.status.name() == 'ACCEPTED' or applicant.status.name() == 'REJECTED'}">
                   <i class="bi bi-camera-video me-2"></i>Mời phỏng vấn
                 </button>
               </form>
@@ -168,7 +162,8 @@
               <form th:action="@{/recruiter/applicant/update-status}" method="post" class="d-grid">
                 <input type="hidden" name="applicationId" th:value="${applicant.applicationId}" />
                 <input type="hidden" name="status" value="ACCEPTED" />
-                <button type="submit" class="btn btn-success fw-bold mb-2" th:disabled="${applicant.status.name() == 'ACCEPTED'}">
+                <button type="submit" class="btn btn-success fw-bold mb-2" 
+                        th:disabled="${applicant.status.name() == 'ACCEPTED' or applicant.status.name() == 'REJECTED'}">
                   <i class="bi bi-check-circle me-2"></i>Nhận ứng viên
                 </button>
               </form>
@@ -176,7 +171,8 @@
               <form th:action="@{/recruiter/applicant/update-status}" method="post" class="d-grid">
                 <input type="hidden" name="applicationId" th:value="${applicant.applicationId}" />
                 <input type="hidden" name="status" value="REJECTED" />
-                <button type="submit" class="btn btn-outline-danger fw-bold" th:disabled="${applicant.status.name() == 'REJECTED'}">
+                <button type="submit" class="btn btn-outline-danger fw-bold" 
+                        th:disabled="${applicant.status.name() == 'ACCEPTED' or applicant.status.name() == 'REJECTED'}">
                   <i class="bi bi-x-circle me-2"></i>Từ chối
                 </button>
               </form>
@@ -187,7 +183,6 @@
                 Trạng thái hiện tại: 
                 <span th:if="${applicant.status.name() == 'APPLIED'}">Mới ứng tuyển</span>
                 <span th:if="${applicant.status.name() == 'UNDER_REVIEW'}">Đang xem xét</span>
-                <span th:if="${applicant.status.name() == 'SHORTLISTED'}">Shortlisted</span>
                 <span th:if="${applicant.status.name() == 'INTERVIEWED'}">Mời phỏng vấn</span>
                 <span th:if="${applicant.status.name() == 'ACCEPTED'}">Đã nhận</span>
                 <span th:if="${applicant.status.name() == 'REJECTED'}">Từ chối</span>

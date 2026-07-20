@@ -48,7 +48,6 @@
               <option value="-1" th:selected="${status == null || status == '' || status == '-1'}">Tất cả trạng thái</option>
               <option value="APPLIED" th:selected="${status == 'APPLIED'}">Mới ứng tuyển</option>
               <option value="UNDER_REVIEW" th:selected="${status == 'UNDER_REVIEW'}">Đang xem xét</option>
-              <option value="SHORTLISTED" th:selected="${status == 'SHORTLISTED'}">Shortlisted</option>
               <option value="INTERVIEWED" th:selected="${status == 'INTERVIEWED'}">Mời phỏng vấn</option>
               <option value="ACCEPTED" th:selected="${status == 'ACCEPTED'}">Đã nhận</option>
               <option value="REJECTED" th:selected="${status == 'REJECTED'}">Từ chối</option>
@@ -82,7 +81,6 @@
                 <td>
                   <span th:if="${applicant.status.name() == 'APPLIED'}" class="badge badge-soft-primary">Mới ứng tuyển</span>
                   <span th:if="${applicant.status.name() == 'UNDER_REVIEW'}" class="badge badge-soft-warning text-dark">Đang xem xét</span>
-                  <span th:if="${applicant.status.name() == 'SHORTLISTED'}" class="badge badge-soft-success">Shortlisted</span>
                   <span th:if="${applicant.status.name() == 'INTERVIEWED'}" class="badge badge-soft-info text-dark">Mời phỏng vấn</span>
                   <span th:if="${applicant.status.name() == 'ACCEPTED'}" class="badge badge-soft-success">Đã nhận</span>
                   <span th:if="${applicant.status.name() == 'REJECTED'}" class="badge badge-soft-danger">Từ chối</span>
