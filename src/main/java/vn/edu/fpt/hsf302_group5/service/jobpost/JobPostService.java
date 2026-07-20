@@ -7,6 +7,7 @@ import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDashboardResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.JobPostDetailRecruiterResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.StatisticResponse;
 import vn.edu.fpt.hsf302_group5.dto.job_post.JobPostResponse;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface JobPostService {
-      StatisticResponse getStatistic();
+      StatisticResponse getStatistic(Integer recruiterId);
 
       Page<JobPostResponse> getJobPostsByFilter(String searchKeyword, Integer industryId, Integer provinceId, BigDecimal minSalary, int page);
 
@@ -27,7 +28,7 @@ public interface JobPostService {
 
       Page<JobPostDashboardResponse> getJobPostDashboard(String textSearch, JobStatus jobStatus, int page,int recruiterId);
 
-      Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<BigDecimal> salary, List<String> operators, List<LocalDate> expireDate, List<String> salaryOperators, List<String> sort, List<String> sortOperator);
+      Page<JobPostResponse> getJobPostsSpecification(int page, String filterLogicInOtherConditions, String filterLogicInSameConditions, List<String> searchKeyword, List<String> searchKeywordOperators, List<Integer> provinceId, List<String> provinceOperators, List<Integer> industryId, List<String> industryOperators, List<Integer> companyId, List<String> companyOperators, List<BigDecimal> salary, List<String> operators, List<LocalDate> expireDate, List<String> salaryOperators, List<String> sort, List<String> sortOperator, CustomUserDetailsResponse userDetails);
 
 //      void updateStatusJobPost(Integer jobPostId,JobStatus jobStatus);
 

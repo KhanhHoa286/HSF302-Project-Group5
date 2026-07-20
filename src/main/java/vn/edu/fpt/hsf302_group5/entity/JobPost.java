@@ -128,6 +128,9 @@ public class JobPost {
     @JsonIgnore
     private Set<JobSkill> jobSkills = new HashSet<>();
 
+    @org.hibernate.annotations.Formula("(SELECT COUNT(a.application_id) FROM applications a WHERE a.job_id = job_id)")
+    private Integer applicationCount;
+
     public String getSalaryDisplay() {
         if (salaryMin == null && salaryMax == null) {
             return "Thỏa thuận";

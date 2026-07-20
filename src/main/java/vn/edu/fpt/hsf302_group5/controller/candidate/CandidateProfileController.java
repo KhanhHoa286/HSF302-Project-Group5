@@ -15,6 +15,7 @@ import vn.edu.fpt.hsf302_group5.dto.candidate.CandidateProfileResponse;
 import vn.edu.fpt.hsf302_group5.dto.candidate.EducationRequest;
 import vn.edu.fpt.hsf302_group5.dto.candidate.ExperienceRequest;
 import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
+import vn.edu.fpt.hsf302_group5.entity.enums.UserRole;
 import vn.edu.fpt.hsf302_group5.mapper.CandidateMapper;
 import vn.edu.fpt.hsf302_group5.service.candidate.CandidateProfileService;
 
@@ -32,20 +33,20 @@ public class CandidateProfileController {
         if (userDetails == null) {
             return "redirect:/login";
         }
-        if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("CANDIDATE"))) {
+        if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(UserRole.CANDIDATE.name()))) {
             return "redirect:/candidate/profile";
-        } else if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("RECRUITER"))) {
+        } else if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(UserRole.RECRUITER.name()))) {
             return "redirect:/recruiter/company-profile";
-        } else if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+        } else if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(UserRole.ADMIN.name()))) {
             return "redirect:/admin/profile";
         }
         return "redirect:/";
     }
 
     @GetMapping("/candidate/profile")
-    @PreAuthorize("hasAuthority('CANDIDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).CANDIDATE.name())")
     public String showProfile(Model model,
-                              @AuthenticationPrincipal UserDetails userDetails,
+                              @AuthenticationPrincipal CustomUserDetailsResponse userDetails,
                               @RequestParam(value = "successMessage", required = false) String successMessage,
                               @RequestParam(value = "errorMessage", required = false) String errorMessage) {
         if (successMessage != null) {
@@ -67,8 +68,18 @@ public class CandidateProfileController {
         return "pages/candidate/profile";
     }
 
+    @GetMapping("/candidate/profile/{id}")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).VIEW_PROFILE_CANDIDATE.name())")
+    public String showProfileById(Model model, @PathVariable("id") Integer id) {
+        CandidateProfileResponse profile = candidateProfileService.getCandidateProfileById(id);
+        model.addAttribute("profile", profile);
+        model.addAttribute("allSkills", candidateProfileService.getAllSkills());
+        model.addAttribute("isReadOnly", true);
+        return "pages/candidate/profile";
+    }
+
     @PostMapping("/candidate/profile/update-personal")
-    @PreAuthorize("hasAuthority('CANDIDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).User.name())")
     public String updatePersonalProfile(@ModelAttribute("personalForm") CandidateProfileRequest form,
                                         @AuthenticationPrincipal UserDetails userDetails,
                                         RedirectAttributes redirectAttributes) {
@@ -82,7 +93,7 @@ public class CandidateProfileController {
     }
 
     @PostMapping("/candidate/profile/add-education")
-    @PreAuthorize("hasAuthority('CANDIDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).CANDIDATE.name())")
     public String addEducation(@Valid @ModelAttribute("educationForm") EducationRequest form,
                                BindingResult bindingResult,
                                @AuthenticationPrincipal UserDetails userDetails,
@@ -107,7 +118,7 @@ public class CandidateProfileController {
     }
 
     @PostMapping("/candidate/profile/delete-education")
-    @PreAuthorize("hasAuthority('CANDIDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).CANDIDATE.name())")
     public String deleteEducation(@RequestParam("educationId") Integer educationId,
                                   @AuthenticationPrincipal UserDetails userDetails,
                                   RedirectAttributes redirectAttributes) {
@@ -121,7 +132,7 @@ public class CandidateProfileController {
     }
 
     @PostMapping("/candidate/profile/add-experience")
-    @PreAuthorize("hasAuthority('CANDIDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).CANDIDATE.name())")
     public String addExperience(@Valid @ModelAttribute("experienceForm") ExperienceRequest form,
                                 BindingResult bindingResult,
                                 @AuthenticationPrincipal UserDetails userDetails,
@@ -145,7 +156,7 @@ public class CandidateProfileController {
     }
 
     @PostMapping("/candidate/profile/delete-experience")
-    @PreAuthorize("hasAuthority('CANDIDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).CANDIDATE.name())")
     public String deleteExperience(@RequestParam("experienceId") Integer experienceId,
                                    @AuthenticationPrincipal UserDetails userDetails,
                                    RedirectAttributes redirectAttributes) {
@@ -159,7 +170,7 @@ public class CandidateProfileController {
     }
 
     @PostMapping("/candidate/profile/update-skills")
-    @PreAuthorize("hasAuthority('CANDIDATE')")
+    @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserRole).CANDIDATE.name())")
     public String updateSkills(@RequestParam(value = "skillIds", required = false) List<Integer> skillIds,
                                @AuthenticationPrincipal UserDetails userDetails,
                                RedirectAttributes redirectAttributes) {

@@ -1,13 +1,10 @@
 package vn.edu.fpt.hsf302_group5.specification;
 
-import jakarta.persistence.criteria.Expression;
-import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.*;
 import org.springframework.beans.factory.BeanRegistry;
 import org.springframework.data.jpa.domain.Specification;
-import vn.edu.fpt.hsf302_group5.entity.Industry;
-import vn.edu.fpt.hsf302_group5.entity.JobPost;
-import vn.edu.fpt.hsf302_group5.entity.JobPost_;
-import vn.edu.fpt.hsf302_group5.entity.Province;
+import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
+import vn.edu.fpt.hsf302_group5.entity.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,6 +20,22 @@ public class JobPostSpecification {
     public static Specification<JobPost> equalTitle(String keyword) {
         return ((root, query, criteriaBuilder) -> {
             return criteriaBuilder.equal(root.get(JobPost_.title), keyword);
+        });
+    }
+
+    public static Specification<JobPost> filterJobNotApply(CustomUserDetailsResponse userDetailsResponse) {
+        return ((root, query, criteriaBuilder) -> {
+            Integer userId = userDetailsResponse.getId();
+            Subquery<Integer> subquery = query.subquery(Integer.class);
+            Root<Application> applicationRoot = subquery.from(Application.class);
+            subquery.select(criteriaBuilder.literal(1))
+                    .where(
+                            criteriaBuilder.and(
+                                    criteriaBuilder.equal(applicationRoot.get(Application_.candidateId), userId),
+                                    criteriaBuilder.equal(applicationRoot.get(Application_.jobPost), root)
+                            )
+                    );
+            return criteriaBuilder.not(criteriaBuilder.exists(subquery));
         });
     }
 
@@ -104,6 +117,14 @@ public class JobPostSpecification {
         return ((root, query, criteriaBuilder) -> {
             Join<JobPost, Province> province = root.join("province");
             return criteriaBuilder.equal(province.get("provinceId"), provinceId);
+        });
+    }
+
+    public static Specification<JobPost> hasCompany(Integer companyId) {
+        return ((root, query, criteriaBuilder) -> {
+            Join<JobPost, Recruiter> recruiter = root.join("recruiter");
+            Join<Recruiter, Company> company = recruiter.join("company");
+            return criteriaBuilder.equal(company.get("companyId"), companyId);
         });
     }
 
@@ -230,5 +251,16 @@ public class JobPostSpecification {
             default:
                 return Specification.unrestricted();
         }
+    }
+
+    public static Specification<JobPost> isApproved() {
+        return (root, query, cb) -> cb.equal(root.get("status"), vn.edu.fpt.hsf302_group5.entity.enums.JobStatus.APPROVED);
+    }
+
+    public static Specification<JobPost> isNotExpired() {
+        return (root, query, cb) -> cb.or(
+                cb.isNull(root.get("expiredDate")),
+                cb.greaterThanOrEqualTo(root.get("expiredDate"), java.time.LocalDateTime.now())
+        );
     }
 }

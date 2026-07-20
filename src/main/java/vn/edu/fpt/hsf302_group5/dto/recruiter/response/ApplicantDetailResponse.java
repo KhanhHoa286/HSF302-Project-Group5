@@ -43,5 +43,8 @@ public class ApplicantDetailResponse {
     // CV files
     private String cvName;
     private String cvUrl;
+
+    // Status Timeline
+    private List<ApplicationStatusHistoryDto> statusHistories;
 }
 

@@ -49,11 +49,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (user == null) {
             user = User.builder()
                     .email(email)
-                    .fullName(name != null ? name : "Google User")
+                    .fullName(name)
                     .avatarUrl(picture)
-                    .passwordHash("") // Đăng nhập Google không dùng mật khẩu dạng text thường
+                    .passwordHash("")
                     .role(roleRepository.findByRoleName(UserRole.CANDIDATE.name()))
-                    .status(UserStatus.ACTIVE) // Đăng ký qua Google tự động ACTIVE
+                    .status(UserStatus.ACTIVE)
                     .build();
             user = userRepository.save(user);
 

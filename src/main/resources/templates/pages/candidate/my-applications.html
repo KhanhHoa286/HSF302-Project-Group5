@@ -20,24 +20,39 @@
 
     <div class="candidate-layout">
         <!-- Sidebar Placeholder -->
-        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar}"></div>
+        <div th:replace="~{fragments/candidate-sidebar.html :: candidate-sidebar(activePage='applications')}"></div>
 
         <main class="candidate-content">
             <h3 class="fw-bold mb-4">Hồ sơ ứng tuyển</h3>
+
+            <!-- Success & Error Alert Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
             <div class="card card-custom p-4">
                 <!-- Filter -->
                 <div class="row mb-4">
                     <div class="col-md-4">
-                        <select class="form-select">
-                            <option value="">Tất cả trạng thái</option>
-                            <option value="applied">Đã ứng tuyển</option>
-                            <option value="review">Đang xem xét</option>
-                            <option value="shortlist">Được shortlist</option>
-                            <option value="interview">Phỏng vấn</option>
-                            <option value="accepted">Trúng tuyển</option>
-                            <option value="rejected">Từ chối</option>
-                        </select>
+                        <form th:action="@{/candidate/my-applications}" method="get" id="filterForm">
+                            <input type="hidden" name="page" value="0">
+                            <select class="form-select" name="status" onchange="document.getElementById('filterForm').submit()">
+                                <option value="ALL" th:selected="${status == 'ALL'}">Tất cả trạng thái</option>
+                                <option value="APPLIED" th:selected="${status == 'APPLIED'}">Đã ứng tuyển</option>
+                                <option value="REVIEW" th:selected="${status == 'REVIEW'}">Đang xem xét</option>
+                                <option value="SHORTLIST" th:selected="${status == 'SHORTLIST'}">Được shortlist</option>
+                                <option value="INTERVIEW" th:selected="${status == 'INTERVIEW'}">Phỏng vấn</option>
+                                <option value="ACCEPTED" th:selected="${status == 'ACCEPTED'}">Trúng tuyển</option>
+                                <option value="REJECTED" th:selected="${status == 'REJECTED'}">Từ chối</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
 
@@ -54,75 +69,45 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><a href= "application-detail.html"
-                                        class="fw-bold text-decoration-none text-primary">Senior Frontend Developer</a>
+                            <tr th:each="app : ${applications}">
+                                <td>
+                                    <a th:href="@{/candidate/application-detail/{id}(id=${app.applicationId})}"
+                                       class="fw-bold text-decoration-none text-primary" th:text="${app.jobPost?.title}">Senior Frontend Developer</a>
                                 </td>
-                                <td class="text-muted">TechCorp Vietnam JSC</td>
-                                <td>12/11/2026</td>
-                                <td><span class="badge badge-soft-warning">Đang xem xét</span></td>
+                                <td class="text-muted" th:text="${app.jobPost?.recruiter?.company?.companyName}">TechCorp Vietnam JSC</td>
+                                <td th:text="${app.appliedDate != null ? #temporals.format(app.appliedDate, 'dd/MM/yyyy') : ''}">12/11/2026</td>
+                                <td>
+                                    <!-- Display badges dynamically based on status enum -->
+                                    <span th:if="${app.status?.name() == 'APPLIED'}" class="badge badge-soft-secondary">Đã ứng tuyển</span>
+                                    <span th:if="${app.status?.name() == 'REVIEW'}" class="badge badge-soft-warning">Đang xem xét</span>
+                                    <span th:if="${app.status?.name() == 'SHORTLIST'}" class="badge badge-soft-info">Được shortlist</span>
+                                    <span th:if="${app.status?.name() == 'INTERVIEW'}" class="badge badge-soft-primary">Phỏng vấn</span>
+                                    <span th:if="${app.status?.name() == 'ACCEPTED'}" class="badge badge-soft-success">Trúng tuyển</span>
+                                    <span th:if="${app.status?.name() == 'REJECTED'}" class="badge badge-soft-danger">Từ chối</span>
+                                </td>
                                 <td class="text-end">
-                                    <a href="application-detail.html" class="btn btn-sm btn-outline-primary-custom">Xem
-                                        chi tiết</a>
+                                    <a th:href="@{/candidate/application-detail/{id}(id=${app.applicationId})}" class="btn btn-sm btn-outline-primary-custom">Xem chi tiết</a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td><a href="application-detail.html"
-                                        class="fw-bold text-decoration-none text-primary">UI/UX Designer</a></td>
-                                <td class="text-muted">Creative Studio</td>
-                                <td>10/11/2026</td>
-                                <td><span class="badge badge-soft-primary">Phỏng vấn</span></td>
-                                <td class="text-end">
-                                    <a href="application-detail.html" class="btn btn-sm btn-outline-primary-custom">Xem
-                                        chi tiết</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="application-detail.html"
-                                        class="fw-bold text-decoration-none text-primary">Chuyên viên Digital
-                                        Marketing</a></td>
-                                <td class="text-muted">Global Retail</td>
-                                <td>01/11/2026</td>
-                                <td><span class="badge badge-soft-success">Trúng tuyển</span></td>
-                                <td class="text-end">
-                                    <a href="application-detail.html" class="btn btn-sm btn-outline-primary-custom">Xem
-                                        chi tiết</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="application-detail.html"
-                                        class="fw-bold text-decoration-none text-primary">Backend Developer (NodeJS)</a>
-                                </td>
-                                <td class="text-muted">StartUp ABC</td>
-                                <td>15/10/2026</td>
-                                <td><span class="badge badge-soft-danger">Từ chối</span></td>
-                                <td class="text-end">
-                                    <a href="application-detail.html" class="btn btn-sm btn-outline-primary-custom">Xem
-                                        chi tiết</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="application-detail.html"
-                                        class="fw-bold text-decoration-none text-primary">React Native Developer</a>
-                                </td>
-                                <td class="text-muted">App Dev Co.</td>
-                                <td>14/11/2026</td>
-                                <td><span class="badge badge-soft-secondary">Đã ứng tuyển</span></td>
-                                <td class="text-end">
-                                    <a href="application-detail.html" class="btn btn-sm btn-outline-primary-custom">Xem
-                                        chi tiết</a>
-                                </td>
+                            <tr th:if="${applications == null || #lists.isEmpty(applications)}">
+                                <td colspan="5" class="text-center text-muted py-4">Bạn chưa ứng tuyển công việc nào.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Pagination -->
-                <nav aria-label="Page navigation" class="mt-3">
+                <nav aria-label="Page navigation" class="mt-3" th:if="${totalPages > 1}">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Sau</a></li>
+                        <li th:class="${currentPage == 0} ? 'page-item disabled' : 'page-item'">
+                            <a class="page-link" th:href="@{/candidate/my-applications(status=${status}, page=${currentPage - 1})}">Trước</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${i == currentPage} ? 'page-item active' : 'page-item'">
+                            <a class="page-link" th:href="@{/candidate/my-applications(status=${status}, page=${i})}" th:text="${i + 1}">1</a>
+                        </li>
+                        <li th:class="${currentPage >= totalPages - 1} ? 'page-item disabled' : 'page-item'">
+                            <a class="page-link" th:href="@{/candidate/my-applications(status=${status}, page=${currentPage + 1})}">Sau</a>
+                        </li>
                     </ul>
                 </nav>
             </div>

@@ -1,0 +1,18 @@
+package vn.edu.fpt.hsf302_group5.entity.enums;
+
+public enum UserPermission {
+    USER_CREATE,
+    USER_UPDATE,
+    USER_DELETE,
+    JOB_APPROVE,
+    JOB_DELETE,
+    COMPANY_UPDATE,
+    JOB_CREATE,
+    JOB_UPDATE,
+    APPLICATION_VIEW,
+    APPLICATION_UPDATE,
+    COMPANY_VIEW,
+    VIEW_PROFILE_CANDIDATE,
+    VIEW_PROFILE_COMPANY,
+    JOB_APPLY
+}

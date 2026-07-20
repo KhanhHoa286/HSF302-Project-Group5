@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class JobPostDetailRecruiterResponse {
-    // --- Đã đổi tên trùng khớp hoàn toàn với Entity JobPost ---
     private Integer jobId;
     private Integer vacancies;
     private String title;

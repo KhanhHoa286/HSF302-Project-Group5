@@ -121,13 +121,13 @@
                     <div class="row g-3">
                         <!--Lương tối thiểu: không bắt buộc-->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Lương tối thiểu (USD)</label>
+                            <label class="form-label fw-bold">Lương tối thiểu (triệu)</label>
                             <input type="number" class="form-control" placeholder="Từ" th:field="*{salaryMin}">
                             <span class="text-danger" th:if="${#fields.hasErrors('salaryMin')}" th:errors="*{salaryMin}"></span>
                         </div>
                         <!--Lương tối đa: không bắt buộc-->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Lương tối đa (USD)</label>
+                            <label class="form-label fw-bold">Lương tối đa (triệu)</label>
                             <input type="number" class="form-control" placeholder="Đến" th:field="*{salaryMax}">
                             <span class="text-danger" th:if="${#fields.hasErrors('salaryMax')}" th:errors="*{salaryMax}"></span>
                         </div>
