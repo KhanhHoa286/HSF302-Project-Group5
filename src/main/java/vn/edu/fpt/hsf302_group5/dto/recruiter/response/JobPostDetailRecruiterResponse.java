@@ -28,6 +28,7 @@ public class JobPostDetailRecruiterResponse {
     private String requirement;
     private String description;
     private String benefit;
+    private String adminComment;
 
     private List<String> skillsName;
     private CompanyJobPostDetailResponse company;

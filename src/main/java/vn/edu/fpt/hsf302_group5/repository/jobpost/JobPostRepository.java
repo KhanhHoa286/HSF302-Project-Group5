@@ -149,6 +149,7 @@ public interface JobPostRepository extends JpaRepository<JobPost,Integer>, JpaSp
         or j.status = :statusSearch
         )     
         GROUP BY j.jobId, j.title,j.postedDate,j.status
+        ORDER BY j.postedDate DESC
 """)
     Page<JobPostDashboardResponse> getJobPostDashboard(
             @Param("recruiterId")Integer recruiterId,
