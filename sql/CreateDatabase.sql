@@ -412,6 +412,7 @@ CREATE TABLE interviews
 -- =========================
 -- VERIFICATION TOKENS
 -- =========================
+
 CREATE TABLE verification_tokens
 (
     token_id    INT IDENTITY(1,1) PRIMARY KEY,

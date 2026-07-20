@@ -5,10 +5,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
+import vn.edu.fpt.hsf302_group5.dto.province.ProvinceResponse;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.CompanyProfileRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.CompanyProfileResponse;
 import vn.edu.fpt.hsf302_group5.entity.Company;
 import vn.edu.fpt.hsf302_group5.entity.CompanyIndustry;
+import vn.edu.fpt.hsf302_group5.entity.Province;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +29,10 @@ public interface CompanyMapper {
     @Mapping(target = "email", expression = "java(company.getRecruiterUserEmail())")
     @Mapping(target = "phone", expression = "java(company.getRecruiterUserPhone())")
     CompanyProfileResponse toResponse(Company company);
+
+
+    @Mapping(target = "logoFile", ignore = true)
+    CompanyProfileRequest toRequest(CompanyProfileResponse response);
 
     @Mapping(target = "companyId", ignore = true)
     @Mapping(target = "status", ignore = true)

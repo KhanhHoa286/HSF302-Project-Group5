@@ -119,9 +119,6 @@ public class Application {
         return (candidateProfile != null) ? candidateProfile.getEducations() : null;
     }
 
-    public java.util.Set<Experience> getCandidateExperiences() {
-        return (candidateProfile != null) ? candidateProfile.getExperiences() : null;
-    }
 
     public String getCvName() {
         return (cv != null) ? cv.getCvName() : null;
