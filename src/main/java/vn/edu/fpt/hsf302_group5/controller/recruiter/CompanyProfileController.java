@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.CompanyProfileRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.CompanyProfileResponse;
 import vn.edu.fpt.hsf302_group5.service.company.CompanyService;
+import vn.edu.fpt.hsf302_group5.mapper.CompanyMapper;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -24,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 public class CompanyProfileController {
 
     private final CompanyService companyService;
+    private final CompanyMapper companyMapper;
 
     @GetMapping("/company-profile")
     @PreAuthorize("hasAuthority(T(vn.edu.fpt.hsf302_group5.entity.enums.UserPermission).COMPANY_VIEW.name())")
@@ -34,15 +36,7 @@ public class CompanyProfileController {
 
         try {
             CompanyProfileResponse profile = companyService.getCompanyProfile(userDetails.getUsername());
-            CompanyProfileRequest form = CompanyProfileRequest.builder()
-                    .companyName(profile.getCompanyName())
-                    .website(profile.getWebsite())
-                    .email(profile.getEmail())
-                    .phone(profile.getPhone())
-                    .description(profile.getDescription())
-                    .addressDetail(profile.getAddressDetail())
-                    .logoUrl(profile.getLogoUrl())
-                    .build();
+            CompanyProfileRequest form = companyMapper.toRequest(profile);
 
             model.addAttribute("companyProfileForm", form);
         } catch (Exception e) {

@@ -4121,3 +4121,83 @@ VALUES
 
     -- Job 33: Backend Developer .NET (Requirement: C#, ASP.NET Core, SQL Server)
     (33, 3); -- SQL Server
+
+
+-- ========================================================
+-- TEST DATA: ADD CANDIDATES & APPLICATIONS FOR ALL JOBS
+-- ========================================================
+
+-- 1. Thêm 6 ứng viên mới để test
+INSERT INTO users (email, password_hash, full_name, phone, role_id, status)
+VALUES
+    ('test.cand1@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Ứng viên Test APPLIED', '0909000001', (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
+    ('test.cand2@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Ứng viên Test REVIEW', '0909000002', (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
+    ('test.cand3@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Ứng viên Test SHORTLIST', '0909000003', (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
+    ('test.cand4@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Ứng viên Test INTERVIEW', '0909000004', (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
+    ('test.cand5@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Ứng viên Test ACCEPTED', '0909000005', (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE'),
+    ('test.cand6@gmail.com', '$2a$10$yBrYs4XluUcVXH1h4RYnAec.jLe7YxMgSX/90y/M7N879hTZl1KD2', N'Ứng viên Test REJECTED', '0909000006', (SELECT role_id FROM roles WHERE role_name = 'CANDIDATE'), 'ACTIVE');
+
+-- 2. Khởi tạo Profile cơ bản cho 6 ứng viên này
+INSERT INTO candidate_profiles (candidate_id, date_of_birth, gender, address_detail, province_id, administrative_unit_id, summary)
+SELECT user_id, '2000-01-01', 'MALE', N'Địa chỉ test', 1, 1, N'Summary test'
+FROM users WHERE email LIKE 'test.cand%@gmail.com';
+
+-- 3. Thêm CV cho 6 ứng viên này
+INSERT INTO cvs (candidate_id, cv_name, file_name, file_url)
+SELECT user_id, N'CV Test ' + full_name, 'test_cv.pdf', 'https://storage.blob.core.windows.net/cvs/test_cv.pdf'
+FROM users WHERE email LIKE 'test.cand%@gmail.com';
+
+-- 4. Thêm applications cho TẤT CẢ các job post (ĐÃ FIX SHORTLISTED -> UNDER_REVIEW)
+-- Cand 1: APPLIED
+INSERT INTO applications (candidate_id, job_id, cv_id, cover_letter, status)
+SELECT u.user_id, j.job_id, c.cv_id, N'Cover letter applied', 'APPLIED'
+FROM job_posts j CROSS JOIN users u JOIN cvs c ON c.candidate_id = u.user_id WHERE u.email = 'test.cand1@gmail.com';
+
+-- Cand 2: UNDER_REVIEW
+INSERT INTO applications (candidate_id, job_id, cv_id, cover_letter, status)
+SELECT u.user_id, j.job_id, c.cv_id, N'Cover letter review', 'UNDER_REVIEW'
+FROM job_posts j CROSS JOIN users u JOIN cvs c ON c.candidate_id = u.user_id WHERE u.email = 'test.cand2@gmail.com';
+
+-- Cand 3: UNDER_REVIEW (Thay cho SHORTLISTED bị lỗi Enum)
+INSERT INTO applications (candidate_id, job_id, cv_id, cover_letter, status)
+SELECT u.user_id, j.job_id, c.cv_id, N'Cover letter shortlisted', 'UNDER_REVIEW'
+FROM job_posts j CROSS JOIN users u JOIN cvs c ON c.candidate_id = u.user_id WHERE u.email = 'test.cand3@gmail.com';
+
+-- Cand 4: INTERVIEWED
+INSERT INTO applications (candidate_id, job_id, cv_id, cover_letter, status)
+SELECT u.user_id, j.job_id, c.cv_id, N'Cover letter interviewed', 'INTERVIEWED'
+FROM job_posts j CROSS JOIN users u JOIN cvs c ON c.candidate_id = u.user_id WHERE u.email = 'test.cand4@gmail.com';
+
+-- Cand 5: ACCEPTED
+INSERT INTO applications (candidate_id, job_id, cv_id, cover_letter, status)
+SELECT u.user_id, j.job_id, c.cv_id, N'Cover letter accepted', 'ACCEPTED'
+FROM job_posts j CROSS JOIN users u JOIN cvs c ON c.candidate_id = u.user_id WHERE u.email = 'test.cand5@gmail.com';
+
+-- Cand 6: REJECTED
+INSERT INTO applications (candidate_id, job_id, cv_id, cover_letter, status)
+SELECT u.user_id, j.job_id, c.cv_id, N'Cover letter rejected', 'REJECTED'
+FROM job_posts j CROSS JOIN users u JOIN cvs c ON c.candidate_id = u.user_id WHERE u.email = 'test.cand6@gmail.com';
+
+-- 5. Thêm Kỹ năng (Candidate Skills) cho các ứng viên test
+INSERT INTO candidate_skills (candidate_id, skill_id)
+SELECT u.user_id, s.skill_id
+FROM users u
+         CROSS JOIN skills s
+WHERE u.email LIKE 'test.cand%@gmail.com'
+  AND s.skill_name IN (N'Java', N'Spring Boot', N'ReactJS');
+
+-- 6. Thêm Học vấn (Educations) cho các ứng viên test
+INSERT INTO educations (candidate_id, school_name, degree, major, start_date, end_date)
+SELECT u.user_id, N'Đại học FPT', N'Cử nhân', N'Kỹ thuật phần mềm', '2018-09-01', '2022-06-01'
+FROM users u
+WHERE u.email LIKE 'test.cand%@gmail.com';
+
+-- 7. Thêm Kinh nghiệm làm việc (Experiences) cho các ứng viên test
+INSERT INTO experiences (candidate_id, company_name, position, description, start_date, end_date)
+SELECT u.user_id, N'FPT Software', N'Backend Developer', N'Phát triển các API với Spring Boot, tối ưu hóa database, tham gia các dự án outsource.', '2022-07-01', '2024-07-01'
+FROM users u
+WHERE u.email LIKE 'test.cand%@gmail.com';
+
+USE [hsf_group_project];
+GO
+UPDATE applications SET status = 'UNDER_REVIEW' WHERE status = 'SHORTLISTED';
