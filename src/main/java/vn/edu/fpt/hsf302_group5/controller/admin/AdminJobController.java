@@ -54,6 +54,7 @@ public class AdminJobController {
         model.addAttribute("pendingCount", adminService.countJobPostsByStatus(JobStatus.PENDING));
         model.addAttribute("approvedCount", adminService.countJobPostsByStatus(JobStatus.APPROVED));
         model.addAttribute("rejectedCount", adminService.countJobPostsByStatus(JobStatus.REJECTED));
+        model.addAttribute("jobStatuses", JobStatus.values());
         return "pages/admin/job-approval";
     }
 

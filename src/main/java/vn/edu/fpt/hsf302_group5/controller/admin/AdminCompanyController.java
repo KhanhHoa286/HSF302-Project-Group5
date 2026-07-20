@@ -51,6 +51,7 @@ public class AdminCompanyController {
         model.addAttribute("companyPage", companyPage);
         model.addAttribute("keyword", keyword);
         model.addAttribute("statusFilter", status);
+        model.addAttribute("companyStatuses", CompanyStatus.values());
         return "pages/admin/company-list";
     }
 
