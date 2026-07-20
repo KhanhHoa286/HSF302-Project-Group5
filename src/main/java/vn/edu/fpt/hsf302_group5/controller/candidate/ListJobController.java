@@ -25,12 +25,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/candidate")
-@PreAuthorize("hasAnyAuthority('CANDIDATE', 'RECRUITER', 'ADMIN')")
 public class ListJobController {
 
 

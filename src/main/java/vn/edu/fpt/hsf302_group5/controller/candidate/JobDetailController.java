@@ -14,12 +14,9 @@ import vn.edu.fpt.hsf302_group5.repository.user.UserRepository;
 import vn.edu.fpt.hsf302_group5.service.jobpost.JobPostService;
 import vn.edu.fpt.hsf302_group5.service.savedjob.SavedJobService;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-
 @Controller
 @RequestMapping("/candidate")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyAuthority('CANDIDATE', 'RECRUITER', 'ADMIN')")
 public class JobDetailController {
 
     private final JobPostService jobPostService;
