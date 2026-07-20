@@ -57,15 +57,10 @@
                     <div class="col-md-4">
                         <select class="form-select" name="status" onchange="this.form.submit()">
                             <option value="" th:selected="${statusFilter == null}">Tất cả trạng thái</option>
-                            <option value="PENDING"
-                                th:selected="${statusFilter != null && statusFilter.name() == 'PENDING'}">Chờ duyệt
-                            </option>
-                            <option value="APPROVED"
-                                th:selected="${statusFilter != null && statusFilter.name() == 'APPROVED'}">Đã duyệt
-                            </option>
-                            <option value="REJECTED"
-                                th:selected="${statusFilter != null && statusFilter.name() == 'REJECTED'}">Bị từ chối
-                            </option>
+                            <option th:each="st : ${jobStatuses}"
+                                    th:value="${st}"
+                                    th:selected="${statusFilter == st}"
+                                    th:text="${st.displayName}"></option>
                         </select>
                     </div>
                 </form>

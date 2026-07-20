@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.hsf302_group5.dto.admin.JobPostDashboardResponse;
+import vn.edu.fpt.hsf302_group5.dto.admin.AdminJobDetailResponse;
+import vn.edu.fpt.hsf302_group5.dto.admin.JobApprovalRequest;
 import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
-import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 import vn.edu.fpt.hsf302_group5.service.user.AdminService;
 
@@ -53,12 +54,13 @@ public class AdminJobController {
         model.addAttribute("pendingCount", adminService.countJobPostsByStatus(JobStatus.PENDING));
         model.addAttribute("approvedCount", adminService.countJobPostsByStatus(JobStatus.APPROVED));
         model.addAttribute("rejectedCount", adminService.countJobPostsByStatus(JobStatus.REJECTED));
+        model.addAttribute("jobStatuses", JobStatus.values());
         return "pages/admin/job-approval";
     }
 
     @GetMapping("/{id}")
     public String viewDetailJob(@PathVariable("id") Integer id, Model model) {
-        JobPost jobPost = adminService.getJobPostById(id);
+        AdminJobDetailResponse jobPost = adminService.getJobPostById(id);
         model.addAttribute("job", jobPost);
         return "pages/admin/job-detail-approval";
     }
@@ -66,11 +68,10 @@ public class AdminJobController {
     @PostMapping("/{id}/action")
     public String approveJob(
             @PathVariable Integer id,
-            @RequestParam("status") JobStatus status,
-            @RequestParam(value = "adminComment", required = false) String adminComment,
+            @ModelAttribute JobApprovalRequest request,
             RedirectAttributes redirectAttributes
     ) {
-        adminService.updateJobPostStatus(id, status, adminComment);
+        adminService.updateJobPostStatus(id, request.getStatus(), request.getAdminComment());
         redirectAttributes.addFlashAttribute("message", "Cập nhật thành công");
         return "redirect:/admin/jobs/" + id;
     }

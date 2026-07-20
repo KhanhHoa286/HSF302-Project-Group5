@@ -25,15 +25,17 @@ public class JobPostSpecification {
 
     public static Specification<JobPost> filterJobNotApply(CustomUserDetailsResponse userDetailsResponse) {
         return ((root, query, criteriaBuilder) -> {
-           Integer userId = userDetailsResponse.getId();
+            Integer userId = userDetailsResponse.getId();
             Subquery<Integer> subquery = query.subquery(Integer.class);
             Root<Application> applicationRoot = subquery.from(Application.class);
             subquery.select(criteriaBuilder.literal(1))
                     .where(
-                            criteriaBuilder.equal(applicationRoot.get(Application_.candidateId), userId),
-                            criteriaBuilder.equal(applicationRoot.get(Application_.jobPost), root)
+                            criteriaBuilder.and(
+                                    criteriaBuilder.equal(applicationRoot.get(Application_.candidateId), userId),
+                                    criteriaBuilder.equal(applicationRoot.get(Application_.jobPost), root)
+                            )
                     );
-           return criteriaBuilder.not(criteriaBuilder.exists(subquery));
+            return criteriaBuilder.not(criteriaBuilder.exists(subquery));
         });
     }
 
@@ -250,6 +252,7 @@ public class JobPostSpecification {
                 return Specification.unrestricted();
         }
     }
+
     public static Specification<JobPost> isApproved() {
         return (root, query, cb) -> cb.equal(root.get("status"), vn.edu.fpt.hsf302_group5.entity.enums.JobStatus.APPROVED);
     }

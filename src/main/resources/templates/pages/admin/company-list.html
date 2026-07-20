@@ -41,9 +41,10 @@
           <div class="col-md-4">
             <select class="form-select" name="status" onchange="this.form.submit()">
               <option value="" th:selected="${statusFilter == null}">Trạng thái</option>
-              <option value="ACTIVE" th:selected="${statusFilter != null && statusFilter.name() == 'ACTIVE'}">Hoạt động
-              </option>
-              <option value="INACTIVE" th:selected="${statusFilter != null && statusFilter.name() == 'INACTIVE'}">Đang khóa</option>
+              <option th:each="st : ${companyStatuses}"
+                      th:value="${st}"
+                      th:selected="${statusFilter == st}"
+                      th:text="${st.displayName}"></option>
             </select>
           </div>
         </form>
