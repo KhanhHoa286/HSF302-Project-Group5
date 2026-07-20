@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDashboardResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.JobPostDashboardResponse;
-import vn.edu.fpt.hsf302_group5.entity.JobPost;
+import vn.edu.fpt.hsf302_group5.dto.admin.AdminJobDetailResponse;
 import vn.edu.fpt.hsf302_group5.entity.enums.CompanyStatus;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 
@@ -28,7 +28,7 @@ public interface AdminService {
 
     long countJobPostsByStatus(JobStatus jobStatus);
 
-    JobPost getJobPostById(Integer id);
+    AdminJobDetailResponse getJobPostById(Integer id);
 
     void updateJobPostStatus(Integer id, JobStatus job, String comment);
 

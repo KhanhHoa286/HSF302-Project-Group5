@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDashboardResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.JobPostDashboardResponse;
+import vn.edu.fpt.hsf302_group5.dto.admin.AdminJobDetailResponse;
 import vn.edu.fpt.hsf302_group5.entity.Company;
 import vn.edu.fpt.hsf302_group5.entity.JobPost;
 import vn.edu.fpt.hsf302_group5.entity.enums.CompanyStatus;
 import vn.edu.fpt.hsf302_group5.entity.enums.JobStatus;
 import vn.edu.fpt.hsf302_group5.entity.enums.UserRole;
-import vn.edu.fpt.hsf302_group5.mapper.CompanyMapper;
+import vn.edu.fpt.hsf302_group5.mapper.AdminMapper;
 import vn.edu.fpt.hsf302_group5.repository.company.CompanyRepository;
 import vn.edu.fpt.hsf302_group5.repository.user.UserRepository;
 import vn.edu.fpt.hsf302_group5.repository.jobpost.JobPostRepository;
@@ -27,14 +28,14 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final JobPostRepository jobPostRepository;
-    private final CompanyMapper companyMapper;
+    private final AdminMapper adminMapper;
 
     public AdminServiceImpl(UserRepository userRepository, CompanyRepository companyRepository,
-            JobPostRepository jobPostRepository, CompanyMapper companyMapper) {
+            JobPostRepository jobPostRepository, AdminMapper adminMapper) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.jobPostRepository = jobPostRepository;
-        this.companyMapper = companyMapper;
+        this.adminMapper = adminMapper;
     }
 
     @Override
@@ -62,12 +63,7 @@ public class AdminServiceImpl implements AdminService {
         List<JobPost> jobPosts = jobPostRepository.findTop5ByStatusOrderByPostedDateDesc(JobStatus.PENDING);
         List<JobPostDashboardResponse> recentPendingJobs = new ArrayList<>();
         for (JobPost job : jobPosts) {
-            recentPendingJobs.add(new JobPostDashboardResponse(
-                    job.getJobId(),
-                    job.getTitle(),
-                    job.getRecruiter().getCompany().getCompanyName(),
-                    job.getStatus(),
-                    job.getPostedDate()));
+            recentPendingJobs.add(adminMapper.toJobPostDashboardResponse(job));
         }
         return recentPendingJobs;
     }
@@ -96,12 +92,7 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         Page<JobPost> entityPage = jobPostRepository.findAllForApproval(status, keyword, pageable);
-        return entityPage.map(job -> new JobPostDashboardResponse(
-                job.getJobId(),
-                job.getTitle(),
-                job.getRecruiter().getCompany().getCompanyName(),
-                job.getStatus(),
-                job.getPostedDate()));
+        return entityPage.map(adminMapper::toJobPostDashboardResponse);
     }
 
     @Override
@@ -110,9 +101,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public JobPost getJobPostById(Integer id) {
-        return jobPostRepository.findById(id)
+    public AdminJobDetailResponse getJobPostById(Integer id) {
+        JobPost jobPost = jobPostRepository.findByJobId(id)
                 .orElseThrow(() -> new IllegalArgumentException("khong tim thay tin tuyen dung voi ID: " + id));
+        return adminMapper.toAdminJobDetailResponse(jobPost);
     }
 
     @Override
@@ -133,7 +125,7 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         Page<Company> entityPage = companyRepository.findAllCompany(status, keyword, pageable);
-        return entityPage.map(companyMapper::toDashboardResponse);
+        return entityPage.map(adminMapper::toCompanyDashboardResponse);
     }
 
     @Override
@@ -145,7 +137,7 @@ public class AdminServiceImpl implements AdminService {
     public CompanyDetailResponse getCompanyById(Integer companyId) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new IllegalArgumentException("Khong tim thay doanh nghiep voi ID:" + companyId));
-        return companyMapper.toDetailResponse(company);
+        return adminMapper.toCompanyDetailResponse(company);
     }
 
     @Override

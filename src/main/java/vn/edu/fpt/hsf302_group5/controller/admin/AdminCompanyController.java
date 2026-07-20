@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDashboardResponse;
 import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
+import vn.edu.fpt.hsf302_group5.dto.admin.CompanyStatusRequest;
 import vn.edu.fpt.hsf302_group5.dto.user.CustomUserDetailsResponse;
 import vn.edu.fpt.hsf302_group5.entity.enums.CompanyStatus;
 import vn.edu.fpt.hsf302_group5.service.user.AdminService;
@@ -63,10 +64,10 @@ public class AdminCompanyController {
     @PostMapping("/edit/{id}")
     public String updateCompanyStatus(
             @PathVariable Integer id,
-            @RequestParam("status") CompanyStatus status,
+            @ModelAttribute CompanyStatusRequest request,
             RedirectAttributes redirectAttributes
     ) {
-        adminService.updateCompanyStatus(id, status);
+        adminService.updateCompanyStatus(id, request.getStatus());
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật trạng thái doanh nghiệp thành công.");
         return "redirect:/admin/companies/detail/" + id;
     }
