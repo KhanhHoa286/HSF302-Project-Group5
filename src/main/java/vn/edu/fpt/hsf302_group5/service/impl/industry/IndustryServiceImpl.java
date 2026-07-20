@@ -21,13 +21,16 @@ public class IndustryServiceImpl implements IndustryService {
 
     @Override
     public List<IndustryResponse> getAllIndustryResponse() {
-        return industryRepository.findAllActiveIndustryResponse();
+        return industryRepository.findByStatusOrderByIndustryNameAsc(IndustryStatus.ACTIVE)
+                .stream()
+                .map(this::toIndustryResponse)
+                .toList();
     }
 
     @Override
     public Page<IndustryResponse> getIndustryPage(String keyword, IndustryStatus status, Pageable pageable) {
-        String normalizedKeyword = normalizeKeyword(keyword);
-        return industryRepository.searchIndustryResponses(normalizedKeyword, status, pageable);
+        return industryRepository.searchIndustries(keyword, status, pageable)
+                .map(this::toIndustryResponse);
     }
 
     @Override
@@ -73,8 +76,11 @@ public class IndustryServiceImpl implements IndustryService {
         return industryName == null ? "" : industryName.trim();
     }
 
-    private String normalizeKeyword(String keyword) {
-        String normalized = keyword == null ? null : keyword.trim();
-        return normalized == null || normalized.isEmpty() ? null : normalized;
+    private IndustryResponse toIndustryResponse(Industry industry) {
+        return new IndustryResponse(
+                industry.getIndustryId(),
+                industry.getIndustryName(),
+                industry.getStatus()
+        );
     }
 }

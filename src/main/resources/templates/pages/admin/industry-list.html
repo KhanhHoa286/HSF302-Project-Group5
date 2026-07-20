@@ -46,19 +46,14 @@
                     <input type="text" class="form-control" name="keyword" th:value="${keyword}"
                            placeholder="Tìm kiếm tên ngành nghề...">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select class="form-select" name="status" onchange="this.form.submit()">
                         <option value="" th:selected="${statusFilter == null}">Trạng thái</option>
-                        <option value="ACTIVE"
-                                th:selected="${statusFilter != null && statusFilter.name() == 'ACTIVE'}">Hoạt động</option>
-                        <option value="INACTIVE"
-                                th:selected="${statusFilter != null && statusFilter.name() == 'INACTIVE'}">Không hoạt động</option>
+                        <option th:each="st : ${industryStatuses}"
+                                th:value="${st}"
+                                th:selected="${statusFilter == st}"
+                                th:text="${st.displayName}"></option>
                     </select>
-                </div>
-                <div class="col-md-1 d-grid">
-                    <button type="submit" class="btn btn-outline-primary-custom" title="Tìm kiếm">
-                        <i class="bi bi-search"></i>
-                    </button>
                 </div>
             </form>
 
@@ -147,8 +142,10 @@
                     <div class="mb-0">
                         <label class="form-label fw-bold">Trạng thái</label>
                         <select class="form-select" name="status">
-                            <option value="ACTIVE" selected>Hoạt động</option>
-                            <option value="INACTIVE">Không hoạt động</option>
+                            <option th:each="st : ${industryStatuses}"
+                                    th:value="${st}"
+                                    th:selected="${st.name() == 'ACTIVE'}"
+                                    th:text="${st.displayName}"></option>
                         </select>
                     </div>
                 </div>
@@ -182,8 +179,10 @@
                     <div class="mb-0">
                         <label class="form-label fw-bold">Trạng thái</label>
                         <select class="form-select" name="status">
-                            <option value="ACTIVE" th:selected="${industry.status.name() == 'ACTIVE'}">Hoạt động</option>
-                            <option value="INACTIVE" th:selected="${industry.status.name() == 'INACTIVE'}">Không hoạt động</option>
+                            <option th:each="st : ${industryStatuses}"
+                                    th:value="${st}"
+                                    th:selected="${industry.status == st}"
+                                    th:text="${st.displayName}"></option>
                         </select>
                     </div>
                 </div>

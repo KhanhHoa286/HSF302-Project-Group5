@@ -5,24 +5,11 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.request.CompanyProfileRequest;
 import vn.edu.fpt.hsf302_group5.dto.recruiter.response.CompanyProfileResponse;
-import org.mapstruct.Named;
-import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDashboardResponse;
-import vn.edu.fpt.hsf302_group5.dto.admin.CompanyDetailResponse;
 import vn.edu.fpt.hsf302_group5.entity.Company;
-import vn.edu.fpt.hsf302_group5.entity.User;
-import vn.edu.fpt.hsf302_group5.entity.CompanyIndustry;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CompanyMapper {
 
-    @Mapping(target = "email", source = "recruiter.user.email", defaultValue = "Không có")
-    @Mapping(target = "website", source = "website", defaultValue = "")
-    CompanyDashboardResponse toDashboardResponse(Company company);
     @Mapping(target = "companyId", expression = "java(company.getCompanyId())")
     @Mapping(target = "companyName", expression = "java(company.getCompanyName())")
     @Mapping(target = "logoUrl", expression = "java(company.getLogoUrl())")
@@ -44,24 +31,4 @@ public interface CompanyMapper {
     @Mapping(target = "administrativeUnitId", ignore = true)
     @Mapping(target = "administrativeUnit", ignore = true)
     void updateEntityFromRequest(CompanyProfileRequest request, @MappingTarget Company company);
-    
-    @Mapping(target = "recruiterId", source = "recruiter.recruiterId")
-    @Mapping(target = "recruiterName", source = "recruiter.user.fullName", defaultValue = "Không có")
-    @Mapping(target = "recruiterEmail", source = "recruiter.user.email", defaultValue = "Không có")
-    @Mapping(target = "recruiterPhone", source = "recruiter.user.phone", defaultValue = "Không có")
-    @Mapping(target = "recruiterAvatarUrl", source = "recruiter.user.avatarUrl", defaultValue = "")
-    @Mapping(target = "provinceName", source = "province.provinceName", defaultValue = "Chưa cập nhật")
-    @Mapping(target = "administrativeUnitName", source = "administrativeUnit.unitName", defaultValue = "Chưa cập nhật")
-    @Mapping(target = "industries", source = "companyIndustries", qualifiedByName = "mapIndustries")
-    CompanyDetailResponse toDetailResponse(Company company);
-
-    @Named("mapIndustries")
-    default List<String> mapIndustries(Set<CompanyIndustry> companyIndustries) {
-        if (companyIndustries == null) {
-            return Collections.emptyList();
-        }
-        return companyIndustries.stream()
-                .map(ci -> ci.getIndustry().getIndustryName())
-                .collect(Collectors.toList());
-    }
 }
