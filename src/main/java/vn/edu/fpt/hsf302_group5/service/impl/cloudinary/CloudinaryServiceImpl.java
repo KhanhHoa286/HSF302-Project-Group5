@@ -50,7 +50,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         }
 
         Map<?, ?> result = cloudinary.uploader().upload(
-                file.getBytes(),
+                file.getInputStream(),
                 options);
 
         if (result.containsKey("secure_url")) {
