@@ -100,7 +100,7 @@
                  th:if="${job.status.name() == 'REJECTED' && job.adminComment != null}">
                 <h6 class="fw-bold text-danger"><i class="bi bi-exclamation-triangle-fill"></i> Lý do bị từ chối từ
                     Admin:</h6>
-                <p class="text-muted mb-0" th:text="${job.adminComment}">Lý do từ chối...</p>
+                <p class="text-muted mb-0 text-break" th:text="${job.adminComment}">Lý do từ chối...</p>
             </div>
 
             <div th:if="${job.status.name() == 'PENDING'}" class="border-top pt-4">
