@@ -58,8 +58,8 @@ public class CVController {
 
         // Validate file type
         String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || (!originalFilename.toLowerCase().endsWith(".pdf") && !originalFilename.toLowerCase().endsWith(".docx"))) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Chỉ hỗ trợ tải lên file PDF hoặc DOCX!");
+        if (originalFilename == null || !originalFilename.toLowerCase().endsWith(".pdf")) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Chỉ hỗ trợ tải lên file PDF!");
             return "redirect:/candidate/upload-cv";
         }
 
@@ -75,7 +75,7 @@ public class CVController {
 
             cvService.uploadCV(user.getUserId(), file, cvName);
             redirectAttributes.addFlashAttribute("successMessage", "Tải CV lên thành công!");
-        } catch (IOException e) {
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Lỗi trong quá trình tải CV lên hệ thống: " + e.getMessage());
         }
 
