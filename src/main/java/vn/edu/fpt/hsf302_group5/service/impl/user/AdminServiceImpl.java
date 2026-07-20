@@ -73,12 +73,7 @@ public class AdminServiceImpl implements AdminService {
         List<Company> companies = companyRepository.findTop5ByOrderByCreatedAtDesc();
         List<CompanyDashboardResponse> recentCompanies = new ArrayList<>();
         for (Company comp : companies) {
-            recentCompanies.add(new CompanyDashboardResponse(
-                    comp.getCompanyId(),
-                    comp.getCompanyName(),
-                    comp.getLogoUrl(),
-                    comp.getStatus(),
-                    comp.getCreatedAt()));
+            recentCompanies.add(adminMapper.toCompanyDashboardResponse(comp));
         }
         return recentCompanies;
     }
