@@ -2935,10 +2935,11 @@ INSERT INTO permissions (permission_code, permission_name, description) VALUES
 -- =========================
 -- ROLE PERMISSION
 -- =========================
--- Admin có tất cả quyền
+-- Admin có tất cả quyền ngoại trừ JOB_APPLY
 INSERT INTO role_permissions (role_id, permission_id)
 SELECT (SELECT role_id FROM roles WHERE role_name = 'ADMIN'), permission_id
-FROM permissions;
+FROM permissions
+WHERE permission_code != 'JOB_APPLY';
 
 -- Recruiter có quyền: COMPANY_UPDATE, JOB_DELETE, JOB_CREATE, JOB_UPDATE, APPLICATION_VIEW, APPLICATION_UPDATE, COMPANY_VIEW, VIEW_PROFILE_CANDIDATE, VIEW_PROFILE_COMPANY
 INSERT INTO role_permissions (role_id, permission_id)

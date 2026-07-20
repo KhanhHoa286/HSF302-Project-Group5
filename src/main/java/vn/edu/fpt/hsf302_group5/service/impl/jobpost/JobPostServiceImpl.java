@@ -239,7 +239,9 @@ public class JobPostServiceImpl implements JobPostService {
         spec = spec.and(JobPostSpecification.isApproved())
                    .and(JobPostSpecification.isNotExpired());
 
-        spec = spec.and(JobPostSpecification.filterJobNotApply(userDetails));
+        if (userDetails != null) {
+            spec = spec.and(JobPostSpecification.filterJobNotApply(userDetails));
+        }
 
         Page<JobPost> jobPosts = jobPostRepository.findAll(spec, pageable);
 
