@@ -38,10 +38,9 @@ public interface AdminMapper {
     @Mapping(target = "recruiterAvatarUrl", source = "recruiter.user.avatarUrl", defaultValue = "")
     @Mapping(target = "provinceName", source = "province.provinceName", defaultValue = "Chưa cập nhật")
     @Mapping(target = "administrativeUnitName", source = "administrativeUnit.unitName", defaultValue = "Chưa cập nhật")
-    @Mapping(target = "industries", source = "companyIndustries", qualifiedByName = "mapIndustries")
+    @Mapping(target = "industries", source = "companyIndustries")
     CompanyDetailResponse toCompanyDetailResponse(Company company);
 
-    @Named("mapIndustries")
     default List<String> mapIndustries(Set<CompanyIndustry> companyIndustries) {
         if (companyIndustries == null) {
             return Collections.emptyList();
