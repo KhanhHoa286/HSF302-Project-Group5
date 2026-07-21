@@ -26,7 +26,6 @@ function loadDistrict(provinceId,preSelectedUnitId) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Gọi đúng cái ID mà th:field="*{provinceId}" tự sinh ra dưới trình duyệt nè em
     const provinceSelect = document.getElementById("provinceId");
 
     if (provinceSelect) {
